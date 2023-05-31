@@ -7,11 +7,13 @@
         <h1 class="text-white">Enregistrement</h1>
         <div class="text-white">
             {{ form_start(registrationForm) }}
-
+            <fieldset>
+                <div class="form-group">
                    {{ form_widget(registrationForm) }}
 
                     <button type="submit" class="btn">Enregistrer</button>
-
+                </div>
+            </fieldset>
             {{ form_end(registrationForm) }}
         </div>
     </div>
