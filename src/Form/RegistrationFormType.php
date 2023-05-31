@@ -2,9 +2,13 @@
 
 namespace App\Form;
 
+use App\Entity\Campus;
 use App\Entity\User;
+use App\Repository\CampusRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -18,17 +22,15 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('pseudo')
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
-                ],
-            ])
+            ->add('nom')
+            ->add('prenom')
+            ->add('telephone')
+            ->add('mail')
+
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
+                'label' => 'Mots de passe',
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
@@ -43,6 +45,21 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
+
+            ->add('campus', EntityType::class, [
+                'class'=> Campus::class,
+                'choice_label'=>'nom',
+                'query_builder'=> function(CampusRepository $campusRepository){
+                $qb = $campusRepository->createQueryBuilder('c');
+               // $qb->addOrderBy('c.name', 'ASC');
+                return $qb;
+                }
+            ])
+            ->add('actif')
+            ->add('administrateur')
+            ->add('photo', FileType::class, [
+                'mapped' => false,
+            ])
         ;
     }
 
@@ -50,6 +67,7 @@ class RegistrationFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'required' => false
         ]);
     }
 }
