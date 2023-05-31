@@ -18,7 +18,7 @@ class CampusType extends AbstractType
         $builder
             ->add('nom', TextType::class, [
                 'required' => true,
-                'label' => "Nom du nouveau Campus",
+                'label' => "Ajouter un nouveau Campus",
                 'constraints' => [
                     new NotBlank([
                         'message' => "Veuillez saisir un nom"
@@ -27,11 +27,16 @@ class CampusType extends AbstractType
                         'min' => 3,
                         'minMessage' => 'Le nom du Campus doit contenir au minimum {{ limit }} caractères'
                     ])
-                ]
+                ],
+                    'attr' => ['class'=>'form-control']
+
             ])
             ->add('save',SubmitType::class, [
-                'label' => 'Valider'
-            ])
+                'label' => 'Valider',
+                    'attr' => ['class'=> 'btn btn-success mt-2']
+            ]
+
+            )
         ;
     }
 
