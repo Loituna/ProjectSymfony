@@ -3,20 +3,16 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <h1>Enregistrement</h1>
+    <div class="container" >
+        <h1 class="text-white">Enregistrement</h1>
+        <div class="text-white">
+            {{ form_start(registrationForm) }}
 
-        {{ form_start(registrationForm) }}
-            <fieldset>
-                <div class="form-group">
-                {{ form_row(registrationForm.pseudo) }}
-                </div>
-                {{ form_row(registrationForm.plainPassword, {
-                    label: 'Password'
-                }) }}
+                   {{ form_widget(registrationForm) }}
 
-                <button type="submit" class="btn">Enregistrer</button>
-            </fieldset>
-        {{ form_end(registrationForm) }}
+                    <button type="submit" class="btn">Enregistrer</button>
+
+            {{ form_end(registrationForm) }}
+        </div>
     </div>
 {% endblock %}

@@ -237,6 +237,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->administrateur = $administrateur;
 
+        if ($administrateur){
+            $this->setRoles(['ROLE_ADMIN']);
+        }else{
+            $this->setRoles(['ROLE_USER']);
+        }
+
         return $this;
     }
 
@@ -305,4 +311,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+
 }
