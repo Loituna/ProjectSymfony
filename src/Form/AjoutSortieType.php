@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Sortie;
+use App\Entity\Ville;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -24,7 +26,7 @@ class AjoutSortieType extends AbstractType
                 'label' => "Nom de la Sortie",
                 'constraints' => [
                     new NotBlank([
-                        'message' => "Veuillez saisir un nom"
+                        'message' => "Veuillez saisir un nom:"
                     ]),
                     new Length([
                         'min' => 2,
@@ -35,39 +37,56 @@ class AjoutSortieType extends AbstractType
             ])
 
             ->add('infoSortie', TextareaType::class, [
-                'label' => "Informations sur la sortie",
+                'label' => "Description et infos:",
                 'constraints' => [
                     new Length([
                         'max' => 1000,
                         'maxMessage' => 'Maximum de {{ limit }} caractères'
                     ])
-                ]
+                ],
+                'attr' => ['class' =>'form-control']
             ])
             ->add('dateDebut', DateTimeType::class, [
+                'label' => 'Date et Heure de la sortie:',
                 'placeholder' => [
                     'year' => 'Year', 'month' => 'Month', 'day' => 'Day',
                     'hour' => 'Hour', 'minute' => 'Minute', 'second' => 'Second',
-                ],
+                ]
             ])
             ->add('dateLimite', DateType::class, [
                 'widget' => 'choice',
+                'label' => "Date limite d'inscription: ",
                 'placeholder' => [
                     'year' => 'Year', 'month' => 'Month', 'day' => 'Day',
-                ],
+                ]
             ])
-            ->add('duree', TextType::class)
+            ->add('duree', IntegerType::class, [
+                'label' =>'Durée: ',
+                'attr' => ['class' =>'form-control']
+            ])
             ->add('nbInscriptionMax', IntegerType::class, [
-                'label' => 'Combien de personnes maximum peuvent participer à cette sortie ?',
+                'label' => 'Nombre de places: ',
                 'constraints' => [
                     new Length([
                         'min' => 2,
                         'minMessage' => 'Il doit y avoir minimum {{ limit }} participants !'
                     ])
+                ],
+                'attr' => ['class' =>'form-control']
+            ])
+            ->add('ville', EntityType::class, [
+                'required'=>true,
+                'label'=> 'Ville: ',
+                'class' => Ville::class,
+                'choice_label' => 'nom',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez choisir une ville'
+                    ])
                 ]
             ])
-            ->add('etat')
-            ->add('campus')
-            ->add('lieu')
+//            ->add('campus')
+//            ->add('lieu')
         ;
     }
 
