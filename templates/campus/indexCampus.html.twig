@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}} | Campus {% endblock %}
+
+{% block body %}
+    <div class="containerCampus">
+        <h1 class="text-white">Les Campus déjà présents : </h1>
+        <table class="table table-light table-striped">
+            <thead class="thead-light">
+                <tr>
+                    <th>Nom du Campus</th>
+                    <th> </th>
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody >
+                {% for campu in campus %}
+                    <tr>
+                        <td ><div class="text-body">{{ campu.nom }}</div></td>
+                        <td><button type="button" class="btn btn-primary mb-2">Modifier</button></td>
+                        <td><button type="button" class="btn btn-danger mb-2">Supprimer</button></td>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+
+        {{ form(campusForm) }}
+    </div>
+{% endblock %}

@@ -4,10 +4,17 @@ body{
     background-position: center center;
     background-size: cover;
     font-family: 'Merriweather', serif;
+    color: #DDDDDD;
 }
 
 .container {
     max-width: 1200px;
+    margin: auto;
+    padding: 1px;
+}
+
+.containerCampus{
+    max-width: 600px;
     margin: auto;
     padding: 1px;
 }
