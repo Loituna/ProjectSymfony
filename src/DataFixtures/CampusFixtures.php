@@ -10,7 +10,7 @@ class CampusFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $this->addCampus($manager);
+
 
     }
 

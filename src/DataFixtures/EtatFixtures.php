@@ -11,9 +11,9 @@ class EtatFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $this->createEtat( $manager);
 
-        $manager->flush();
+
+
     }
 
     public function createEtat(ObjectManager $manager)
