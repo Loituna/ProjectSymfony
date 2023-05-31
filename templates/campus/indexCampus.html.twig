@@ -17,8 +17,7 @@
                 {% for campu in campus %}
                     <tr>
                         <td ><div class="text-body">{{ campu.nom }}</div></td>
-                        <td><button type="button" class="btn btn-primary mb-2">Modifier</button></td>
-                        <td><button type="button" class="btn btn-danger mb-2">Supprimer</button></td>
+                        <td><button type="button" class="btn btn-danger mb-2"><a href="{{ path('campus_delete', {'id': campu.id }) }}" onclick="return confirm('Etes vous sur de vouloir supprimer ce Campus ? ')">Supprimer</a></button></td>
                     </tr>
                 {% endfor %}
 

@@ -12,9 +12,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[Route('/campus', name: 'campus_')]
 class CampusController extends AbstractController
 {
-    #[Route('/campus', name: 'app_campus')]
+    #[Route('/', name: 'index')]
     public function index(CampusRepository $campusRepository,
                             Request $request,
                             EntityManagerInterface $entityManager): Response
@@ -32,7 +33,7 @@ class CampusController extends AbstractController
 
             $this->addFlash('success', 'Campus bien rajouté');
 
-            return $this->redirectToRoute('app_campus');
+            return $this->redirectToRoute('campus_index');
         }
         return $this->render('campus/indexCampus.html.twig', [
             'campus' => $listCampus,
@@ -40,5 +41,14 @@ class CampusController extends AbstractController
         ]);
     }
 
+    #[Route('/campus/delete/{id}', name : 'delete', requirements: ['id' => '\d+'])]
+    public function delete(int $id, CampusRepository $campusRepository){
+        $campus = $campusRepository->find($id);
 
+        //suppression de la série
+        $campusRepository->remove($campus, true);
+
+        $this->addFlash('success', $campus->getNom()." a été supprimé ! ");
+        return $this->redirectToRoute('campus_index');
+    }
 }
