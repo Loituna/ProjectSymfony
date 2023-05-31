@@ -90,8 +90,6 @@ class UserFixtures extends Fixture
                 ->setActif((bool)$generator->randomElements(['true', 'false']))
                 ->setPassword($this->hasher->hashPassword($user, $generator->password));
 
-            dump($user);
-
             $manager->persist($user);
 
 
