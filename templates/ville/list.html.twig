@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>LA LISTE MAGGLE</h1>
+
+    {% for ville in villes %}
+
+    <article>
+        <div>{{ ville.nom }}</div>
+        <div>{{ ville.codePostal }}</div>
+
+
+    </article>
+        <br>
+    {% endfor %}
+{% endblock %}
