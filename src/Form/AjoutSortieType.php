@@ -75,6 +75,7 @@ class AjoutSortieType extends AbstractType
                 'attr' => ['class' =>'form-control']
             ])
             ->add('ville', EntityType::class, [
+
                 'required'=>true,
                 'label'=> 'Ville: ',
                 'class' => Ville::class,
