@@ -56,6 +56,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->save($user, true);
     }
 
+
+    public function findParticipant ( int $MaxResult){
+
+        $qb= $this->createQueryBuilder('u');
+        $qb->setMaxResults($MaxResult);
+
+
+
+
+}
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */

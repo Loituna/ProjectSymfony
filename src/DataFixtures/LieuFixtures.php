@@ -12,10 +12,7 @@ class LieuFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // $product = new Product();
-        // $manager->persist($product);
-//        $this->addLieu($manager);
-//        $manager->flush();
+
     }
 
     public function addLieu(ObjectManager $manager){

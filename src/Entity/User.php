@@ -230,6 +230,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isAdministrateur(): ?bool
     {
+
+
         return $this->administrateur;
     }
 

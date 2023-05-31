@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Etat;
+use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -18,14 +19,17 @@ private SortieFixtures $sortie;
 private UserFixtures $user;
 private LieuFixtures $lieu;
 
-    public function __construct(CampusFixtures $campus,EtatFixtures $etat,VillesFixtures $ville,SortieFixtures $sortie,UserFixtures $user,LieuFixtures $lieu )
+
+    public function __construct(CampusFixtures $campus,EtatFixtures $etat,VillesFixtures $ville,SortieFixtures $sortie,UserFixtures $user,LieuFixtures $lieu, )
     {
         $this->lieu=$lieu;
-        $this->sortie=$sortie;
         $this->campus=$campus;
         $this->ville=$ville;
         $this->user=$user;
         $this->etat=$etat;
+        $this->sortie=$sortie;
+
+
 
 
     }
@@ -36,7 +40,9 @@ private LieuFixtures $lieu;
         $this->ville->addVille($manager);
         $this->user->addUser($manager);
         $this->lieu->addLieu($manager);
-       // $this->sortie->createSortie($manager);
+
+        $manager->flush();
+        $this->sortie->createSortie($manager);
         $manager->flush();
     }
 }
