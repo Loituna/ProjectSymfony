@@ -77,7 +77,7 @@ class AjoutSortieType extends AbstractType
             ->add('ville', EntityType::class, [
 
                 'required'=>true,
-                'label'=> 'Ville: ',
+                'label'=> 'Ville de merde : ',
                 'class' => Ville::class,
                 'choice_label' => 'nom',
                 'constraints' => [
