@@ -1,3 +1,21 @@
 body{
     background-color: #032757;
+    background-attachment: fixed;
+    background-position: center center;
+    background-size: cover;
+    font-family: 'Merriweather', serif;
 }
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 1px;
+}
+
+.header{
+    display: flex;
+    justify-content: left;
+}
+
+
+

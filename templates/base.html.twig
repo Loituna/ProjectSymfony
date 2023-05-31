@@ -9,6 +9,9 @@
         <link rel="icon" href="{{ asset('img/logo.png') }}">
         <link rel="stylesheet" href="{{ asset('css/index.css') }}">
         <link rel="stylesheet" href="{{ asset('css/normalize.css') }}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather&display=swap" rel="stylesheet">
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
@@ -19,20 +22,18 @@
         {% endblock %}
     </head>
     <body>
-    <div class = "container">
-        <header>{{ include('header/nav.html.twig') }}</header>
-        <div>Bonjour</div>
-
-
-
-
-
-
-    </div>
-        {% block body %}
-
-
-            <div>Bonjour la commu  ddsssssssss ! </div>
-        {% endblock %}
+        <div class = "container">
+            <header>
+                {{ include('header/header.html.twig') }}
+            </header>
+            <main>
+                {% block body %}
+                    <div>Bonjour la commu  ddsssssssss ! </div>
+                {% endblock %}
+            </main>
+            <footer class="position- bottom-0 end-0">
+                {{ include('footer/footer.html.twig') }}
+            </footer>
+        </div>
     </body>
 </html>
