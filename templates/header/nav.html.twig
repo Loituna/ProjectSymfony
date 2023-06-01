@@ -2,24 +2,39 @@
     <nav >
         <ul class ="nav">
 
+
+
+            {% if app.user %}
             <li class ="nav-item">
-                <a class="nav-link text-white" href="">Villes</a>
+                <a class="nav-link text-white" href="{{ path('ville_list') }}">Villes</a>
             </li>
             <li class ="nav-item">
                 <a class="nav-link text-white" href="{{ path('campus_index') }}">Campus</a>
             </li>
-            <li class ="nav-item">
-                <a class="nav-link text-white" href="">Accueil</a>
             </li>
             <li class ="nav-item">
-                <a class="nav-link text-white" href="">Mon Profil</a>
+                <a class="nav-link text-white" href="{{ path('user_show')}}">Mon Profil</a>
             </li>
+
+
+                {% if app.user.roles == ['ROLE_ADMIN','ROLE_USER'] %}
+                    <li class ="nav-item">
+                        <a class="nav-link text-white" href="{{ path('app_register') }}">Panneau Admin</a>
+                    </li>
+                    {% endif %}
+
+                <li class ="nav-item">
+                    <a class="nav-link text-white" href="{{ path('app_logout') }}">Se déconnecter</a>
+                </li>
+            {% else %}
+            <li class ="nav-item">
+                <a class="nav-link text-white" href="{{ path('app_main') }}">Accueil</a>
+
             <li class ="nav-item">
                 <a class="nav-link text-white" href="{{ path('app_login') }}">Se connecter</a>
             </li>
-            <li class ="nav-item">
-                <a class="nav-link text-white" href="{{ path('app_logout') }}">Se déconnecter</a>
-            </li>
+            {% endif %}
+
 
         </ul>
     </nav>

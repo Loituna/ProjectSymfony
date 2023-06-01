@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Ville;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,6 +17,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class VilleRepository extends ServiceEntityRepository
 {
+    const MAX_RESULT = 10;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Ville::class);
@@ -63,4 +66,18 @@ class VilleRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    public function findVilleWithPagination(int $page): Paginator
+    {
+        $qb=$this->createQueryBuilder('v')
+            ->addOrderBy('v.nom','ASC');
+
+
+        $query=$qb->getQuery();
+        $query->setMaxResults(VilleRepository::MAX_RESULT);
+        $offset = ($page - 1) * VilleRepository::MAX_RESULT;
+        $query->setFirstResult($offset);
+
+        return new Paginator($query);
+
+    }
 }

@@ -245,6 +245,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $this->setRoles(['ROLE_USER']);
         }
 
+
         return $this;
     }
 

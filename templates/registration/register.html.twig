@@ -4,15 +4,23 @@
 
 {% block body %}
     <div class="container" >
-        <h1 class="text-white">Enregistrement</h1>
+        <h2 class="text-white">Enregistrement</h2>
         <div class="text-white">
             {{ form_start(registrationForm) }}
-
-                   {{ form_widget(registrationForm) }}
-
-                    <button type="submit" class="btn">Enregistrer</button>
-
+            <fieldset>
+                <div>
+                    {% for field in registrationForm %}
+                        <div class="form-group">
+                            {{ form_row(field, {'attr': {'class': 'form-control', 'style': 'width: 600px;'}}) }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-success mt-2">Enregistrer</button>
+                </div>
+            </fieldset>
             {{ form_end(registrationForm) }}
         </div>
+
     </div>
 {% endblock %}
