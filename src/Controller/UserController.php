@@ -4,8 +4,13 @@ namespace App\Controller;
 
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
+
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/user', name: 'user_')]
@@ -37,11 +42,32 @@ class UserController extends AbstractController
     }
 
     #[Route('/update/{id}', name: 'update')]
-    public function update(int $id, UserRepository $userRepository)
+    public function update(
+        int $id,
+        UserRepository $userRepository,
+        EntityManagerInterface $entityManager,
+        UserPasswordHasherInterface $userPasswordHasher,
+        Request $request): Response
     {
         $user = $userRepository->find($id);
-
         $userForm = $this->createForm(RegistrationFormType::class, $user);
+        $userForm->handleRequest($request);
+
+
+        if ($userForm->isSubmitted() && $userForm->isValid()) {
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $userForm->get('plainPassword')->getData()
+                )
+            );
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('user_show');
+
+        }
 
         return $this->render('user/update.html.twig',[
            'userForm' => $userForm->createView()
