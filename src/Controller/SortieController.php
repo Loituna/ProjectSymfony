@@ -42,6 +42,7 @@ class SortieController extends AbstractController
             ->getQuery()
             ->getResult();
 
+
         return $this->render('main/index.html.twig', [
             'sorties' => $listSorties
         ]);
