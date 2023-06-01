@@ -13,6 +13,13 @@ body{
     padding: 1px;
 }
 
+.containerMain{
+    max-width: 500px;
+    display: flex;
+
+}
+
+
 .containerCampus{
     max-width: 600px;
     margin: auto;
@@ -32,6 +39,7 @@ body{
 }
 
 
+
 .list-group{
 
     background-color: #032757;
@@ -46,7 +54,12 @@ body{
 .flex_between{
     justify-content: space-between;
 }
+/* Modification des couleurs des liens */
 
+a:link{
+    color: #DDDDDD;
+
+}
 
 
 

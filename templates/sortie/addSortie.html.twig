@@ -1,20 +1,43 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello SortieController!{% endblock %}
+
+
+{% block title %}{{parent()}} | Ajouter une Sortie{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    {{ form_start(sortieForm) }}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    {{ form_row(sortieForm.nom) }}
+    {{ form_row(sortieForm.infoSortie) }}
+    {{ form_row(sortieForm.dateDebut) }}
+    {{ form_row(sortieForm.dateLimite) }}
+    {{ form_row(sortieForm.duree) }}
+    {{ form_row(sortieForm.nbInscriptionMax) }}
+    {{ form_row(sortieForm.ville) }}
+    {% block javascripts %}
+        {# element by id pour recuperer les deux select #}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'D:/PHP/www/ProjectSymfony/src/Controller/SortieController.php'|file_link(0) }}">src/Controller/SortieController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'D:/PHP/www/ProjectSymfony/templates/sortie/addSortie.html.twig'|file_link(0) }}">templates/sortie/index.html.twig</a></code></li>
-    </ul>
-</div>
+        {# ajouter un EventListener aux deux select #}
+
+        {# quand il detecte une valeur sur le ville, il va faire une requete xhttp à l'URL ou j'ai ma methode getlieuxbyville dans le Sortie Controller #}
+
+        {# on recupere un tableau json ou il y aura un id mappé a un lieu  #}
+
+        {# boucle foreach for lieu as lieu, le select de lieu .add options .add value set placeholder name  #}
+
+    {% endblock%}
+    {{ form_row(sortieForm.lieu) }}
+
+
+
+
+
+    {{ form_row(sortieForm.save) }}
+
+
+    {{ form_end(sortieForm) }}
+
+
+
+
 {% endblock %}
