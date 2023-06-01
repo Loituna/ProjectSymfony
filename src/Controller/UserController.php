@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,4 +35,18 @@ class UserController extends AbstractController
             'user' => $user
         ]);
     }
+
+    #[Route('/update/{id}', name: 'update')]
+    public function update(int $id, UserRepository $userRepository)
+    {
+        $user = $userRepository->find($id);
+
+        $userForm = $this->createForm(RegistrationFormType::class, $user);
+
+        return $this->render('user/update.html.twig',[
+           'userForm' => $userForm->createView()
+        ]);
+
+    }
+
 }
