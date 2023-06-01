@@ -20,7 +20,10 @@
 
                     <td><button type="button" class="btn btn-danger mb-2">
                             <a href="{{ path('ville_delete', {'id': ville.id }) }}" onclick="return confirm('Etes vous sur de vouloir supprimer cette Ville ? ')">Supprimer </a></button></td>
-                    <td><button type="button" class="btn btn-secondary mb-2"><a href=""></a>Consulter Lieu</button></td>
+
+
+                    <td>
+                        <a href="{{ path('lieu_detailByVille', {'id': ville.id} ) }}"><button type="button" class="btn btn-secondary mb-2">Consulter Lieu</button></a></td>
                 </tr>
 
             {% endfor %}

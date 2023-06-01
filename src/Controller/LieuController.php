@@ -2,17 +2,29 @@
 
 namespace App\Controller;
 
+use App\Entity\Lieu;
+use App\Form\LieuType;
+use App\Repository\LieuRepository;
+use App\Repository\VilleRepository;
+use http\Env\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 #[Route('/lieu', name: 'lieu_')]
 class LieuController extends AbstractController
 {
-    #[Route('/{id}', name: '_detail')]
-    public function index(): Response
+    #[Route('/{id}', name: 'detailByVille')]
+    public function detailByVille(LieuRepository $lieuRepository,VilleRepository $villeRepository , int $id ): Response
     {
-        return $this->render('lieu/index.html.twig', [
-            'controller_name' => 'LieuController',
+        $ville = $villeRepository->find($id);
+        $lieus=$lieuRepository->findBy(['ville'=>$id]);
+
+
+        return $this->render('lieu/detailByVille.html.twig', [ 'lieus'=>$lieus , 'ville'=> $ville
+
         ]);
+
+
     }
+
 }

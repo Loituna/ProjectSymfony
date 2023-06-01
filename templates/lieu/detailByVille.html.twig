@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+<div class="containerCampus">
+
+    <h1 class="text-white"> Voici les lieus de débauche à {{ ville.nom }} ¯\_(ツ)_/¯</h1>
+
+        <table class="table table-light table-striped">
+            <thead class="thead-light">
+            <tr>
+                <th>Nom : </th>
+                <th> Rue : </th>
+{#                <th>Lattitude :</th>#}
+{#                <th>Longitude :</th>#}
+
+            </thead>
+
+            <tbody>
+            {% for lieu in lieus %}
+            <tr>
+                <td><div class="text-body">{{ lieu.nom }}</div></td>
+                <td><div class="text-body">{{ lieu.rue }}</div></td>
+
+                <td><button type="button" class="btn btn-danger mb-2">
+                        <a href="{{ path('lieu_delete', {'id': lieu.id }) }}" onclick="return confirm('Etes vous sur de vouloir supprimer ce Lieu ? ')">Supprimer </a></button></td>
+                {% endfor %}
+            </tbody>
+        </table>
+</div>
+{% endblock %}

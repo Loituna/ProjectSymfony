@@ -16,6 +16,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class LieuRepository extends ServiceEntityRepository
 {
+    const MAX_RESULT = 5;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Lieu::class);
