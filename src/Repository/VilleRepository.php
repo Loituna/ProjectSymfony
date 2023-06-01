@@ -17,7 +17,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class VilleRepository extends ServiceEntityRepository
 {
-    const MAX_RESULT = 5;
+    const MAX_RESULT = 10;
 
     public function __construct(ManagerRegistry $registry)
     {
