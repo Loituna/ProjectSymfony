@@ -32,14 +32,17 @@ body{
 }
 
 
-
-
 .list-group{
 
     background-color: #032757;
 }
 
+/* Modification des couleurs des liens */
 
+a:link{
+    color: #DDDDDD;
+
+}
 
 
 

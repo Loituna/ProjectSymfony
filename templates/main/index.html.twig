@@ -1,7 +1,39 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Welcome to Sortir.com !{% endblock %}
+{% block title %}Sortir.com !{% endblock %}
 
 {% block body %}
-    <div>Bonjour les loulous !! </div>
+<div class="containerIndex">
+    <h1 class="text-white">Les Evenements en cours : </h1>
+    <table class="table table-light table-striped">
+        <thead class="thead-light">
+        <tr>
+            <th>Nom de la Sortie</th>
+            <th>Date de la Sortie </th>
+            <th>Clotûre </th>
+            <th>inscrits/places</th>
+            <th>Etat</th>
+            <th>Inscrit</th>
+            <th>Organisateur</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody >
+        {% for sortie in sorties %}
+            <tr>
+                <td ><div class="text-body">{{ sortie.nom }}</div></td>
+                <td><div class="text-secondary">{{ sortie.dateDebut | date('d M Y H:i:s')}}</div></td>
+                <td><div class="text-danger">{{ sortie.dateLimite | date('d M Y')}}</div></td>
+                <td><div class="text-secondary">{{ sortie.participant_count }}/{{ sortie.nbInscriptionMax }}</div></td>
+                <td><div class="text-warning ">{{ sortie.etat }}</div></td>
+                <td></td>
+                <td><div class="text-secondary">{{ sortie.organisateur }}</div></td>
+                <td><button type="button" class="btn btn-danger mb-2"><a class="text-white" href="" onclick="return confirm('Etes vous sur de vouloir supprimer ce Campus ? ')">Supprimer</a></button></td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
 {% endblock %}
