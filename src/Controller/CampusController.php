@@ -17,8 +17,7 @@ class CampusController extends AbstractController
 {
     #[Route('/', name: 'index')]
     public function index(CampusRepository $campusRepository,
-                            Request $request,
-                            EntityManagerInterface $entityManager): Response
+                            Request $request): Response
     {
         //Renvoyer une liste/tableau des campus rentrés dans ma BDD
         $listCampus = $campusRepository->findAll();
