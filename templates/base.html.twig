@@ -18,7 +18,7 @@
         {% endblock %}
 
         {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
+
         {% endblock %}
     </head>
     <body>
@@ -34,9 +34,11 @@
                 {% endfor %}
             </header>
             <main>
-                {% block body %}
-                    <div>Bonjour la commu  ddsssssssss ! </div>
-                {% endblock %}
+                <div class="containerMain">
+                    {% block body %}
+                        <div>Bonjour la commu  ddsssssssss ! </div>
+                    {% endblock %}
+                </div>
             </main>
             <footer class="position- bottom-0 end-0">
                 {{ include('footer/footer.html.twig') }}

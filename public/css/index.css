@@ -7,11 +7,20 @@ body{
     color: #DDDDDD;
 }
 
+
+
 .container {
     max-width: 1200px;
     margin: auto;
     padding: 1px;
 }
+
+.containerMain{
+    max-width: 500px;
+    display: flex;
+
+}
+
 
 .containerCampus{
     max-width: 600px;
@@ -23,6 +32,5 @@ body{
     display: flex;
     justify-content: left;
 }
-
 
 

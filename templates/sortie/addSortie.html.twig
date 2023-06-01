@@ -1,11 +1,43 @@
 {% extends 'base.html.twig' %}
 
+
+
 {% block title %}{{parent()}} | Ajouter une Sortie{% endblock %}
 
 {% block body %}
+    {{ form_start(sortieForm) }}
+
+    {{ form_row(sortieForm.nom) }}
+    {{ form_row(sortieForm.infoSortie) }}
+    {{ form_row(sortieForm.dateDebut) }}
+    {{ form_row(sortieForm.dateLimite) }}
+    {{ form_row(sortieForm.duree) }}
+    {{ form_row(sortieForm.nbInscriptionMax) }}
+    {{ form_row(sortieForm.ville) }}
+    {% block javascripts %}
+        {# element by id pour recuperer les deux select #}
+
+        {# ajouter un EventListener aux deux select #}
+
+        {# quand il detecte une valeur sur le ville, il va faire une requete xhttp à l'URL ou j'ai ma methode getlieuxbyville dans le Sortie Controller #}
+
+        {# on recupere un tableau json ou il y aura un id mappé a un lieu  #}
+
+        {# boucle foreach for lieu as lieu, le select de lieu .add options .add value set placeholder name  #}
+
+    {% endblock%}
+    {{ form_row(sortieForm.lieu) }}
 
 
-<div class="containerAjoutSortie">
-    {{ form(sortieForm) }}
-</div>
+
+
+
+    {{ form_row(sortieForm.save) }}
+
+
+    {{ form_end(sortieForm) }}
+
+
+
+
 {% endblock %}
