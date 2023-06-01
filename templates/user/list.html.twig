@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+
+
+{% endblock %}
+
+{% block body %}
+
+    <h3>List des étudiants</h3>
+
+    <article>
+        {% for user in users %}
+            <a href="{{ path('user_show', {'id': user.id})}}">
+                <br>
+                Pseudo : {{ user.pseudo }}.
+            </a>
+            <br><br>
+        {% endfor %}
+
+    </article>
+
+{% endblock %}
+
