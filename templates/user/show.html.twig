@@ -1,23 +1,24 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h2>Mon profil</h2>
+    <h2 class="text-white">Mon profil</h2>
 
     <section>
-        <h4>Pseudo : {{ app.user.pseudo }} </h4>
+        <br>
+        <h5 class="text-white">Pseudo : {{ app.user.pseudo }} </h5>
         <div>
-
-            <div>Nom : {{ app.user.nom }}</div>
-            <div>Prénom : {{ app.user.prenom }}</div>
-            <div>Mail : {{ app.user.mail}} </div>
-            <div>Téléphone : {{ app.user.telephone }}</div>
-            <div>Campus : {{ app.user.campus.nom}} </div>
+            <br>
+            <div  class="form-control col-sm-6"  >Nom : {{ app.user.nom }}</div>
+            <div class="form-control col-sm-6">Prénom : {{ app.user.prenom }}</div>
+            <div class="form-control col-sm-6">Mail : {{ app.user.mail}} </div>
+            <div class="form-control col-sm-6">Téléphone : {{ app.user.telephone }}</div>
+            <div class="form-control col-sm-6">Campus : {{ app.user.campus.nom}} </div>
 
         </div>
 
         <br>
-        <a href="{{ path('app_main') }}"><button>Retour</button></a>
-        <button>Modifer</button>
+        <a href="{{ path('app_main') }}"><button class="btn btn-light mb-2">Retour</button></a>
+        <button class="btn btn-light mb-2">Modifer</button>
     </section>
 
 {% endblock %}
