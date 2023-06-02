@@ -39,6 +39,28 @@ class SortieRepository extends ServiceEntityRepository
         }
     }
 
+
+
+    public function findSortiesByCurrentUser($currentUser)
+    {
+        // Création de la requête avec createQueryBuilder
+        $query = $this->createQueryBuilder('s')
+            // Jointure avec la relation "participants"
+            ->leftJoin('s.participants', 'p')
+            // Condition pour filtrer les sorties où le current user est un participant
+            ->andWhere('p = :currentUser')
+            ->addSelect('s.nom')
+            // Définition du paramètre ":currentUser"
+            ->setParameter('currentUser', $currentUser)
+
+            // Récupération de la requête
+            ->getQuery();
+
+        // Exécution de la requête et retour du résultat
+        return $query->getResult();
+    }
+
+
 //    /**
 //     * @return Sortie[] Returns an array of Sortie objects
 //     */
