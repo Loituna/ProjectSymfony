@@ -42,7 +42,7 @@ class SortieFixtures extends Fixture
                 ->setDateDebut($generator->dateTimeBetween('-3 years' , '-1 week'))
                 ->setDateLimite($generator->dateTimeBetween($bamboche->getDateDebut()))
                 ->setDuree($generator->numberBetween(1,4).' jours')
-                ->setNbInscriptionMax($generator->numberBetween(10,30))
+                ->setNbInscriptionMax($generator->numberBetween(10,15))
                 ->setOrganisateur( $manager->find(User::class,$generator->numberBetween(1,20)))
                 ->setEtat( $manager->find(Etat::class,$generator->numberBetween(1,7)))
                 ->setCampus($manager->find(Campus::class,$generator->numberBetween(1,4)))

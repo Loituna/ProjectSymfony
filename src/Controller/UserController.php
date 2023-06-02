@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 
 #[Route('/user', name: 'user_')]
@@ -46,16 +47,19 @@ class UserController extends AbstractController
     public function update(
         int $id,
         UserRepository $userRepository,
-        EntityManagerInterface $entityManager,
         UserPasswordHasherInterface $userPasswordHasher,
-        Request $request): Response
+        Request $request,
+        AuthorizationCheckerInterface $authorizationChecker): Response
     {
         $user = $userRepository->find($id);
-        $userForm = $this->createForm(RegistrationFormType::class, $user);
+        $userForm = $this->createForm(RegistrationFormType::class, $user,[
+            'authorization_checker' => $authorizationChecker,
+        ]);
         $userForm->handleRequest($request);
 
 
         if ($userForm->isSubmitted() && $userForm->isValid()) {
+
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
@@ -63,8 +67,7 @@ class UserController extends AbstractController
                 )
             );
 
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $userRepository->save($user,true);
 
             return $this->redirectToRoute('user_show');
 
