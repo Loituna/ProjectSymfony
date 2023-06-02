@@ -38,9 +38,9 @@
                 <td><div class="text-secondary">{{ sortie.organisateur }}</div></td>
                 <td>
                     {% if isCurrentUserParticipant %}
-                        <button type="button" class="btn btn-info mb-2"><a class="text-white" href="" onclick="return confirm('Etes vous sur de vouloir vous inscrire à cet événement  ? ')">S'inscrire</a></button>
+                        <button type="button" class="btn btn-info mb-2"><a class="text-white" href="{{ path('eventRemove', {'sortieId': sortie.id})  }}" onclick="return confirm('Etes vous sur de vouloir vous désister de cet événement  ? ')">Se désister</a></button>
                     {% else %}
-                        <button type="button" class="btn btn-info mb-2"><a class="text-white" href="" onclick="return confirm('Etes vous sur de vouloir vous désister de cet événement  ? ')">Se désister</a></button>
+                        <button type="button" class="btn btn-info mb-2"><a class="text-white" href="{{ path('eventRegister', {'sortieId': sortie.id})  }}" onclick="return confirm('Etes vous sur de vouloir vous inscrire à cet événement  ? ')">S'inscrire</a></button>
                     {% endif%}
                     <button type="button" class="btn btn-primary mb-2"><a class="text-white" href="" onclick="return confirm('Etes vous sur de vouloir supprimer ce Campus ? ')">Modifier</a></button>
                 </td>

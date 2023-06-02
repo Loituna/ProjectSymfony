@@ -56,6 +56,9 @@ class SortieRepository extends ServiceEntityRepository
             // Récupération de la requête
             ->getQuery();
 
+        $results = $query->getResult();
+        var_dump($results);
+//        dd($query->getResult());
         // Exécution de la requête et retour du résultat
         return $query->getResult();
     }

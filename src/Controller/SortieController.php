@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Sortie;
+use App\Entity\User;
 use App\Entity\Ville;
 use App\Form\AjoutSortieType;
 use App\Repository\LieuRepository;
@@ -28,10 +29,13 @@ class SortieController extends AbstractController
         $currentUser = $security->getUser();
         $sortiesUserInscrit = $sortieRepository->findSortiesByCurrentUser($currentUser);
 
+
+
         $listSorties = $sortieRepository->createQueryBuilder('s')
             ->leftJoin('s.etat', 'e')
             ->leftJoin('s.participants', 'p')
             ->leftJoin('s.organisateur', 'o')
+            ->addSelect('s.id')
             ->addSelect('s.nom')
             ->addSelect('s.dateDebut')
             ->addSelect('s.dateLimite')
@@ -98,4 +102,63 @@ class SortieController extends AbstractController
             'sortie' => $sortie,
         ]);
     }
+
+    #[Route('/eventRegister/{sortieId}', name:'eventRegister', requirements: ['id'=>'\d+'])]
+    public function registerToEvent(int $sortieId, UserRepository $userRepository, SortieRepository $sortieRepository):Response {
+
+        //Récupèrer l'utilisateur courant
+        $currentUser = $userRepository->find($this->getUser());
+
+        //Récupèrer l'événement à partir de l'id
+        $sortie = $sortieRepository->find($sortieId);
+
+        //vérifier si l'événement existe
+        if (!$sortie){
+            throw $this->createNotFoundException('L événement n existe pas ');
+        }
+
+        //Vérifier si l'utilisateur est déjà inscrit à cet événement
+        $isAlreadyParticipant = $sortie->getParticipants()->contains($currentUser);
+        if ($isAlreadyParticipant){
+            throw $this->createNotFoundException('Vous etes deja inscrit ! ');
+        }
+
+        //Ajout de l'utilisateur courant aux participants de l'événement
+        $sortie->addUser($currentUser);
+
+        //Enregistrer les modifications dans la base de données
+        $sortieRepository->save($sortie, true);
+
+        $this->addFlash('success', 'Vous êtes bien inscrit à '.$sortie->getNom());
+        return $this->redirectToRoute('index');
+
+    }
+
+    #[Route('/eventRemove/{sortieId}', name:'eventRemove', requirements: ['id'=>'\d+'])]
+    public function removeToEvent(int $sortieId, UserRepository $userRepository, SortieRepository $sortieRepository):Response {
+
+        //Récupèrer l'utilisateur courant
+        $currentUser = $userRepository->find($this->getUser());
+
+        //Récupèrer l'événement à partir de l'id
+        $sortie = $sortieRepository->find($sortieId);
+
+        //vérifier si l'événement existe
+        if (!$sortie){
+            throw $this->createNotFoundException('L événement n existe pas ');
+        }
+
+        //Ajout de l'utilisateur courant aux participants de l'événement
+        $sortie->removeUser($currentUser);
+
+        //Enregistrer les modifications dans la base de données
+        $sortieRepository->save($sortie, true);
+
+        $this->addFlash('success', 'Vous êtes bien désinscrit de '.$sortie->getNom());
+        return $this->redirectToRoute('index');
+
+    }
+
+
+
 }
