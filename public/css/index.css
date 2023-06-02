@@ -14,14 +14,14 @@ body{
 }
 
 .containerMain{
-    max-width: 500px;
+    max-width: 1200px;
     display: flex;
 
 }
 
 
 .containerCampus{
-    max-width: 600px;
+    max-width: 1200px;
     margin: auto;
     padding: 1px;
 }

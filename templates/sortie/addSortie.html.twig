@@ -14,30 +14,47 @@
     {{ form_row(sortieForm.duree) }}
     {{ form_row(sortieForm.nbInscriptionMax) }}
     {{ form_row(sortieForm.ville) }}
-    {% block javascripts %}
-        {# element by id pour recuperer les deux select #}
 
-        {# ajouter un EventListener aux deux select #}
-
-        {# quand il detecte une valeur sur le ville, il va faire une requete xhttp à l'URL ou j'ai ma methode getlieuxbyville dans le Sortie Controller #}
-
-        {# on recupere un tableau json ou il y aura un id mappé a un lieu  #}
-
-        {# boucle foreach for lieu as lieu, le select de lieu .add options .add value set placeholder name  #}
-
-    {% endblock%}
     {{ form_row(sortieForm.lieu) }}
-
-
-
-
-
     {{ form_row(sortieForm.save) }}
 
 
     {{ form_end(sortieForm) }}
 
-
-
-
 {% endblock %}
+{% block javascripts %}
+    <script>
+        {#            permet d'attendre que le fichier soit chargé#}
+        window.onload = () => {
+            // on va chercher la ville
+            let ville = document.querySelector("#ajout_sortie_ville");
+
+            ville.addEventListener("change", function(){
+                //fonction JS, permet d'aller chercher la balise form la plus proche de mon élément, dc le parent
+                let form = this.closest("form");
+                let data = this.name + "=" + this.value;
+                // console.log(data);
+                fetch(form.action,{
+                    method: form.getAttribute("method"),
+                    body: data,
+                    headers: {
+                        //on envoie nos données sous forme de query string : Clé = valeur
+                        "Content-Type": "application/x-www-form-urlencoded; charset:UTF-8"
+
+                    }
+                })
+                //on recoit la page en HTML
+                    .then(response => response.text())
+                    .then(html => {
+                        let content = document.createElement("html");
+                        content.innerHTML = html; //on pourra faire ensuite un query selector dessus
+                        let nouveauSelect = content.querySelector("#ajout_sortie_lieu");
+                        document.querySelector("#ajout_sortie_lieu").replaceWith(nouveauSelect);
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+            });
+        }
+    </script>
+{% endblock%}
