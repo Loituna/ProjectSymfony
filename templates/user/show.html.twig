@@ -6,18 +6,17 @@
     <section>
         <br>
         <h5 class="text-white">Pseudo : {{ app.user.pseudo }} </h5>
-        <div>
+        <div class="container">
             <br>
-            <div  class="form-control col-sm-6"  >Nom : {{ app.user.nom }}</div>
-            <div class="form-control col-sm-6">Prénom : {{ app.user.prenom }}</div>
-            <div class="form-control col-sm-6">Mail : {{ app.user.mail}} </div>
-            <div class="form-control col-sm-6">Téléphone : {{ app.user.telephone }}</div>
-            <div class="form-control col-sm-6">Campus : {{ app.user.campus.nom}} </div>
-
+            <div  class="form-control col-m-8"  >Nom : {{ app.user.nom }}</div>
+            <div class="form-control col-m-6">Prénom : {{ app.user.prenom }}</div>
+            <div class="form-control col-m-6">Mail : {{ app.user.mail}} </div>
+            <div class="form-control col-m-6">Téléphone : {{ app.user.telephone }}</div>
+            <div class="form-control col-m-6">Campus : {{ app.user.campus.nom}} </div>
         </div>
 
         <br>
-        <a href="{{ path('app_main') }}"><button class="btn btn-light mb-2">Retour</button></a>
+        <a href="{{ path('index') }}"><button class="btn btn-light mb-2">Retour</button></a>
         <a href="{{ path('user_update', {'id': user.id}) }}"><button class="btn btn-light mb-2">Modifer</button></a>
     </section>
 
