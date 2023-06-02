@@ -17,7 +17,7 @@ class LieuFixtures extends Fixture
 
     public function addLieu(ObjectManager $manager){
         $generator = Factory::create('fr_FR');
-        for($i=0;$i<30;$i++){
+        for($i=0;$i<100;$i++){
             $villeLieu = $manager->find(Ville::class,$generator->numberBetween(1,20) );
 
             $lieu = new Lieu();

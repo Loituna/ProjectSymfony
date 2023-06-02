@@ -118,9 +118,12 @@ class AjoutSortieType extends AbstractType
         ;
 
         $formModifier = function (FormInterface $form, Ville $ville){
+
+
 //            $lieux = $ville->getLieux(); //mais si c'est null ca ne marche pas, donc ternaire
-            $lieux = (null === $ville) ? [] : $ville->getLieux(); //soit tableau vide car null, soit lieux de la ville
+            $lieux = (null == $ville) ? [] : $ville->getLieux(); //soit tableau vide car null, soit lieux de la ville
             $form->add('lieu', EntityType::class, [
+
                 'class' => Lieu::class,
                 'choices' => $lieux,
                 'choice_label' => 'nom',
@@ -129,11 +132,16 @@ class AjoutSortieType extends AbstractType
                 'required' => false
             ]);
         };
+//dd($formModifier);
+
 
         $builder->get('ville')->addEventListener(
           FormEvents::POST_SUBMIT, //on recupere dans event l'evenement
-            function (FormEvent $event) use ($formModifier){
+
+            function (FormEvent $event) use ($formModifier)
+            {
               $ville = $event->getForm()->getData();
+
                 $formModifier($event->getForm()->getParent(), $ville);
             }
         );
