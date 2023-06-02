@@ -1,18 +1,21 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h2 class="text-white">Mon profil</h2>
+
 
     <section>
-        <br>
-        <h5 class="text-white">Pseudo : {{ app.user.pseudo }} </h5>
+
         <div class="container">
+            <h2 class="text-white">Mon profil</h2>
             <br>
-            <div  class="form-control col-m-8"  >Nom : {{ app.user.nom }}</div>
-            <div class="form-control col-m-6">Prénom : {{ app.user.prenom }}</div>
-            <div class="form-control col-m-6">Mail : {{ app.user.mail}} </div>
-            <div class="form-control col-m-6">Téléphone : {{ app.user.telephone }}</div>
-            <div class="form-control col-m-6">Campus : {{ app.user.campus.nom}}     </div>
+
+            <h5 class="text-white">Pseudo : {{ app.user.pseudo }} </h5>
+            <br>
+            <div  class="form-control champShow"  >Nom : {{ app.user.nom }}</div>
+            <div class="form-control ">Prénom : {{ app.user.prenom }}</div>
+            <div class="form-control ">Mail : {{ app.user.mail}} </div>
+            <div class="form-control ">Téléphone : {{ app.user.telephone }}</div>
+            <div class="form-control ">Campus : {{ app.user.campus.nom}} </div>
         </div>
 
         <br>
