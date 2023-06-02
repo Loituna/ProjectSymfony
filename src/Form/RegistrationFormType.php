@@ -12,15 +12,28 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+
+
 class RegistrationFormType extends AbstractType
 {
+    //private $authorizationChecker;
+
+//    public function __construct(AuthorizationCheckerInterface $authorizationChecker)
+//    {
+//        $this->authorizationChecker = $authorizationChecker;
+//    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+      //  $userRole = $this->authorizationChecker->isGranted('ROLE_ADMIN') ? 'admin' : 'user';
+
         $builder
             ->add('pseudo')
             ->add('nom')
@@ -57,8 +70,10 @@ class RegistrationFormType extends AbstractType
                 return $qb;
                 }
             ])
+
             ->add('actif')
             ->add('administrateur')
+
             ->add('photo', FileType::class, [
                 'mapped' => false,
             ])
