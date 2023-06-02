@@ -20,15 +20,30 @@
         </thead>
         <tbody >
         {% for sortie in sorties %}
+        {#            Vérifier si le current User fait partie des participants#}
+            {% set isCurrentUserParticipant = false %}
+            {% for inscrit in sortiesUserInscrit %}
+                {% if  sortie.nom  == inscrit.nom  %}
+                    {% set isCurrentUserParticipant = true %}
+
+                {% endif %}
+            {% endfor%}
             <tr>
                 <td ><div class="text-body">{{ sortie.nom }}</div></td>
                 <td><div class="text-secondary">{{ sortie.dateDebut | date('d M Y H:i:s')}}</div></td>
                 <td><div class="text-danger">{{ sortie.dateLimite | date('d M Y')}}</div></td>
                 <td><div class="text-secondary">{{ sortie.participant_count }}/{{ sortie.nbInscriptionMax }}</div></td>
                 <td><div class="text-warning ">{{ sortie.etat }}</div></td>
-                <td></td>
+                <td><div class="text-info">{{ isCurrentUserParticipant ? 'Inscrit' : ' ' }}</div></td>
                 <td><div class="text-secondary">{{ sortie.organisateur }}</div></td>
-                <td><button type="button" class="btn btn-danger mb-2"><a class="text-white" href="" onclick="return confirm('Etes vous sur de vouloir supprimer ce Campus ? ')">Supprimer</a></button></td>
+                <td>
+                    {% if isCurrentUserParticipant %}
+                        <button type="button" class="btn btn-info mb-2"><a class="text-white" href="" onclick="return confirm('Etes vous sur de vouloir vous inscrire à cet événement  ? ')">S'inscrire</a></button>
+                    {% else %}
+                        <button type="button" class="btn btn-info mb-2"><a class="text-white" href="" onclick="return confirm('Etes vous sur de vouloir vous désister de cet événement  ? ')">Se désister</a></button>
+                    {% endif%}
+                    <button type="button" class="btn btn-primary mb-2"><a class="text-white" href="" onclick="return confirm('Etes vous sur de vouloir supprimer cet événement ? ')">Modifier</a></button>
+                </td>
             </tr>
         {% endfor %}
 

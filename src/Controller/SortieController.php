@@ -7,6 +7,7 @@ use App\Entity\Ville;
 use App\Form\AjoutSortieType;
 use App\Repository\LieuRepository;
 use App\Repository\SortieRepository;
+use App\Repository\UserRepository;
 use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -16,16 +17,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 
 class SortieController extends AbstractController
 {
     #[Route('/', name: 'index')]
-    public function index(SortieRepository $sortieRepository): Response
+    public function index(SortieRepository $sortieRepository, Security $security): Response
     {
-        //renvoyer une liste/tableau des sorties rentrées dans ma BDD
-//        $listSorties = $sortieRepository->findAll();
+        $currentUser = $security->getUser();
+        $sortiesUserInscrit = $sortieRepository->findSortiesByCurrentUser($currentUser);
 
         $listSorties = $sortieRepository->createQueryBuilder('s')
             ->leftJoin('s.etat', 'e')
@@ -44,7 +46,8 @@ class SortieController extends AbstractController
             ->getResult();
 
         return $this->render('main/index.html.twig', [
-            'sorties' => $listSorties
+            'sorties' => $listSorties,
+            'sortiesUserInscrit' => $sortiesUserInscrit
         ]);
     }
 
