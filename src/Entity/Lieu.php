@@ -35,7 +35,7 @@ class Lieu
     private ?float $longitude = null;
 
     #[Groups("lieu_data")]
-    #[ORM\OneToMany(mappedBy: 'lieu', targetEntity: Sortie::class)]
+    #[ORM\OneToMany(mappedBy: 'lieu', targetEntity: Sortie::class, cascade: ['remove'])]
     private Collection $sorties;
 
     #[Groups("lieu_data")]

@@ -68,7 +68,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Un pseudo est obligatoire !")]
+    #[Assert\NotBlank(message: "Une adresse mail est obligatoire !")]
     #[Assert\Email(message: "L'adresse mail n'est pas valide.")]
     private ?string $mail = null;
 
@@ -90,7 +90,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Sortie::class, inversedBy: 'participants')]
     private Collection $sorties;
 
-    #[ORM\OneToMany(mappedBy: 'organisateur', targetEntity: Sortie::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'organisateur', targetEntity: Sortie::class,  cascade: ['remove'])]
     private Collection $sortiesOrga;
 
     public function __construct()
