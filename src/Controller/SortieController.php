@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -41,7 +42,6 @@ class SortieController extends AbstractController
             ->groupBy('s.id')
             ->getQuery()
             ->getResult();
-
 
         return $this->render('main/index.html.twig', [
             'sorties' => $listSorties
@@ -75,17 +75,19 @@ class SortieController extends AbstractController
         ]);
     }
 
-    #[Route('/sortie/lieux-par-ville/{villeId}', name: 'sortie_lieux_par_ville', methods: ['GET'])]
-    public function lieuxParVille(int $villeId, LieuRepository $lieuRepository){
-        $lieux = $lieuRepository->findLieuxByVille($villeId);
-        //
+    #[Route('/sortie/lieux-par-ville/', name: 'sortie_lieux_par_ville', methods: ['POST'])]
+    public function lieuxParVille(Request $request, LieuRepository $lieuRepository){
 
-        //Générez le HTMl pour les options de lieu
-        $lieuxOptions = '';
-        foreach ($lieux as $lieu){
-            $lieuxOptions.='<option value="' . $lieu->getId() . '">' . $lieu->getNom() . '</option>';
-        }
-        return new Response($lieuxOptions);
+        $patate = $request->getContent();
+        $patate= (int)substr($patate,-2);
+
+        $lieux = $lieuRepository->findLieuxByVille($patate);
+
+        return $this->json($lieux,200,[],['groups'=>'lieu_data']);
+
+
+
+
     }
 
     #[Route('/sortie/{id}', name: 'sortie_show')]

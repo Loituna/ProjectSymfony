@@ -24,36 +24,44 @@
 {% endblock %}
 {% block javascripts %}
     <script>
-        {#            permet d'attendre que le fichier soit chargé#}
         window.onload = () => {
-            // on va chercher la ville
+            // On écoute l'événement de changement de la ville
             let ville = document.querySelector("#ajout_sortie_ville");
 
-            ville.addEventListener("change", function(){
-                //fonction JS, permet d'aller chercher la balise form la plus proche de mon élément, dc le parent
-                let form = this.closest("form");
-                let data = this.name + "=" + this.value;
-                 console.log(data);
-                fetch(form.action,{
-                    method: form.getAttribute("method"),
-                    body: data,
+            ville.addEventListener("change", function() {
+                console.log("change");
+                let form = this.closest("form"); // On récupère le formulaire parent
+                let data = new URLSearchParams();
+                data.append(this.name, this.value); // On ajoute les données de la ville au formulaire
+
+                // On envoie une requête Ajax pour récupérer les lieux correspondants
+                fetch("{{ path('sortie_lieux_par_ville') }}", {
+                    method: form.getAttribute("method"), // On récupère la méthode du formulaire
+                    body: data, // On envoie les données de la ville
                     headers: {
-                        //on envoie nos données sous forme de query string : Clé = valeur
-                        "Content-Type": "application/x-www-form-urlencoded; charset:UTF-8"
+                        "Content-Type": "application/x-www-form-urlencoded; charset:UTF-8" // On précise le type de contenu de la requête
                     }
                 })
-                //on recoit la page en HTML
-                    .then(response => response.text())
-                    .then(html => {
-                        let content = document.createElement("html");
-                        content.innerHTML = html; //on pourra faire ensuite un query selector dessus
-                        let nouveauSelect = content.querySelector("#ajout_sortie_lieu");
-                        document.querySelector("#ajout_sortie_lieu").replaceWith(nouveauSelect);
+                    .then(response => response.json()) // On traite la réponse comme JSON
+                    .then(data => {
+                        let nouveauSelect = document.createElement("select"); // On crée un nouvel élément select
+
+                        // On parcourt les données JSON pour créer les options du sélecteur de lieu
+                        data.forEach(lieu => {
+                            let option = document.createElement("option"); // On crée un nouvel élément option
+                            option.value = lieu.id; // On attribue la valeur du lieu à l'option
+                            option.text = lieu.nom; // On attribue le nom du lieu comme texte de l'option
+                            nouveauSelect.appendChild(option); // On ajoute l'option au sélecteur
+                        });
+
+                        let ancienSelect = document.querySelector("#ajout_sortie_lieu"); // On récupère l'ancien sélecteur
+                        ancienSelect.parentNode.replaceChild(nouveauSelect, ancienSelect); // On remplace l'ancien sélecteur par le nouveau
                     })
                     .catch(error => {
-                        console.log(error)
-                    })
+                        console.log(error);
+                    });
             });
-        }
+        };
+
     </script>
 {% endblock%}
