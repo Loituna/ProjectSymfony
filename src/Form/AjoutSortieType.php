@@ -10,6 +10,7 @@ use App\Repository\SortieRepository;
 use App\Repository\VilleRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -19,6 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -86,12 +88,10 @@ class AjoutSortieType extends AbstractType
 
 
             ->add('ville', EntityType::class, [
-                'required'=>true,
                 'mapped'=>false,
                 'label'=> 'Ville: ',
                 'class' => Ville::class,
                 'choice_label' => 'nom',
-                'choices' => $options['villes']->findAll(),
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez choisir une ville'
@@ -104,45 +104,11 @@ class AjoutSortieType extends AbstractType
                 }
             ])
 
-            ->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
-                $form = $event->getForm();
-                $data = $event->getData();
-
-
-                // Vérifier si la ville est sélectionnée
-                if (isset($data['ville'])) {
-                    $villeId = $data['ville']->getId();
-                    $lieuOptions = [];
-
-                    // Récupérer le repository des lieux depuis les options du formulaire
-                    $lieuRepository = $options['lieux'];
-
-                    // Récupérer les lieux correspondants à la ville sélectionnée
-                    $lieux = $lieuRepository->findLieuxByVille($villeId);
-
-                    // Créer les nouvelles options pour le champ lieu
-                    foreach ($lieux as $lieu) {
-                        $lieuOptions[$lieu->getNom()] = $lieu;
-                    }
-
-                    //configuration du champ lieu
-                    $form->add('lieu', EntityType::class, [
-                        'required' => false,
-                        'label' => 'Lieu: ',
-                        'class' => Lieu::class,
-                        'placeholder' => 'Sélectionnez un lieu ',
-                        'choice_label' => 'nom',
-//                        'choices' => $lieuOptions,
-                        'constraints' => [
-                            new NotBlank([
-                                'message' => 'Veuillez choisir un lieu'
-                            ])
-                        ]
-                    ]);
-                }
-            })
-
-
+            ->add('lieu', ChoiceType::class, [
+                'label' => 'Lieu: ',
+                'placeholder' => 'Lieu (Choisir une ville',
+                'required' => false
+            ])
 
             ->add('save',SubmitType::class, [
                     'label' => 'Valider',
@@ -151,14 +117,32 @@ class AjoutSortieType extends AbstractType
 
         ;
 
+        $formModifier = function (FormInterface $form, Ville $ville = null){
+//            $lieux = $ville->getLieux(); //mais si c'est null ca ne marche pas, donc ternaire
+            $lieux = (null === $ville) ? [] : $ville->getLieux(); //soit tableau vide car null, soit lieux de la ville
+            $form->add('lieu', EntityType::class, [
+                'class' => Lieu::class,
+                'choices' => $lieux,
+                'choice_label' => 'nom',
+                'placeholder' => 'Lieu (Choisir une ville',
+                'label' => 'Lieu : ',
+                'required' => false
+            ]);
+        };
+
+        $builder->get('ville')->addEventListener(
+          FormEvents::POST_SUBMIT, //on recupere dans event l'evenement
+            function (FormEvent $event) use ($formModifier){
+              $ville = $event->getForm()->getData();
+                $formModifier($event->getForm()->getParent(), $ville);
+            }
+        );
+
 
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setRequired(['lieux','villes']);
-        $resolver->setAllowedTypes('lieux',LieuRepository::class);
-        $resolver->setAllowedTypes('villes', VilleRepository::class);
 
         $resolver->setDefaults([
             'data_class' => Sortie::class,

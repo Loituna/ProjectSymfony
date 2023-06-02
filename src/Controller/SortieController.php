@@ -32,10 +32,7 @@ class SortieController extends AbstractController
         $sortie = new Sortie();
 
         //créer un formulaire pour Sortie
-        $sortieForm = $this->createForm(AjoutSortieType::class,$sortie, [
-            'lieux' => $lieuRepository,
-            'villes' => $villeRepository
-        ]);
+        $sortieForm = $this->createForm(AjoutSortieType::class,$sortie);
 
         $sortieForm->handleRequest($request);
 
