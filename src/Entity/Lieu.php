@@ -6,8 +6,10 @@ use App\Repository\LieuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+#[UniqueEntity(fields: ['nom','rue','ville'], message: "Ce Lieu existe déjà , il serait temps de boire moins de biere dans ce bar !!!")]
 #[ORM\Entity(repositoryClass: LieuRepository::class)]
 class Lieu
 
