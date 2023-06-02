@@ -97,11 +97,11 @@ class AjoutSortieType extends AbstractType
                         'message' => 'Veuillez choisir une ville'
                     ])
                 ],
-                'query_builder'=>function(VilleRepository $villeRepository){
-                    $qb=$villeRepository->createQueryBuilder('s');
-                    $qb->addOrderBy('s.nom', 'ASC');
-                    return $qb;
-                }
+//                'query_builder'=>function(VilleRepository $villeRepository){
+//                    $qb=$villeRepository->createQueryBuilder('s');
+//                    $qb->addOrderBy('s.nom', 'ASC');
+//                    return $qb;
+//                }
             ])
 
             ->add('lieu', ChoiceType::class, [
@@ -117,7 +117,7 @@ class AjoutSortieType extends AbstractType
 
         ;
 
-        $formModifier = function (FormInterface $form, Ville $ville = null){
+        $formModifier = function (FormInterface $form, Ville $ville){
 //            $lieux = $ville->getLieux(); //mais si c'est null ca ne marche pas, donc ternaire
             $lieux = (null === $ville) ? [] : $ville->getLieux(); //soit tableau vide car null, soit lieux de la ville
             $form->add('lieu', EntityType::class, [

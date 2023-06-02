@@ -33,7 +33,7 @@
                 //fonction JS, permet d'aller chercher la balise form la plus proche de mon élément, dc le parent
                 let form = this.closest("form");
                 let data = this.name + "=" + this.value;
-                // console.log(data);
+                 console.log(data);
                 fetch(form.action,{
                     method: form.getAttribute("method"),
                     body: data,
