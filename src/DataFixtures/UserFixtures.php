@@ -33,6 +33,7 @@ class UserFixtures extends Fixture
      * Fonction dont le but est d'ajouter un pull Utilisateur à la BDD.
      * Les deux premiers paramètres de la premiere itération sont à completer par vos soins
      * pour pouvoir ensuite vous connecter en tant qu'admin sur votre site internet.
+     * Meme Chose pour la deuxieme iteration pour ce connecter en tant que USER
      */
     public function addUser(ObjectManager $manager) {
         $generator = Factory::create('fr_FR');
@@ -44,7 +45,7 @@ class UserFixtures extends Fixture
         $userAdmin->setPseudo("AdminPatate");
         $userAdmin->setPassword($this->hasher->hashPassword($userAdmin, 'Patate'));
 
-        $campusAdmin = $manager->find(Campus::class,1);
+        $campus = $manager->find(Campus::class,1);
 
 
         $userAdmin->setRoles(['ROLE_ADMIN']);
@@ -54,13 +55,27 @@ class UserFixtures extends Fixture
             ->setActif('true')
             ->setAdministrateur('true')
             ->setTelephone($generator->phoneNumber)
-            ->setCampus($campusAdmin);
+            ->setCampus($campus);
 
 
         $manager->persist($userAdmin);
 
 
-        // Ici le pull pour les utilisateurs lambda
+        $userUser = new User();
+
+        $userUser->setPseudo("Patate");
+        $userAdmin->setPassword($this->hasher->hashPassword($userAdmin, 'Patate'));
+
+        $userUser->setNom($generator->lastName)
+            ->setPrenom($generator->firstName)
+            ->setMail($generator->email)
+            ->setActif('true')
+            ->setAdministrateur('true')
+            ->setTelephone($generator->phoneNumber)
+            ->setCampus($campus);
+
+
+        // Ici le pull pour les utilisateurs Anonymes
 
 
 

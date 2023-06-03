@@ -6,30 +6,41 @@ use App\Repository\LieuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[UniqueEntity(fields: ['nom','rue','ville'], message: "Ce Lieu existe déjà , il serait temps de boire moins de biere dans ce bar !!!")]
 #[ORM\Entity(repositoryClass: LieuRepository::class)]
 class Lieu
+
 {
+    #[Groups("lieu_data")]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups("lieu_data")]
     #[ORM\Column(length: 50)]
     private ?string $nom = null;
 
+    #[Groups("lieu_data")]
     #[ORM\Column(length: 80)]
     private ?string $rue = null;
 
+    #[Groups("lieu_data")]
     #[ORM\Column(nullable: true)]
     private ?float $lattitude = null;
 
+    #[Groups("lieu_data")]
     #[ORM\Column(nullable: true)]
     private ?float $longitude = null;
 
-    #[ORM\OneToMany(mappedBy: 'lieu', targetEntity: Sortie::class)]
+    #[Groups("lieu_data")]
+    #[ORM\OneToMany(mappedBy: 'lieu', targetEntity: Sortie::class, cascade: ['remove'])]
     private Collection $sorties;
 
+    #[Groups("lieu_data")]
     #[ORM\ManyToOne(inversedBy: 'lieux')]
     private ?Ville $ville = null;
 

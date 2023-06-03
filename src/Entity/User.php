@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['pseudo'], message: "Dieu Irwin te l'interdit ! Pseudo déjà existant !")]
@@ -21,6 +22,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Assert\NotBlank(message: "Un pseudo est obligatoire !")]
+    #[Assert\Length(
+        min: 1,
+        max: 25,
+        minMessage: "Minimum {{ value }} character",
+        maxMessage: "Maximum {{ value }} characters"
+    )]
     private ?string $pseudo = null;
 
     #[ORM\Column]
@@ -30,15 +38,38 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+//    #[Assert\NotBlank(message: "Un mots de passe est obligatoire !")]
+//    #[Assert\Length(
+//        min: 1,
+//        max: 25,
+//        minMessage: "Minimum {{ value }} character",
+//        maxMessage: "Maximum {{ value }} characters"
+//    )]
     private ?string $password = null;
 
+    #[Assert\NotBlank(message: "Le nom est obligatoire !")]
+    #[Assert\Length(
+        min: 1,
+        max: 50,
+        minMessage: "Minimum {{ value }} character",
+        maxMessage: "Maximum {{ value }} characters"
+    )]
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le prenom est obligatoire !")]
+    #[Assert\Length(
+        min: 1,
+        max: 25,
+        minMessage: "Minimum {{ value }} character",
+        maxMessage: "Maximum {{ value }} characters"
+    )]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Une adresse mail est obligatoire !")]
+    #[Assert\Email(message: "L'adresse mail n'est pas valide.")]
     private ?string $mail = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -59,7 +90,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Sortie::class, inversedBy: 'participants')]
     private Collection $sorties;
 
-    #[ORM\OneToMany(mappedBy: 'organisateur', targetEntity: Sortie::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'organisateur', targetEntity: Sortie::class,  cascade: ['remove'])]
     private Collection $sortiesOrga;
 
     public function __construct()

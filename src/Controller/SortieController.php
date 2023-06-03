@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Sortie;
-use App\Entity\User;
 use App\Entity\Ville;
 use App\Form\AjoutSortieType;
 use App\Repository\LieuRepository;
@@ -63,17 +62,19 @@ class SortieController extends AbstractController
         ]);
     }
 
-    #[Route('/sortie/lieux-par-ville/{villeId}', name: 'sortie_lieux_par_ville', methods: ['GET'])]
-    public function lieuxParVille(int $villeId, LieuRepository $lieuRepository){
-        $lieux = $lieuRepository->findLieuxByVille($villeId);
-        //
+    #[Route('/sortie/lieux-par-ville/', name: 'sortie_lieux_par_ville', methods: ['POST'])]
+    public function lieuxParVille(Request $request, LieuRepository $lieuRepository){
 
-        //Générez le HTMl pour les options de lieu
-        $lieuxOptions = '';
-        foreach ($lieux as $lieu){
-            $lieuxOptions.='<option value="' . $lieu->getId() . '">' . $lieu->getNom() . '</option>';
-        }
-        return new Response($lieuxOptions);
+        $patate = $request->getContent();
+        $patate= (int)substr($patate,-2);
+
+        $lieux = $lieuRepository->findLieuxByVille($patate);
+
+        return $this->json($lieux,200,[],['groups'=>'lieu_data']);
+
+
+
+
     }
 
     #[Route('/sortie/{id}', name: 'sortie_show')]

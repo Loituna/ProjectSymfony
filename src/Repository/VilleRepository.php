@@ -69,8 +69,7 @@ class VilleRepository extends ServiceEntityRepository
     public function findVilleWithPagination(int $page): Paginator
     {
         $qb=$this->createQueryBuilder('v')
-            ->addOrderBy('v.nom','ASC');
-
+            ->addOrderBy('v.codePostal','ASC');
 
         $query=$qb->getQuery();
         $query->setMaxResults(VilleRepository::MAX_RESULT);
