@@ -19,15 +19,19 @@
         </tr>
         </thead>
         <tbody >
+        {% set isCurrentUserParticipant = false %}
+        {% set loopBreak = false %}
         {% for sortie in sorties %}
-        {#            Vérifier si le current User fait partie des participants#}
-            {% set isCurrentUserParticipant = false %}
-            {% for inscrit in sortiesUserInscrit %}
-                {% if  sortie.nom  == inscrit.nom  %}
-                    {% set isCurrentUserParticipant = true %}
+                {#            Vérifier si le current User fait partie des participants#}
+            {% if not loopBreak %}
+                {% for inscrit in sortiesUserInscrit %}
+                    {% if  sortie.nom  == inscrit.nom  %}
+                        {% set isCurrentUserParticipant = true %}
+                        {% set loopBreak= true %}
+                    {% endif %}
+                {% endfor%}
+            {% endif %}
 
-                {% endif %}
-            {% endfor%}
             <tr>
                 <td ><div class="text-body">{{ sortie.nom }}</div></td>
                 <td><div class="text-secondary">{{ sortie.dateDebut | date('d M Y H:i:s')}}</div></td>

@@ -57,13 +57,32 @@ class SortieRepository extends ServiceEntityRepository
             ->getQuery();
 
         $results = $query->getResult();
-        var_dump($results);
+//        var_dump($results);
 //        dd($query->getResult());
         // Exécution de la requête et retour du résultat
         return $query->getResult();
     }
 
+    public function findEventsIndex(){
+        $listSorties = $this->createQueryBuilder('s')
+            ->leftJoin('s.etat', 'e')
+            ->leftJoin('s.participants', 'p')
+            ->leftJoin('s.organisateur', 'o')
+            ->addSelect('s.id')
+            ->addSelect('s.nom')
+            ->addSelect('s.dateDebut')
+            ->addSelect('s.dateLimite')
+            ->addSelect('s.duree')
+            ->addSelect('s.nbInscriptionMax')
+            ->addSelect('e.libelle as etat')
+            ->addSelect('COUNT(p.id) as participant_count')
+            ->addSelect('o.nom as organisateur')
+            ->groupBy('s.id')
+            ->getQuery()
+            ->getResult();
 
+        return $listSorties;
+    }
 //    /**
 //     * @return Sortie[] Returns an array of Sortie objects
 //     */

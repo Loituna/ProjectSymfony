@@ -28,26 +28,7 @@ class SortieController extends AbstractController
     {
         $currentUser = $security->getUser();
         $sortiesUserInscrit = $sortieRepository->findSortiesByCurrentUser($currentUser);
-
-
-
-        $listSorties = $sortieRepository->createQueryBuilder('s')
-            ->leftJoin('s.etat', 'e')
-            ->leftJoin('s.participants', 'p')
-            ->leftJoin('s.organisateur', 'o')
-            ->addSelect('s.id')
-            ->addSelect('s.nom')
-            ->addSelect('s.dateDebut')
-            ->addSelect('s.dateLimite')
-            ->addSelect('s.duree')
-            ->addSelect('s.nbInscriptionMax')
-            ->addSelect('e.libelle as etat')
-            ->addSelect('COUNT(p.id) as participant_count')
-            ->addSelect('o.nom as organisateur')
-            ->groupBy('s.id')
-            ->getQuery()
-            ->getResult();
-
+        $listSorties = $sortieRepository->findEventsIndex();
 
         return $this->render('main/index.html.twig', [
             'sorties' => $listSorties,
