@@ -19,36 +19,59 @@
         </tr>
         </thead>
         <tbody >
-        {% set isCurrentUserParticipant = false %}
-        {% set loopBreak = false %}
-        {% for sortie in sorties %}
-                {#            Vérifier si le current User fait partie des participants#}
-            {% if not loopBreak %}
-                {% for inscrit in sortiesUserInscrit %}
-                    {% if  sortie.nom  == inscrit.nom  %}
-                        {% set isCurrentUserParticipant = true %}
-                        {% set loopBreak= true %}
-                    {% endif %}
-                {% endfor%}
-            {% endif %}
 
+
+        {% for sortie in sorties %}
+            {% if sortie.etat != 'Archivée' and sortie.etat != 'Annulée' and sortie.etat != 'Passée'%}
             <tr>
-                <td ><div class="text-body">{{ sortie.nom }}</div></td>
-                <td><div class="text-secondary">{{ sortie.dateDebut | date('d M Y H:i:s')}}</div></td>
-                <td><div class="text-danger">{{ sortie.dateLimite | date('d M Y')}}</div></td>
+                <td><div class="text-body">{{ sortie.nom }}</div></td>
+                <td><div class="text-secondary">{{ sortie.dateDebut | date('d M Y H:i:s') }}</div></td>
+                <td><div class="text-danger">{{ sortie.dateLimite | date('d M Y') }}</div></td>
                 <td><div class="text-secondary">{{ sortie.participant_count }}/{{ sortie.nbInscriptionMax }}</div></td>
-                <td><div class="text-warning ">{{ sortie.etat }}</div></td>
-                <td><div class="text-info">{{ isCurrentUserParticipant ? 'Inscrit' : ' ' }}</div></td>
+                <td>
+                {% if sortie.etat == 'Passée' %}
+                    <div class="text-danger font-weight-bold">{{ sortie.etat }}</div>
+                {% else %}
+                    <div class="text-info">{{ sortie.etat }}</div>
+                {% endif %}
+                </td>
+                <td>
+                    {% set isCurrentUserParticipant = false %}
+                    {% set loopBreak = false %}
+                    {# Vérifier si le current User fait partie des participants #}
+                    {% for inscrit in sortiesUserInscrit %}
+                        {% if not loopBreak %}
+                            {% if sortie.id == inscrit.id %}
+                                {% set isCurrentUserParticipant = true %}
+                                {% set loopBreak = true %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if isCurrentUserParticipant %}
+                        <div class="text-info">Inscrit</div>
+                    {% else %}
+                        <div class="text-danger">Non Inscrit</div>
+                    {% endif %}
+                </td>
                 <td><div class="text-secondary">{{ sortie.organisateur }}</div></td>
                 <td>
-                    {% if isCurrentUserParticipant %}
-                        <button type="button" class="btn btn-info mb-2"><a class="text-white" href="{{ path('eventRemove', {'sortieId': sortie.id})  }}" onclick="return confirm('Etes vous sur de vouloir vous désister de cet événement  ? ')">Se désister</a></button>
-                    {% else %}
-                        <button type="button" class="btn btn-info mb-2"><a class="text-white" href="{{ path('eventRegister', {'sortieId': sortie.id})  }}" onclick="return confirm('Etes vous sur de vouloir vous inscrire à cet événement  ? ')">S'inscrire</a></button>
-                    {% endif%}
-                    <button type="button" class="btn btn-primary mb-2"><a class="text-white" href="" onclick="return confirm('Etes vous sur de vouloir supprimer cet événement ? ')">Modifier</a></button>
+                    {# affichage des boutons selon connexion, inscrit et selon état #}
+                    {% if isCurrentUserParticipant and sortie.etat =='Ouverte' %}
+                        <button type="button" class="btn btn-info mb-2">
+                            <a class="text-white" href="{{ path('eventRemove', {'sortieId': sortie.id}) }}" onclick="return confirm('Etes vous sur de vouloir vous désister de cet événement ? ')">Se désister</a>
+                        </button>
+                    {% elseif sortie.etat =='Ouverte' %}
+                        <button type="button" class="btn btn-info mb-2">
+                            <a class="text-white" href="{{ path('eventRegister', {'sortieId': sortie.id}) }}" onclick="return confirm('Etes vous sur de vouloir vous inscrire à cet événement ? ')">S'inscrire</a>
+                        </button>
+                    {% endif %}
+                    <button type="button" class="btn btn-primary mb-2">
+                        <a class="text-white" href="" onclick="return confirm('Etes vous sur de vouloir supprimer cet événement ? ')">Modifier</a>
+                    </button>
                 </td>
             </tr>
+            {% endif %}
         {% endfor %}
 
         </tbody>

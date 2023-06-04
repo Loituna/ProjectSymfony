@@ -50,6 +50,7 @@ class SortieRepository extends ServiceEntityRepository
             // Condition pour filtrer les sorties où le current user est un participant
             ->andWhere('p = :currentUser')
             ->addSelect('s.nom')
+            ->addSelect('s.id')
             // Définition du paramètre ":currentUser"
             ->setParameter('currentUser', $currentUser)
 
