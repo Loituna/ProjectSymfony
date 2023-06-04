@@ -29,9 +29,6 @@ private LieuFixtures $lieu;
         $this->etat=$etat;
         $this->sortie=$sortie;
 
-
-
-
     }
     public function load(ObjectManager $manager ): void
     {
@@ -42,7 +39,7 @@ private LieuFixtures $lieu;
         $this->lieu->addLieu($manager);
 
         $manager->flush();
-        $this->sortie->createSortie($manager);
+//        $this->sortie->createSortie($manager);
         $manager->flush();
     }
 }

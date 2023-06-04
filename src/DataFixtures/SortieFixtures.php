@@ -32,7 +32,7 @@ class SortieFixtures extends Fixture
 
             $nom = $generator->randomElement(['Bowling', 'Cinéma', 'Fléchette', 'Escalade', 'Piscine', 'Pintes & Compagnie', 'PMU', 'CTF avec Denis', 'Randonnée']);
             $bamboche->setNom($nom)
-                ->setInfoSortie($generator->realText(200));
+                    ->setInfoSortie($generator->realText(200));
 
             // Générer la date de début et la date limite
             $dateDebut = $generator->dateTimeBetween('-2 months', '+9 months');

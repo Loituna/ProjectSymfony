@@ -9,18 +9,20 @@
             <h2 class="text-white">Mon profil</h2>
             <br>
 
-            <h5 class="text-white">Pseudo : {{ app.user.pseudo }} </h5>
+            <h5 class="text-white">Pseudo : {{ user.pseudo }} </h5>
             <br>
-            <div  class="form-control champShow"  >Nom : {{ app.user.nom }}</div>
-            <div class="form-control ">Prénom : {{ app.user.prenom }}</div>
-            <div class="form-control ">Mail : {{ app.user.mail}} </div>
-            <div class="form-control ">Téléphone : {{ app.user.telephone }}</div>
-            <div class="form-control ">Campus : {{ app.user.campus.nom}} </div>
+            <div  class="form-control champShow"  >Nom : {{ user.nom }}</div>
+            <div class="form-control ">Prénom : {{ user.prenom }}</div>
+            <div class="form-control ">Mail : {{ user.mail}} </div>
+            <div class="form-control ">Téléphone : {{ user.telephone }}</div>
+            <div class="form-control ">Campus : {{ user.campus.nom}} </div>
         </div>
 
         <br>
         <a href="{{ path('index') }}"><button class="btn btn-light mb-2">Retour</button></a>
+        {% if user.id == app.user.id %}
         <a href="{{ path('user_update', {'id': user.id}) }}"><button class="btn btn-light mb-2">Modifer</button></a>
+        {% endif %}
     </section>
 
 {% endblock %}

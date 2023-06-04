@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Sortir.com !{% endblock %}
+{% block title %}Sortir.com ! | Index{% endblock %}
 
 {% block body %}
 <div class="containerIndex">
@@ -15,24 +15,28 @@
             <th>Etat</th>
             <th>Inscrit</th>
             <th>Organisateur</th>
-            <th>Actions</th>
+            <th>
+            {% if app.user != null %}
+                Actions
+            {% endif %}
+            </th>
         </tr>
         </thead>
         <tbody >
 
 
         {% for sortie in sorties %}
-            {% if sortie.etat != 'Archivée' and sortie.etat != 'Annulée' and sortie.etat != 'Passée'%}
+            {% if sortie.etatNom != 'Archivée' and sortie.etatNom != 'Annulée' and sortie.etatNom != 'Passée'%}
             <tr>
                 <td><div class="text-body">{{ sortie.nom }}</div></td>
                 <td><div class="text-secondary">{{ sortie.dateDebut | date('d M Y H:i:s') }}</div></td>
                 <td><div class="text-danger">{{ sortie.dateLimite | date('d M Y') }}</div></td>
                 <td><div class="text-secondary">{{ sortie.participant_count }}/{{ sortie.nbInscriptionMax }}</div></td>
                 <td>
-                {% if sortie.etat == 'Passée' %}
-                    <div class="text-danger font-weight-bold">{{ sortie.etat }}</div>
+                {% if sortie.etatNom == 'Passée' %}
+                    <div class="text-danger font-weight-bold">{{ sortie.etatNom }}</div>
                 {% else %}
-                    <div class="text-info">{{ sortie.etat }}</div>
+                    <div class="text-info">{{ sortie.etatNom }}</div>
                 {% endif %}
                 </td>
                 <td>
@@ -54,21 +58,43 @@
                         <div class="text-danger">Non Inscrit</div>
                     {% endif %}
                 </td>
-                <td><div class="text-secondary">{{ sortie.organisateur }}</div></td>
+                <td><div class="text-secondary">{{ sortie.organisateurNom }}</div></td>
                 <td>
-                    {# affichage des boutons selon connexion, inscrit et selon état #}
-                    {% if isCurrentUserParticipant and sortie.etat =='Ouverte' %}
-                        <button type="button" class="btn btn-info mb-2">
-                            <a class="text-white" href="{{ path('eventRemove', {'sortieId': sortie.id}) }}" onclick="return confirm('Etes vous sur de vouloir vous désister de cet événement ? ')">Se désister</a>
+                    {% if app.user == null %}
+
+                    {% elseif(sortie.organisateurId != app.user.id) %}
+                        {# Gérer les boutons si user n'est pas organisateur de la sortie #}
+                        {% if isCurrentUserParticipant and sortie.etatId =='2' %}
+                            <button type="button" class="btn btn-info mb-2">
+                                <a class="text-white" href="{{ path('eventRemove', {'sortieId': sortie.id}) }}" onclick="return confirm('Etes vous sur de vouloir vous désister de cet événement ? ')">Se désister</a>
+                            </button>
+                        {% elseif sortie.etatId =='2'%}
+                            <button type="button" class="btn btn-info mb-2">
+                                <a class="text-white" href="{{ path('eventRegister', {'sortieId': sortie.id}) }}" onclick="return confirm('Etes vous sur de vouloir vous inscrire à cet événement ? ')">S'inscrire</a>
+                            </button>
+                        {% endif %}
+                            <button type="button" class="btn btn-primary mb-2">
+                                <a class="text-white" href="{{ path('sortie_show', {'sortieId': sortie.id}) }}">Détails</a>
+                            </button>
+                    {# Gérer les boutons si user est organisateur de la sortie #}
+                    {% elseif sortie.organisateurId == app.user.id %}
+                        {# affichage des boutons selon connexion, inscrit et selon état #}
+                        {% if isCurrentUserParticipant and sortie.etatId =='2' %}
+                            <button type="button" class="btn btn-info mb-2">
+                                <a class="text-white" href="{{ path('eventRemove', {'sortieId': sortie.id}) }}" onclick="return confirm('Etes vous sur de vouloir vous désister de cet événement ? ')">Se désister</a>
+                            </button>
+                        {% elseif sortie.etatId =='2'%}
+                            <button type="button" class="btn btn-info mb-2">
+                                <a class="text-white" href="{{ path('eventRegister', {'sortieId': sortie.id}) }}" onclick="return confirm('Etes vous sur de vouloir vous inscrire à cet événement ? ')">S'inscrire</a>
+                            </button>
+                        {% endif %}
+                        <button type="button" class="btn btn-primary mb-2">
+                            <a class="text-white" href="{{ path('sortie_show', {'sortieId': sortie.id}) }}">Détails</a>
                         </button>
-                    {% elseif sortie.etat =='Ouverte' %}
-                        <button type="button" class="btn btn-info mb-2">
-                            <a class="text-white" href="{{ path('eventRegister', {'sortieId': sortie.id}) }}" onclick="return confirm('Etes vous sur de vouloir vous inscrire à cet événement ? ')">S'inscrire</a>
+                        <button type="button" class="btn btn-primary mb-2">
+                            <a class="text-white" href="">Modifier</a>
                         </button>
                     {% endif %}
-                    <button type="button" class="btn btn-primary mb-2">
-                        <a class="text-white" href="" onclick="return confirm('Etes vous sur de vouloir supprimer cet événement ? ')">Modifier</a>
-                    </button>
                 </td>
             </tr>
             {% endif %}
@@ -76,6 +102,10 @@
 
         </tbody>
     </table>
+
+    <div><button type="button" class="btn btn-primary mb-2">
+            <a href="{{ path('sortie_add') }}" class="text-white">Créer une nouvelle sortie</a>
+        </button></div>
 </div>
 
 {% endblock %}

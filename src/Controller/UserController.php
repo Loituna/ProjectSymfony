@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,13 +31,10 @@ class UserController extends AbstractController
     ]);
     }
 
-    #[Route('/', name: 'show')]
-    public function show(): Response
+    #[Route('/{id}', name: 'show', requirements: ['id'=>'\d+'])]
+    public function show(int $id, UserRepository $userRepository): Response
     {
-
-        //$user = $userRepository->find($id);
-
-        $user = $this->getUser();
+        $user = $userRepository->find($id);
 
         return $this->render('user/show.html.twig', [
             'user' => $user

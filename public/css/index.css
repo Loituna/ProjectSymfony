@@ -5,6 +5,9 @@ body{
     background-size: cover;
     font-family: 'Merriweather', serif;
     color: #DDDDDD;
+    /*min-height: 100vh;*/
+    /*display: flex;*/
+    /*flex-direction: column;*/
 }
 
 .container {
@@ -16,7 +19,7 @@ body{
 .containerMain{
     max-width: 1300px;
     display: flex;
-
+    margin-bottom: 80px;
 }
 
 
@@ -29,6 +32,14 @@ body{
 .header{
     display: flex;
     justify-content: left;
+
+}
+
+.footer{
+    margin-top: auto;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
 
 .link_button{

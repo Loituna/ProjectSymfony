@@ -75,9 +75,11 @@ class SortieRepository extends ServiceEntityRepository
             ->addSelect('s.dateLimite')
             ->addSelect('s.duree')
             ->addSelect('s.nbInscriptionMax')
-            ->addSelect('e.libelle as etat')
+            ->addSelect('e.libelle as etatNom')
+            ->addSelect('e.id as etatId')
             ->addSelect('COUNT(p.id) as participant_count')
-            ->addSelect('o.nom as organisateur')
+            ->addSelect('o.nom as organisateurNom')
+            ->addSelect('o.id as organisateurId')
             ->groupBy('s.id')
             ->getQuery()
             ->getResult();

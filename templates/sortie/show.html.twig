@@ -1,10 +1,100 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Sortir.com ! | Détails d'une sortie{% endblock %}
+
 {% block body %}
+    <div class="container">
+        <h1>Détails à propos de {{ sortie.nom }} </h1>
+        <h1 class="text-white">Sortie organisée par <a href="{{ path('user_show', {'id': sortie.organisateur.id}) }}">{{ sortie.organisateur.nom }}</a> | Campus de : {{ sortie.campus.nom }}</h1>
+        {% if sortie.etat.libelle == 'Ouverte' %}
+        <div class="text-success mb-2">Cette sortie est actuellement {{ sortie.etat.libelle }}</div>
+        {% elseif sortie.etat.libelle == 'Annulée' %}
+        <div class="text-danger mb-2">Cette sortie est actuellement {{ sortie.etat.libelle }}</div>
+        {% endif %}
+        <ul class="list-group">
+            <li class="list-group-item">
+                {% if sortie.lieu == null %}
+                    <label class="text-info">Pas de lieu notifié pour le moment pour l'évenement</label>
+                {% elseif sortie.lieu !=null %}
+                    <label class="text-info"> Localisation de l'événement</label>
+                    <div class="text-danger">{{ sortie.lieu }}, Ville de {{ sortie.lieu.ville.nom }}</div>
+                {% endif %}
+            </li>
+            <li class="list-group-item">
+                <label class="text-info"> Description de la sortie</label>
+                <div class="text-danger">{{ sortie.infoSortie }}</div>
+            </li>
+            <li class="list-group-item">
+                <label class="text-info"> Date début de l'événement :</label>
+                <div class="text-danger">{{ sortie.dateDebut|date("m/d/Y") }}</div>
+            </li>
+            <li class="list-group-item">
+                <label class="text-info"> Date limite d'inscription :</label>
+                <div class="text-danger">{{ sortie.dateLimite|date("m/d/Y") }}</div>
+            </li>
+            <li class="list-group-item">
+                <label class="text-info"> Durée de l'événement : </label>
+                <div class="text-danger">{{ sortie.duree }}</div>
+            </li>
+            <li class="list-group-item">
+                <div class="text-danger">Nombre de participants : {{ sortie.participants|length }}/{{ sortie.nbInscriptionMax }} places</div>
+                {% if  sortie.participants|length  == 0 %}
+                    <label class="text-danger">Il n'y a actuellement aucun participant à cet événement </label>
+                {% elseif sortie.participants|length != 0 %}
+                    <label class="text-info "> Liste des participants :</label>
+                    <table class="table text-info ">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Nom </th>
+                                <th>Prénom </th>
+                                <th>Contact </th>
+                                <th>Profil</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for participant in listParticipants %}
+                            <tr>
+                                <th>{{ participant.nom }}</th>
+                                <th>{{ participant.prenom }}</th>
+                                <th>{{ participant.mail }}</th>
+                                <th><button type="button" class="btn btn-primary">
+                                        <a href="{{ path('user_show', {'id': participant.id}) }}" class="text-white">Accéder au profil</a>
+                                    </button></th>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </li>
+        </ul>
+        {% if sortie.organisateur.id == app.user.id and (sortie.etat.id == 2)%}
 
+            <button type="button" class="btn btn-primary mb-2 mt-3">
+                    <a href="" class="text-white">Modifier la sortie</a>
+            </button>
+            <button type="button" class="btn btn-danger mb-2 mt-3">
+                <a href="{{ path('sortie_cancelevent', {'eventId': sortie.id}) }}" class="annuler-link" data-url="{{ path('sortie_cancelevent', {'eventId': sortie.id}) }}" onclick="confirmCancel(event)">Annuler la sortie</a>
+
+            </button>
+        {% endif%}
+    </div>
 {% endblock %}
 
-{% block title %}
+{% block javascripts %}
+    <script>
 
+        function confirmCancel(event){
+            event.preventDefault(); //Empêcher le comportement de lien par défaut
+
+            var url = event.currentTarget.getAttribute('data-url');
+            var raison = prompt("Veuillez entrer la raison de l'annulation :")
+            if (raison!== null ){
+                url += "?raison=" + encodeURIComponent(raison);
+                window.location.href = url;
+            }
+        }
+    </script>
 {% endblock %}
+
+
 
