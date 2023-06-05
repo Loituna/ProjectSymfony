@@ -118,11 +118,7 @@ class SortieRepository extends ServiceEntityRepository
 //    }
     public function listeSortieFiltre(FormInterface $filtreForm,)
     {
-
             $qb= $this->createQueryBuilder('s');
-
-
-
 
             if ($filtreForm->get('Campus')) {
                 $qb->leftJoin('s.campus', 'c')
@@ -135,7 +131,8 @@ class SortieRepository extends ServiceEntityRepository
             }
             if ($filtreForm->get('participant')){
                 $qb ->leftJoin('s.participants', 'p')
-                    ->andWhere('s.participants = :user' )
+                    ->andWhere('s.participants
+                     = :user' )
                     ->setParameter('user', $this->security->getUser());
             }
             if ($filtreForm->get('pasParticipant')){
