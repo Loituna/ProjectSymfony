@@ -71,13 +71,13 @@
         </ul>
         {% if sortie.organisateur.id == app.user.id and (sortie.etat.id == 2)%}
 
-            <button type="button" class="btn btn-primary mb-2 mt-3">
-                    <a href="{{ path('update', {'eventId': sortie.id}) }}" class="text-white">Modifier la sortie</a>
-            </button>
             <button type="button" class="btn btn-danger mb-2 mt-3">
                 <a href="{{ path('sortie_cancelevent', {'eventId': sortie.id}) }}" class="annuler-link" data-url="{{ path('sortie_cancelevent', {'eventId': sortie.id}) }}" onclick="confirmCancel(event)">Annuler la sortie</a>
             </button>
         {% elseif sortie.organisateur.id == app.user.id and (sortie.etat.id == 1) %}
+            <button type="button" class="btn btn-primary mb-2 mt-3">
+                <a href="{{ path('update', {'eventId': sortie.id}) }}" class="text-white">Modifier la sortie</a>
+            </button>
             <button type="button" class="btn btn-success mb-2 mt-3">
                 <a href="{{ path('sortie_publishEvent', {'eventId': sortie.id}) }}" class="text-white" id="publishButton">Publier la sortie</a>
             </button>

@@ -28,11 +28,14 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
+
 class
 AjoutSortieType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+
+
         $builder
             ->add('nom', TextType::class, [
                 'required' => true,
@@ -122,8 +125,8 @@ AjoutSortieType extends AbstractType
                 'label' => 'Publier',
                 'attr' => ['class'=> 'btn btn-primary mt-2']
             ])
-
         ;
+
 
         $formModifier = function (FormInterface $form, Ville $ville){
 
@@ -169,12 +172,12 @@ AjoutSortieType extends AbstractType
         //$value représente la valeur du champ 'date debut'
         $dateDebut = $value;
 
-        //$execution contexte
-        $dateLimit = $executionContext->getRoot()->get('dateLimite')->getData();
+        // nous utilisons $executioncontexte pour accéder à l'ensemble du formulaire et obtenir la valeur du champ dateLimiteInscription
+        $dateLimitInscription = $executionContext->getRoot()->get('dateLimite')->getData();
 
-        if ($dateDebut >= $dateLimit){
-            //ici on créer une violation si la date de début est supérieur à la date de fin de la sortie
-            $executionContext->buildViolation("La date de début est supérieur à la date de fin de la sortie")
+        if ($dateDebut <= $dateLimitInscription){
+            //ici on créer une violation si la date de début est inférieur à la date d'inscription
+            $executionContext->buildViolation("La date limite pour participer à la sortie est supérieur à la date du début de l'événement.")
                 ->atPath('dateDebut')
                 ->addViolation();
         }

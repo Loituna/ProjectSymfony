@@ -92,7 +92,7 @@
                             <a class="text-white" href="{{ path('sortie_show', {'eventId': sortie.id}) }}">Détails</a>
                         </button>
                         <button type="button" class="btn btn-primary mb-2">
-                            <a class="text-white" href="">Modifier</a>
+                            <a class="text-white" href="{{ path('update', {'eventId': sortie.id}) }}">Modifier</a>
                         </button>
                     {% endif %}
                 </td>

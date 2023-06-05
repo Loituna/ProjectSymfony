@@ -229,16 +229,10 @@ class SortieController extends AbstractController
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()){
 
-            $debutSortie = $event->getDateDebut();
-            $finSortie = $event->getDateLimite();
-
-            if ($debutSortie>=$finSortie){
-                $this->addFlash('error', "Le date du début de la sortie est supérieur à la date de fin de la sortie !");
-            }
-
             $sortieRepository->save($event, true);
 
-            return $this->redirectToRoute('sortie_show', ['sortieId' => $eventId]);
+            return $this->redirectToRoute('sortie_show', ['eventId' => $eventId]);
+
 
         }
 
