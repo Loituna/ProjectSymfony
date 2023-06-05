@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -22,7 +23,7 @@ class Sortie
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $infoSortie = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateDebut = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -173,11 +174,13 @@ class Sortie
 
     public function getEtat(): ?Etat
     {
+
         return $this->etat;
     }
 
     public function setEtat(?Etat $etat): self
     {
+
         $this->etat = $etat;
 
         return $this;
@@ -206,5 +209,7 @@ class Sortie
 
         return $this;
     }
+
+
 
 }

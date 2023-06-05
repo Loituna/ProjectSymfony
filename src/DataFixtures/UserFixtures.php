@@ -70,7 +70,7 @@ class UserFixtures extends Fixture
             ->setPrenom($generator->firstName)
             ->setMail($generator->email)
             ->setActif('true')
-            ->setAdministrateur('0')
+            ->setAdministrateur('01')
             ->setTelephone($generator->phoneNumber)
             ->setCampus($campus);
 
