@@ -10,6 +10,8 @@
         <div class="text-success mb-2">Cette sortie est actuellement {{ sortie.etat.libelle }}</div>
         {% elseif sortie.etat.libelle == 'Annulée' %}
         <div class="text-danger mb-2">Cette sortie est actuellement {{ sortie.etat.libelle }}</div>
+        {%  elseif sortie.etat.libelle == 'Créée'%}
+            <div class="text-primary mb-2">Cette sortie est actuellement {{ sortie.etat.libelle }}</div>
         {% endif %}
         <ul class="list-group">
             <li class="list-group-item">
@@ -74,7 +76,13 @@
             </button>
             <button type="button" class="btn btn-danger mb-2 mt-3">
                 <a href="{{ path('sortie_cancelevent', {'eventId': sortie.id}) }}" class="annuler-link" data-url="{{ path('sortie_cancelevent', {'eventId': sortie.id}) }}" onclick="confirmCancel(event)">Annuler la sortie</a>
-
+            </button>
+        {% elseif sortie.organisateur.id == app.user.id and (sortie.etat.id == 1) %}
+            <button type="button" class="btn btn-success mb-2 mt-3">
+                <a href="{{ path('sortie_publishEvent', {'eventId': sortie.id}) }}" class="text-white" id="publishButton">Publier la sortie</a>
+            </button>
+            <button type="button" class="btn btn-danger mb-2 mt-3">
+                <a href="{{ path('sortie_cancelevent', {'eventId': sortie.id}) }}" class="annuler-link" data-url="{{ path('sortie_cancelevent', {'eventId': sortie.id}) }}" onclick="confirmCancel(event)">Annuler la sortie</a>
             </button>
         {% endif%}
     </div>
@@ -86,13 +94,29 @@
         function confirmCancel(event){
             event.preventDefault(); //Empêcher le comportement de lien par défaut
 
-            var url = event.currentTarget.getAttribute('data-url');
-            var raison = prompt("Veuillez entrer la raison de l'annulation :")
+            let url = event.currentTarget.getAttribute('data-url');
+            let raison = prompt("Veuillez entrer la raison de l'annulation :")
             if (raison!== null ){
                 url += "?raison=" + encodeURIComponent(raison);
                 window.location.href = url;
             }
         }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            let publishButton = document.getElementById("publishButton");
+
+            publishButton.addEventListener("click", function() {
+                let confirmation = confirm("Voulez-vous modifier les informations de la sortie avant de la publier ?");
+
+                if (confirmation) {
+                    // Rediriger vers la page de modification de la sortie
+                    window.location.href = "{{ path('sortie_show', {'eventId': sortie.id}) }}";
+                } else {
+                    // Rediriger vers la méthode pour publier la sortie
+                    window.location.href = "{{ path('sortie_publishEvent', {'eventId': sortie.id}) }}";
+                }
+            });
+        });
     </script>
 {% endblock %}
 

@@ -10,7 +10,7 @@
 
     {{ form_row(sortieForm.nom, {'attr': {'class': 'form-control', 'style': 'width: 600px;' }})}}
     {{ form_row(sortieForm.infoSortie) }}
-    {{ form_row(sortieForm.dateDebut) }}
+    {{ form_row(sortieForm.dateDebut)}}
     {{ form_row(sortieForm.dateLimite) }}
     {{ form_row(sortieForm.duree) }}
     {{ form_row(sortieForm.nbInscriptionMax) }}
@@ -24,6 +24,8 @@
 
 {% endblock %}
 {% block javascripts %}
+
+
     <script>
         window.onload = () => {
             // On écoute l'événement de changement de la ville
@@ -64,5 +66,9 @@
             });
         };
 
+
     </script>
+
+
+
 {% endblock%}
