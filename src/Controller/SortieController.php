@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Campus;
 use App\Entity\Sortie;
 use App\Entity\Ville;
 use App\Form\AjoutSortieType;
+use App\Form\FiltreType;
 use App\Repository\EtatRepository;
 use App\Repository\LieuRepository;
 use App\Repository\SortieRepository;
@@ -25,7 +27,7 @@ use Symfony\Component\Validator\Constraints\Date;
 class SortieController extends AbstractController
 {
     #[Route('/', name: 'index')]
-    public function index(SortieRepository $sortieRepository, Security $security, EtatRepository $etatRepository): Response
+    public function index(SortieRepository $sortieRepository, Security $security, EtatRepository $etatRepository, Request $request): Response
 
         {
         $this->reloadEtat($etatRepository, $sortieRepository);
@@ -36,10 +38,24 @@ class SortieController extends AbstractController
 
 
 
+        $filtreForm = $this->createForm(FiltreType::class);
 
-        return $this->render('main/index.html.twig', [
+        $filtreForm->handleRequest($request);
+
+
+            if ($filtreForm->isSubmitted() && $filtreForm->isValid()){
+
+               $nom =  $this->getUser()->getUserIdentifier();
+                $sortieRepository->listeSortieFiltre($filtreForm, $nom);
+
+
+            }
+
+
+                return $this->render('main/index.html.twig', [
             'sorties' => $listEvents,
-            'sortiesUserInscrit' => $eventsWhereUserParticipant
+            'sortiesUserInscrit' => $eventsWhereUserParticipant,
+            'filtreForm'=>$filtreForm->createView()
         ]);
     }
 
@@ -223,10 +239,6 @@ class SortieController extends AbstractController
     private function reloadEtat(EtatRepository $etatRepository, SortieRepository $sortieRepository)
     {
         $listSortie = $sortieRepository->findAll();
-
-
-
-
 
         foreach ($listSortie as $sortie ) {
 

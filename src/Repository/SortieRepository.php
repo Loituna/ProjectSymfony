@@ -7,6 +7,8 @@ use App\Entity\Sortie;
 use Container7GF5p5a\getEtatRepositoryService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @extends ServiceEntityRepository<Sortie>
@@ -18,9 +20,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class SortieRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private Security $security)
     {
         parent::__construct($registry, Sortie::class);
+
 
     }
 
@@ -113,11 +116,46 @@ class SortieRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    public function listeSortieFiltre(FormInterface $filtreForm,)
+    {
+
+            $qb= $this->createQueryBuilder('s');
 
 
 
 
+            if ($filtreForm->get('Campus')) {
+                $qb->leftJoin('s.campus', 'c')
+                    ->andWhere('s.campus = :campus')
+                    ->setParameter('Campus', $filtreForm['Campus']);
+            }
+            if ($filtreForm->get('sortiefini')){
+                $qb->leftJoin('s.etat', 'e')
+                    ->andWhere('e = 5 ');
+            }
+            if ($filtreForm->get('participant')){
+                $qb ->leftJoin('s.participants', 'p')
+                    ->andWhere('s.participants = :user' )
+                    ->setParameter('user', $this->security->getUser());
+            }
+            if ($filtreForm->get('pasParticipant')){
+                $qb->andWhere('s.participants != :user')
+                    ->setParameter('user', $this->security->getUser());
 
+            }
+            if ($filtreForm->get('organisateur')){
+                $qb->leftJoin('s.organisateur', 'o')
+                ->andWhere('s.organisateur = :user')
+                ->setParameter('user', $this->security->getUser());
+            }
+
+       $listeSortie=  $qb->getQuery()->getResult();
+
+            dd($listeSortie);
+
+
+
+    }
 
 
 }

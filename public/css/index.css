@@ -84,3 +84,8 @@ select {
 option {
     padding: 5px;
 }
+
+.flex_filtre{
+    display: flex;
+
+}
