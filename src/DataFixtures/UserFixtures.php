@@ -64,17 +64,18 @@ class UserFixtures extends Fixture
         $userUser = new User();
 
         $userUser->setPseudo("Patate");
-        $userAdmin->setPassword($this->hasher->hashPassword($userAdmin, 'Patate'));
+        $userUser->setPassword($this->hasher->hashPassword($userAdmin, 'Patate'));
 
         $userUser->setNom($generator->lastName)
             ->setPrenom($generator->firstName)
             ->setMail($generator->email)
             ->setActif('true')
-            ->setAdministrateur('true')
+            ->setAdministrateur('0')
             ->setTelephone($generator->phoneNumber)
             ->setCampus($campus);
 
 
+        $manager->persist($userUser);
         // Ici le pull pour les utilisateurs Anonymes
 
 
