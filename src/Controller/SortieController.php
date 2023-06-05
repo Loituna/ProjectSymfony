@@ -217,7 +217,8 @@ class SortieController extends AbstractController
     public function updateEvent(
         int $eventId,
         SortieRepository $sortieRepository,
-        Request $request)
+        Request $request,
+        EtatRepository $etatRepository)
 
     {
         //récupération de l'id de la sortie en cours
@@ -229,11 +230,16 @@ class SortieController extends AbstractController
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()){
 
+            if( $sortieForm->get('publish')->isClicked()){
+                $state = $etatRepository->findOneBy(['libelle'=>'Ouverte']);
+                $event->setEtat($state);
+            }
+
             $sortieRepository->save($event, true);
 
+            $this->addFlash('success', 'La sortie à été modifié');
+
             return $this->redirectToRoute('sortie_show', ['eventId' => $eventId]);
-
-
         }
 
         return $this->render('sortie/updateEvent.html.twig', [
