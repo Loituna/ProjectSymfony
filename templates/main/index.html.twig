@@ -28,7 +28,7 @@
                 {% if sortie.etatNom == 'Ouverte' %}
                 <tr>
                 <td><div class="text-body">{{ sortie.nom }}</div></td>
-                <td><div class="text-secondary">{{ sortie.dateDebut | date('d M Y H:i:s') }}</div></td>
+                <td><div class="text-secondary">{{ sortie.dateDebut | date('d M Y H:i:') }}</div></td>
                 <td><div class="text-danger">{{ sortie.dateLimite | date('d M Y') }}</div></td>
                 <td><div class="text-secondary">{{ sortie.participant_count }}/{{ sortie.nbInscriptionMax }}</div></td>
                 <td>
