@@ -39,7 +39,7 @@ class SortieFixtures extends Fixture
             $bamboche->setDateDebut($dateDebut);
 
             // Calculer la date limite d'inscription
-            $dateLimite = clone $dateDebut;
+            $dateLimite =  $dateDebut;
             $dateLimite->modify("-" . $generator->numberBetween(1, 5) . " days");
             $bamboche->setDateLimite($dateLimite);
 
@@ -52,14 +52,17 @@ class SortieFixtures extends Fixture
             // Définir l'état en fonction des dates
             $aujourdhui = new \DateTime();
             if ($dateDebut == $aujourdhui && $aujourdhui <= $dateDebut->modify("+{$duree}")) {
-                $etat = $manager->find(Etat::class, 1); // Activité en cours
+                $etat = $manager->find(Etat::class, 4); // Activité en cours
             } elseif ($dateLimite < $aujourdhui && $dateDebut > $aujourdhui->modify("+{$duree}")) {
-                $etat = $manager->find(Etat::class, 2); // Clôturée
+                $etat = $manager->find(Etat::class, 3); // Clôturée
             } elseif ($dateDebut < $aujourdhui->modify("+{$duree}")) {
-                $etat = $manager->find(Etat::class, 3); // Passée
+                $etat = $manager->find(Etat::class, 5); // Passée
             } else {
+
+                $rdm= $generator->numberBetween(1,2);
+
                 // Définir un état par défaut si nécessaire
-                $etat = $manager->find(Etat::class, 1);
+                $etat = $manager->find(Etat::class, $rdm);
             }
             $bamboche->setEtat($etat);
 
