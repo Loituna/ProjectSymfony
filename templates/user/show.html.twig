@@ -23,6 +23,10 @@
         {% if user.id == app.user.id %}
         <a href="{{ path('user_update', {'id': user.id}) }}"><button class="btn btn-light mb-2">Modifer</button></a>
         {% endif %}
+
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('user_delete', {'id': user.id}) }}"> <button class="btn btn-light mb-2">Supprimer</button></a>
+        {% endif %}
     </section>
 
 {% endblock %}

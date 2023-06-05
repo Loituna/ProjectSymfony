@@ -7,6 +7,7 @@ use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -77,4 +78,15 @@ class UserController extends AbstractController
 
     }
 
+    #[IsGranted ('ROLE_ADMIN')]
+    #[Route('/delete/{id}', name: 'delete', requirements: ['id' => '\d+'])]
+    public function delete(int $id, UserRepository $userRepository){
+        $user = $userRepository->find($id);
+
+        $userRepository->remove($user, true);
+
+        $this->addFlash('success', $user->getPseudo()." a été supprimé !");
+
+        return $this->redirectToRoute('user_list');
+    }
 }
