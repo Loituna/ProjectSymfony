@@ -6,19 +6,41 @@
 {% endblock %}
 
 {% block body %}
+    <div class="containerIndex">
+        <h1 class="text-white">List des étudiants</h1>
+        <div class="table-responsive">
+            <table class="table table-light table-striped ">
+                <thead class="thead-light">
+                <tr>
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>Pseudo</th>
+                    <th>Actif</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.nom }}</td>
+                        <td>{{ user.prenom }}</td>
+                        <td>{{ user.pseudo }}</td>
+                        <td>{{ user.actif }}</td>
+                        <td>
+                            <button  class="btn btn-info mb-2">Modifier</button>
+                            <button class="btn btn-danger mb-2">
+                                {% set userId = user.id %}
+                                <a class="text-white" href="{{ path('user_delete', {'id': user.id}) }}">Supprimer</a>
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    <article>
-        <h3>List des étudiants</h3>
-        <br>
-        {% for user in users %}
-            <a href="{{ path('user_show', {'id': user.id})}}">
-                <br>
-                Pseudo : {{ user.pseudo }}.
-            </a>
-            <br><br>
-        {% endfor %}
 
-    </article>
+
 
 {% endblock %}
-

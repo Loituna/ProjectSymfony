@@ -41,7 +41,7 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
 
         // Vérifier si l'utilisateur existe et est actif
         if (!$user || !$user->isActif()) {
-            throw new CustomUserMessageAuthenticationException('Votre compte est désactivé.');
+            throw new CustomUserMessageAuthenticationException('Vous ne pouvez pas vous connecter, votre compte est désactivé.');
         }
 
         return new Passport(
