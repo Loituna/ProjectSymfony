@@ -82,8 +82,6 @@ class SortieController extends AbstractController
     #[Route('/sortie/{sortieId}', name: 'sortie_show', requirements: ['id'=>'\d+'])]
     public function show(int $sortieId, SortieRepository $sortieRepository ): Response
     {
-        $sortie = new Sortie();
-
         $sortie = $sortieRepository->find($sortieId);
         $listParticipants = $sortie->getParticipants();
 
