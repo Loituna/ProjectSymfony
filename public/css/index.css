@@ -1,20 +1,24 @@
 body{
     background-color: #032757;
     background-attachment: fixed;
-    background-position: center center;
     background-size: cover;
     font-family: 'Merriweather', serif;
     color: #DDDDDD;
-    /*min-height: 100vh;*/
-    /*display: flex;*/
-    /*flex-direction: column;*/
 }
 
-.container {
-    max-width: 1300px;
-    margin: auto;
-    padding: 1px;
+.logo{
+    background-image: url('../img/logoHeaderFini2.png');
+    /*background-size: cover; !* Ajuste la taille de l'image pour couvrir tout le div *!*/
+    background-repeat: no-repeat; /* Empêche la répétition de l'image de fond */
+    width: 132px; /* Remplacez la valeur par la largeur souhaitée */
+    height: 145px; /* Remplacez la valeur par la hauteur souhaitée */
 }
+
+/*.container {*/
+/*    max-width: 1300px;*/
+/*    margin: auto;*/
+/*    padding: 1px;*/
+/*}*/
 
 .containerMain{
     max-width: 1300px;
@@ -32,7 +36,8 @@ body{
 .header{
     display: flex;
     justify-content: left;
-
+    margin: 0;
+    align-items: center;
 }
 
 .footer{
@@ -47,8 +52,6 @@ body{
     padding: 5px;
     border-radius: 30% 5%;
 }
-
-
 
 .list-group{
 
@@ -83,6 +86,57 @@ select {
 
 option {
     padding: 5px;
+}
+
+.dropdown-menu{
+    background-color: #032757;
+}
+
+/*Couleur lors du hover dans le menu dropdown down*/
+.dropdown-menu >  a:hover, .dropdown-menu >  a:focus {
+    background-color: #032757;
+}
+
+
+
+.hide_on_small{
+    display: block;
+}
+
+@media (max-width: 767px) {/* Ecran de petite taille */
+    .hide_on_small{
+        display: none;/* Masque l'élement sur de petits écrans */
+    }
+
+    .header{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .logo{
+        background-image: url('../img/logoSmartphone.png');
+        background-repeat: no-repeat; /* Empêche la répétition de l'image de fond */
+        width: 76px; /* Remplacez la valeur par la largeur souhaitée */
+        height: 81px; /* Remplacez la valeur par la hauteur souhaitée */
+    }
+
+    body{
+        font-size: x-small;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .table-responsive table {
+        max-height: 100%;
+    }
+
+    .table-responsive td {
+        height: 50px; /* Modifier la hauteur selon vos besoins */
+    }
+
 }
 
 .input {
