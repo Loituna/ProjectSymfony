@@ -150,10 +150,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->roles = $roles;
 
-        if (!$roles){
-            $this->setRoles(['ROLE_PUBLIC_ACCESS']);
-        }
-
         return $this;
     }
 
