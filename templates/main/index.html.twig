@@ -13,20 +13,33 @@
             <th>Clotûre </th>
             <th>inscrits/places</th>
             <th>Etat</th>
+            {% if app.user != null %}
             <th>Inscrit</th>
             <th>Organisateur</th>
-            <th>
-            {% if app.user != null %}
-                Actions
+            <th>Actions</th>
             {% endif %}
-            </th>
         </tr>
         </thead>
         <tbody >
 
 
         {% for sortie in sorties %}
-            {% if (sortie.etatNom == 'Ouverte') or (sortie.etatNom == 'Créée' and (app.user is null or sortie.organisateurId == app.user.id)) %}
+            {% if app.user is null  %}
+                {% if sortie.etatNom == 'Ouverte' %}
+                <tr>
+                <td><div class="text-body">{{ sortie.nom }}</div></td>
+                <td><div class="text-secondary">{{ sortie.dateDebut | date('d M Y H:i:s') }}</div></td>
+                <td><div class="text-danger">{{ sortie.dateLimite | date('d M Y') }}</div></td>
+                <td><div class="text-secondary">{{ sortie.participant_count }}/{{ sortie.nbInscriptionMax }}</div></td>
+                <td>
+                    {% if sortie.etatNom == 'Passée' %}
+                        <div class="text-danger font-weight-bold">{{ sortie.etatNom }}</div>
+                    {% else %}
+                        <div class="text-info">{{ sortie.etatNom }}</div>
+                    {% endif %}
+                </td>
+                {% endif %}
+            {% elseif (sortie.etatNom == 'Ouverte') or (sortie.etatNom == 'Créée' and sortie.organisateurId == app.user.id) %}
             <tr>
                 <td><div class="text-body">{{ sortie.nom }}</div></td>
                 <td><div class="text-secondary">{{ sortie.dateDebut | date('d M Y H:i:s') }}</div></td>

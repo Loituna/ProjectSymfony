@@ -37,8 +37,7 @@ body{
 
 .footer{
     margin-top: auto;
-    position: fixed;
-    bottom: 0;
+    position: relative;
     width: 100%;
 }
 
