@@ -5,9 +5,10 @@
 {% block title %}{{parent()}} | Ajouter une Sortie{% endblock %}
 
 {% block body %}
+    <div class="form-group"></div>
     {{ form_start(sortieForm) }}
 
-    {{ form_row(sortieForm.nom) }}
+    {{ form_row(sortieForm.nom, {'attr': {'class': 'form-control', 'style': 'width: 600px;' }})}}
     {{ form_row(sortieForm.infoSortie) }}
     {{ form_row(sortieForm.dateDebut) }}
     {{ form_row(sortieForm.dateLimite) }}

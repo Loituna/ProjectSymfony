@@ -61,7 +61,7 @@ AjoutSortieType extends AbstractType
                 'label' => 'Date et Heure de la sortie:',
                 'placeholder' => [
                     'year' => 'Year', 'month' => 'Month', 'day' => 'Day',
-                    'hour' => 'Hour', 'minute' => 'Minute', 'second' => 'Second',
+                    'hour' => 'Hour', 'minute' => 'Minute',
                 ]
             ])
             ->add('dateLimite', DateType::class, [
@@ -70,6 +70,7 @@ AjoutSortieType extends AbstractType
                 'placeholder' => [
                     'year' => 'Year', 'month' => 'Month', 'day' => 'Day',
                 ]
+
             ])
             ->add('duree', IntegerType::class, [
                 'label' =>'Durée: ',
@@ -98,17 +99,14 @@ AjoutSortieType extends AbstractType
                         'message' => 'Veuillez choisir une ville'
                     ])
                 ],
-//                'query_builder'=>function(VilleRepository $villeRepository){
-//                    $qb=$villeRepository->createQueryBuilder('s');
-//                    $qb->addOrderBy('s.nom', 'ASC');
-//                    return $qb;
-//                }
+                'attr' => ['class' =>'form-control']
             ])
 
             ->add('lieu', ChoiceType::class, [
                 'label' => 'Lieu: ',
                 'placeholder' => 'Lieu (Choisir une ville',
-                'required' => false
+                'required' => false,
+                'attr' => ['class' =>'form-control']
             ])
 
             ->add('save',SubmitType::class, [

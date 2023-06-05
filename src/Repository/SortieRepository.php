@@ -40,7 +40,6 @@ class SortieRepository extends ServiceEntityRepository
     }
 
 
-
     public function findSortiesByCurrentUser($currentUser)
     {
         // Création de la requête avec createQueryBuilder
@@ -64,7 +63,8 @@ class SortieRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function findEventsIndex(){
+    public function findEventsIndex()
+    {
         $listSorties = $this->createQueryBuilder('s')
             ->leftJoin('s.etat', 'e')
             ->leftJoin('s.participants', 'p')
@@ -86,7 +86,7 @@ class SortieRepository extends ServiceEntityRepository
 
         return $listSorties;
     }
-//    /**
+//    /*O
 //     * @return Sortie[] Returns an array of Sortie objects
 //     */
 //    public function findByExampleField($value): array
