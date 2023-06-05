@@ -48,6 +48,12 @@ class SortieController extends AbstractController
 
                $listEvents = $sortieRepository->listeSortieFiltre($filtreForm);
 
+                return $this->render('main/index.html.twig', [
+                    'sorties' => $listEvents,
+                    'sortiesUserInscrit' => $eventsWhereUserParticipant,
+                    'filtreForm'=>$filtreForm->createView()
+                ]);
+
 
             }
 
