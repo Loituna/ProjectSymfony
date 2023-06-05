@@ -54,25 +54,24 @@ AjoutSortieType extends AbstractType
                         'maxMessage' => 'Maximum de {{ limit }} caractères'
                     ])
                 ],
-                'attr' => ['class' =>'form-control']
+                'attr' => ['class' =>'form-control mb-2']
             ])
 
             ->add('dateDebut', DateTimeType::class, [
+                'widget' => 'single_text',
                 'label' => 'Date et Heure de la sortie:',
-                'placeholder' => [
-                    'year' => 'Year', 'month' => 'Month', 'day' => 'Day',
-                    'hour' => 'Hour', 'minute' => 'Minute',
-                ]
+
             ])
+
             ->add('dateLimite', DateType::class, [
-                'widget' => 'choice',
+                'widget' => 'single_text',
                 'label' => "Date limite d'inscription: ",
                 'placeholder' => [
                     'year' => 'Year', 'month' => 'Month', 'day' => 'Day',
                 ]
 
             ])
-            ->add('duree', IntegerType::class, [
+            ->add('duree', TextType::class, [
                 'label' =>'Durée: ',
                 'attr' => ['class' =>'form-control']
             ])
@@ -110,9 +109,14 @@ AjoutSortieType extends AbstractType
             ])
 
             ->add('save',SubmitType::class, [
-                    'label' => 'Valider',
+                    'label' => 'Enregistrer le brouillon',
                         'attr' => ['class'=> 'btn btn-success mt-2']
                 ])
+
+            ->add('publish',SubmitType::class, [
+                'label' => 'Publier',
+                'attr' => ['class'=> 'btn btn-primary mt-2']
+            ])
 
         ;
 

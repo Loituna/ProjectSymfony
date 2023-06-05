@@ -26,7 +26,7 @@
 
 
         {% for sortie in sorties %}
-            {% if sortie.etatNom != 'Archivée' and sortie.etatNom != 'Annulée' and sortie.etatNom != 'Passée'%}
+            {% if (sortie.etatNom == 'Ouverte') or (sortie.etatNom == 'Créée' and (app.user is null or sortie.organisateurId == app.user.id)) %}
             <tr>
                 <td><div class="text-body">{{ sortie.nom }}</div></td>
                 <td><div class="text-secondary">{{ sortie.dateDebut | date('d M Y H:i:s') }}</div></td>
@@ -66,30 +66,30 @@
                         {# Gérer les boutons si user n'est pas organisateur de la sortie #}
                         {% if isCurrentUserParticipant and sortie.etatId =='2' %}
                             <button type="button" class="btn btn-info mb-2">
-                                <a class="text-white" href="{{ path('eventRemove', {'sortieId': sortie.id}) }}" onclick="return confirm('Etes vous sur de vouloir vous désister de cet événement ? ')">Se désister</a>
+                                <a class="text-white" href="{{ path('eventRemove', {'eventId': sortie.id}) }}" onclick="return confirm('Etes vous sur de vouloir vous désister de cet événement ? ')">Se désister</a>
                             </button>
                         {% elseif sortie.etatId =='2'%}
                             <button type="button" class="btn btn-info mb-2">
-                                <a class="text-white" href="{{ path('eventRegister', {'sortieId': sortie.id}) }}" onclick="return confirm('Etes vous sur de vouloir vous inscrire à cet événement ? ')">S'inscrire</a>
+                                <a class="text-white" href="{{ path('eventRegister', {'eventId': sortie.id}) }}" onclick="return confirm('Etes vous sur de vouloir vous inscrire à cet événement ? ')">S'inscrire</a>
                             </button>
                         {% endif %}
                             <button type="button" class="btn btn-primary mb-2">
-                                <a class="text-white" href="{{ path('sortie_show', {'sortieId': sortie.id}) }}">Détails</a>
+                                <a class="text-white" href="{{ path('sortie_show', {'eventId': sortie.id}) }}">Détails</a>
                             </button>
                     {# Gérer les boutons si user est organisateur de la sortie #}
                     {% elseif sortie.organisateurId == app.user.id %}
                         {# affichage des boutons selon connexion, inscrit et selon état #}
                         {% if isCurrentUserParticipant and sortie.etatId =='2' %}
                             <button type="button" class="btn btn-info mb-2">
-                                <a class="text-white" href="{{ path('eventRemove', {'sortieId': sortie.id}) }}" onclick="return confirm('Etes vous sur de vouloir vous désister de cet événement ? ')">Se désister</a>
+                                <a class="text-white" href="{{ path('eventRemove', {'eventId': sortie.id}) }}" onclick="return confirm('Etes vous sur de vouloir vous désister de cet événement ? ')">Se désister</a>
                             </button>
                         {% elseif sortie.etatId =='2'%}
                             <button type="button" class="btn btn-info mb-2">
-                                <a class="text-white" href="{{ path('eventRegister', {'sortieId': sortie.id}) }}" onclick="return confirm('Etes vous sur de vouloir vous inscrire à cet événement ? ')">S'inscrire</a>
+                                <a class="text-white" href="{{ path('eventRegister', {'eventId': sortie.id}) }}" onclick="return confirm('Etes vous sur de vouloir vous inscrire à cet événement ? ')">S'inscrire</a>
                             </button>
                         {% endif %}
                         <button type="button" class="btn btn-primary mb-2">
-                            <a class="text-white" href="{{ path('sortie_show', {'sortieId': sortie.id}) }}">Détails</a>
+                            <a class="text-white" href="{{ path('sortie_show', {'eventId': sortie.id}) }}">Détails</a>
                         </button>
                         <button type="button" class="btn btn-primary mb-2">
                             <a class="text-white" href="">Modifier</a>

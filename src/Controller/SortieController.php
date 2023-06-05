@@ -49,18 +49,27 @@ class SortieController extends AbstractController
         $currentUser = $userRepository->find($this->getUser());
 
         //créer un formulaire pour Sortie
-        $sortieForm = $this->createForm(AjoutSortieType::class,$event);
+        $eventForm = $this->createForm(AjoutSortieType::class,$event);
 
-        $sortieForm->handleRequest($request);
+        $eventForm->handleRequest($request);
 
-        if ($sortieForm->isSubmitted() && $sortieForm->isValid()){
-            $event = $sortieForm->getData();
+        if ($eventForm->isSubmitted() && $eventForm->isValid()){
+            $event = $eventForm->getData();
 
-            $event->setEtat($etatRepository->findOneBy(['libelle'=>'Ouverte']));
+            if( $eventForm->get('save')->isClicked()){
+                $state = $etatRepository->findOneBy(['libelle'=>'Créée']);
+                $event->setEtat($state);
+            } else if( $eventForm->get('publish')->isClicked()){
+                $state = $etatRepository->findOneBy(['libelle'=>'Ouverte']);
+                $event->setEtat($state);
+            }else{
+                return $this->redirectToRoute('sortie_add');
+            }
+
             $event->setOrganisateur($this->getUser());
             // set le Campus de la sortie automatiquement au campus de l'organistateur
-            $idCampusCurrentUser = $currentUser->getCampus()->getId();
-            $event->setCampus($idCampusCurrentUser);
+            $CampusCurrentUser = $currentUser->getCampus();
+            $event->setCampus($CampusCurrentUser);
 
             //Effectuer les opérations nécessaires avec l'entité sortie
             $entityManager->persist($event);
@@ -75,7 +84,7 @@ class SortieController extends AbstractController
 //            return $this->redirectToRoute('sortie_show', ['id' => $sortie->getId()]);
         }
         return $this->render('sortie/addSortie.html.twig', [
-           'sortieForm'=>$sortieForm->createView()
+           'sortieForm'=>$eventForm->createView()
         ]);
     }
 
@@ -90,10 +99,10 @@ class SortieController extends AbstractController
         return $this->json($lieux,200,[],['groups'=>'lieu_data']);
     }
 
-    #[Route('/sortie/{sortieId}', name: 'sortie_show', requirements: ['id'=>'\d+'])]
-    public function show(int $sortieId, SortieRepository $sortieRepository ): Response
+    #[Route('/sortie/{eventId}', name: 'sortie_show', requirements: ['id'=>'\d+'])]
+    public function show(int $eventId, SortieRepository $sortieRepository ): Response
     {
-        $sortie = $sortieRepository->find($sortieId);
+        $sortie = $sortieRepository->find($eventId);
         $listParticipants = $sortie->getParticipants();
 
 
@@ -103,14 +112,14 @@ class SortieController extends AbstractController
         ]);
     }
 
-    #[Route('/eventRegister/{sortieId}', name:'eventRegister', requirements: ['id'=>'\d+'])]
-    public function registerToEvent(int $sortieId, UserRepository $userRepository, SortieRepository $sortieRepository):Response {
+    #[Route('/eventRegister/{eventId}', name:'eventRegister', requirements: ['id'=>'\d+'])]
+    public function registerToEvent(int $eventId, UserRepository $userRepository, SortieRepository $sortieRepository):Response {
 
         //Récupèrer l'utilisateur courant
         $currentUser = $userRepository->find($this->getUser());
 
         //Récupèrer l'événement à partir de l'id
-        $event = $sortieRepository->find($sortieId);
+        $event = $sortieRepository->find($eventId);
 
         //récupérer la date du jour dans une variable
         $date = new \DateTime('now');
@@ -142,14 +151,14 @@ class SortieController extends AbstractController
 
     }
 
-    #[Route('/eventRemove/{sortieId}', name:'eventRemove', requirements: ['id'=>'\d+'])]
-    public function removeToEvent(int $sortieId, UserRepository $userRepository, SortieRepository $sortieRepository):Response {
+    #[Route('/eventRemove/{eventId}', name:'eventRemove', requirements: ['id'=>'\d+'])]
+    public function removeToEvent(int $eventId, UserRepository $userRepository, SortieRepository $sortieRepository):Response {
 
         //Récupèrer l'utilisateur courant
         $currentUser = $userRepository->find($this->getUser());
 
         //Récupèrer l'événement à partir de l'id
-        $event = $sortieRepository->find($sortieId);
+        $event = $sortieRepository->find($eventId);
 
         //vérifier si l'événement existe
         if (!$event){
@@ -184,7 +193,24 @@ class SortieController extends AbstractController
         }
 
         $sortieRepository->save($eventToCancel, true);
-        return $this->redirectToRoute('sortie_show', ['sortieId'=>$eventId]);
+        return $this->redirectToRoute('sortie_show', ['eventId'=>$eventId]);
+    }
+
+    #[Route('/publishEvent/{eventId}', name:'sortie_publishEvent', requirements: ['id'=>'\d+'])]
+    public function publishEvent(int $eventId, SortieRepository $sortieRepository, EtatRepository $etatRepository, Request $request){
+        $eventToPublish = $sortieRepository->find($eventId);
+
+        $date = new \DateTime('now');
+
+        if ($eventToPublish->getDateDebut()<= $date){
+            $this->addFlash('error', "Cet événement est censé avoir commencé, vous ne pouvez le publier ! ");
+            return $this->redirectToRoute('sortie_show', ['id'=>$eventId]);
+        }else {
+            $eventToPublish->setEtat($etatRepository->find(2));
+        }
+
+        $sortieRepository->save($eventToPublish, true);
+        return $this->redirectToRoute('sortie_show', ['eventId'=>$eventId]);
     }
 
 }
