@@ -19,16 +19,23 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints\Date;
 
 
 class SortieController extends AbstractController
 {
     #[Route('/', name: 'index')]
-    public function index(SortieRepository $sortieRepository, Security $security): Response
-    {
+    public function index(SortieRepository $sortieRepository, Security $security, EtatRepository $etatRepository): Response
+
+        {
+        $this->reloadEtat($etatRepository, $sortieRepository);
         $currentUser = $security->getUser();
         $eventsWhereUserParticipant = $sortieRepository->findSortiesByCurrentUser($currentUser);
         $listEvents = $sortieRepository->findEventsIndex();
+
+
+
+
 
         return $this->render('main/index.html.twig', [
             'sorties' => $listEvents,
@@ -212,5 +219,42 @@ class SortieController extends AbstractController
         $sortieRepository->save($eventToPublish, true);
         return $this->redirectToRoute('sortie_show', ['eventId'=>$eventId]);
     }
+
+    private function reloadEtat(EtatRepository $etatRepository, SortieRepository $sortieRepository)
+    {
+        $listSortie = $sortieRepository->findAll();
+
+
+
+
+
+        foreach ($listSortie as $sortie ) {
+
+            $dateNow = new \DateTime();
+
+            if ($dateNow>$sortie->getDateDebut()&&$dateNow<$sortie->getDateLimite()){
+                $sortie->setEtat(($etatRepository->find(3)));
+            }
+
+            if ($dateNow>$sortie->getDateDebut()){
+                $sortie->setEtat($etatRepository->find(5));}
+
+
+            if($dateNow->format('Y-m-d')==$sortie->getDateDebut()->format('Y-m-d')){
+
+                $sortie->setEtat($etatRepository->find(4));}
+
+
+            $dif = $dateNow->diff($sortie->getDateDebut());
+            if ($dif->m > 1) {
+                $sortie->setEtat($etatRepository->find(7));
+            }
+
+
+            $sortieRepository->save($sortie, true);
+        }
+
+    }
+
 
 }
