@@ -45,8 +45,8 @@ class SortieController extends AbstractController
 
             if ($filtreForm->isSubmitted() && $filtreForm->isValid()){
 
-               $nom =  $this->getUser()->getUserIdentifier();
-                $sortieRepository->listeSortieFiltre($filtreForm, $nom);
+
+               $listEvents = $sortieRepository->listeSortieFiltre($filtreForm);
 
 
             }
