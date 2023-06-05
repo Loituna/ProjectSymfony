@@ -27,32 +27,43 @@ class SortieController extends AbstractController
     public function index(SortieRepository $sortieRepository, Security $security): Response
     {
         $currentUser = $security->getUser();
-        $sortiesUserInscrit = $sortieRepository->findSortiesByCurrentUser($currentUser);
-        $listSorties = $sortieRepository->findEventsIndex();
+        $eventsWhereUserParticipant = $sortieRepository->findSortiesByCurrentUser($currentUser);
+        $listEvents = $sortieRepository->findEventsIndex();
 
         return $this->render('main/index.html.twig', [
-            'sorties' => $listSorties,
-            'sortiesUserInscrit' => $sortiesUserInscrit
+            'sorties' => $listEvents,
+            'sortiesUserInscrit' => $eventsWhereUserParticipant
         ]);
     }
 
     #[Route('/sortie/add', name:'sortie_add')]
-    public function add(EntityManagerInterface $entityManager, LieuRepository $lieuRepository, VilleRepository $villeRepository, Request $request, EtatRepository $etatRepository): Response{
-        $sortie = new Sortie();
+    public function add(EntityManagerInterface $entityManager,
+                        LieuRepository $lieuRepository,
+                        VilleRepository $villeRepository,
+                        Request $request,
+                        EtatRepository $etatRepository,
+                        UserRepository $userRepository): Response{
+        $event = new Sortie();
+
+        //Récupèrer l'utilisateur courant
+        $currentUser = $userRepository->find($this->getUser());
 
         //créer un formulaire pour Sortie
-        $sortieForm = $this->createForm(AjoutSortieType::class,$sortie);
+        $sortieForm = $this->createForm(AjoutSortieType::class,$event);
 
         $sortieForm->handleRequest($request);
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()){
-            $sortie = $sortieForm->getData();
+            $event = $sortieForm->getData();
 
-            $sortie->setEtat($etatRepository->findOneBy(['libelle'=>'Ouverte']));
-            $sortie->setOrganisateur($this->getUser());
+            $event->setEtat($etatRepository->findOneBy(['libelle'=>'Ouverte']));
+            $event->setOrganisateur($this->getUser());
+            // set le Campus de la sortie automatiquement au campus de l'organistateur
+            $idCampusCurrentUser = $currentUser->getCampus()->getId();
+            $event->setCampus($idCampusCurrentUser);
 
             //Effectuer les opérations nécessaires avec l'entité sortie
-            $entityManager->persist($sortie);
+            $entityManager->persist($event);
             $entityManager->flush();
 
             $this->addFlash('success', 'Sortie bien rajoutée');
@@ -99,34 +110,34 @@ class SortieController extends AbstractController
         $currentUser = $userRepository->find($this->getUser());
 
         //Récupèrer l'événement à partir de l'id
-        $sortie = $sortieRepository->find($sortieId);
+        $event = $sortieRepository->find($sortieId);
 
         //récupérer la date du jour dans une variable
         $date = new \DateTime('now');
 
         //vérifier si l'événement existe et qu'il n'est pas complet
-        if (!$sortie || ($sortie->getParticipants()->count() == $sortie->getNbInscriptionMax() && $sortie->getNbInscriptionMax() != null )){
+        if (!$event || ($event->getParticipants()->count() == $event->getNbInscriptionMax() && $event->getNbInscriptionMax() != null )){
             $this->addFlash('error', "la sortie est complète où alors elle n'existe plus");
             return $this->redirectToRoute('index');
-        } else if($sortie->getDateLimite() <= $date){
+        } else if($event->getDateLimite() <= $date){
             $this->addFlash('error', "la Date Limite est dépassée, vous ne pouvez plus vous inscrire");
             return $this->redirectToRoute('index');
         }
 
         //Vérifier si l'utilisateur est déjà inscrit à cet événement
-        $isAlreadyParticipant = $sortie->getParticipants()->contains($currentUser);
+        $isAlreadyParticipant = $event->getParticipants()->contains($currentUser);
         if ($isAlreadyParticipant){
             $this->addFlash('error', "Vous êtes déjà inscrit à cet événement ! ");
             return $this->redirectToRoute('index');
         }
 
         //Ajout de l'utilisateur courant aux participants de l'événement
-        $sortie->addUser($currentUser);
+        $event->addUser($currentUser);
 
         //Enregistrer les modifications dans la base de données
-        $sortieRepository->save($sortie, true);
+        $sortieRepository->save($event, true);
 
-        $this->addFlash('success', 'Vous êtes bien inscrit à '.$sortie->getNom());
+        $this->addFlash('success', 'Vous êtes bien inscrit à '.$event->getNom());
         return $this->redirectToRoute('index');
 
     }
