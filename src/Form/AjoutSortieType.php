@@ -22,8 +22,11 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class
 AjoutSortieType extends AbstractType
@@ -62,7 +65,11 @@ AjoutSortieType extends AbstractType
                 'placeholder' => [
                     'year' => 'Year', 'month' => 'Month', 'day' => 'Day',
                     'hour' => 'Hour', 'minute' => 'Minute',
-                ]
+                ],
+                //on mets une callback pour la contrainte. voir la function 'dateValide' en dessous
+                'constraints' => [
+                     new Callback([$this, 'dateValide']),
+                ],
             ])
             ->add('dateLimite', DateType::class, [
                 'widget' => 'choice',
@@ -79,9 +86,9 @@ AjoutSortieType extends AbstractType
             ->add('nbInscriptionMax', IntegerType::class, [
                 'label' => 'Nombre de places: ',
                 'constraints' => [
-                    new Length([
-                        'min' => 2,
-                        'minMessage' => 'Il doit y avoir minimum {{ limit }} participants !'
+                    new GreaterThanOrEqual([
+                        'value' => 2,
+                        'message' => 'Il doit y avoir minimum {{ compared_value }} participants !'
                     ])
                 ],
                 'attr' => ['class' =>'form-control']
@@ -154,5 +161,21 @@ AjoutSortieType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Sortie::class,
         ]);
+    }
+
+    public function dateValide($value, ExecutionContextInterface $executionContext){
+        //$value représente la valeur du champ 'date debut'
+        $dateDebut = $value;
+
+        //$execution contexte
+        $dateLimit = $executionContext->getRoot()->get('dateLimite')->getData();
+
+        if ($dateDebut >= $dateLimit){
+            //ici on créer une violation si la date de début est supérieur à la date de fin de la sortie
+            $executionContext->buildViolation("La date de début est supérieur à la date de fin de la sortie")
+                ->atPath('dateDebut')
+                ->addViolation();
+        }
+
     }
 }

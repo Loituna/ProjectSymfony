@@ -183,18 +183,26 @@ class SortieController extends AbstractController
         Request $request)
 
     {
-
+        //récupération de l'id de la sortie en cours
         $event = $sortieRepository->find($eventId);
+
         $sortieForm = $this->createForm(AjoutSortieType::class, $event);
 
         $sortieForm->handleRequest($request);
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()){
 
+            $debutSortie = $event->getDateDebut();
+            $finSortie = $event->getDateLimite();
+
+            if ($debutSortie>=$finSortie){
+                $this->addFlash('error', "Le date du début de la sortie est supérieur à la date de fin de la sortie !");
+            }
 
             $sortieRepository->save($event, true);
 
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('sortie_show', ['sortieId' => $eventId]);
+
         }
 
         return $this->render('sortie/updateEvent.html.twig', [
