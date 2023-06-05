@@ -27,7 +27,7 @@ class SortieFixtures extends Fixture
 
         $generator = Factory::create('fr_FR');
 
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i <200; $i++) {
             $bamboche = new Sortie();
 
             $nom = $generator->randomElement(['Bowling', 'Cinéma', 'Fléchette', 'Escalade', 'Piscine', 'Pintes & Compagnie', 'PMU', 'CTF avec Denis', 'Randonnée']);
@@ -35,13 +35,17 @@ class SortieFixtures extends Fixture
                     ->setInfoSortie($generator->realText(200));
 
             // Générer la date de début et la date limite
-            $dateDebut = $generator->dateTimeBetween('-2 months', '+9 months');
+            $dateDebut = $generator->dateTimeBetween('-3 months', '+3 months');
+            $dateDebut->format('Y-m-d ');
             $bamboche->setDateDebut($dateDebut);
 
             // Calculer la date limite d'inscription
-            $dateLimite =  $dateDebut;
-            $dateLimite->modify("-" . $generator->numberBetween(1, 5) . " days");
-            $bamboche->setDateLimite($dateLimite);
+            $dateDebutInscription =  $dateDebut;
+            $dateLimite= $dateDebut->modify('-5 days');
+            $dateLimite->format('Y-m-d ');
+            $dateRdm = $generator->dateTimeBetween($dateLimite,$dateDebutInscription);
+
+            $bamboche->setDateLimite($dateRdm);
 
             // Calculer la durée en fonction de la date de début
             // Calculer la durée aléatoire en minutes
