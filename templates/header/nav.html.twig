@@ -20,10 +20,14 @@
 
 
                 {% if app.user.roles == ['ROLE_ADMIN','ROLE_USER'] %}
-                    <li class ="nav-item">
-                        <a class="nav-link text-white" href="{{ path('app_register') }}">Panneau Admin</a>
-                    </li>
-                    {% endif %}
+
+                    <select onchange="redirectToPage(this.value)">
+                        <option value="">Panneau Admin</option>
+                        <option value="{{ path('app_register') }}">Enregistrer un élève</option>
+                        <option value="{{ path('user_list') }}">Liste des utilisateurs</option>
+                    </select>
+
+                {% endif %}
 
                 <li class ="nav-item">
                     <a class="nav-link text-white" href="{{ path('app_logout') }}">Se déconnecter</a>
@@ -37,7 +41,11 @@
             </li>
             {% endif %}
 
-
+            <script>
+                function redirectToPage(url) {
+                    window.location.href = url;
+                }
+            </script>
         </ul>
     </nav>
 </div>
