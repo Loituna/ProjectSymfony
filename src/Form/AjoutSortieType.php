@@ -72,7 +72,7 @@ AjoutSortieType extends AbstractType
                 ]
 
             ])
-            ->add('duree', IntegerType::class, [
+            ->add('duree', TextType::class, [
                 'label' =>'Durée: ',
                 'attr' => ['class' =>'form-control']
             ])

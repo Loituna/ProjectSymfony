@@ -41,7 +41,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/update/{id}', name: 'update')]
+    #[Route('/update/{id}', name: 'update',  requirements: ['id'=>'\d+'])]
     public function update(
         int $id,
         UserRepository $userRepository,

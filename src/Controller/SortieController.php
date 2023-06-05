@@ -176,4 +176,30 @@ class SortieController extends AbstractController
         return $this->redirectToRoute('sortie_show', ['sortieId'=>$eventId]);
     }
 
+    #[Route('/updateEvent/{eventId}', name: 'update',  requirements: ['id'=>'\d+'])]
+    public function updateEvent(
+        int $eventId,
+        SortieRepository $sortieRepository,
+        Request $request)
+
+    {
+
+        $event = $sortieRepository->find($eventId);
+        $sortieForm = $this->createForm(AjoutSortieType::class, $event);
+
+        $sortieForm->handleRequest($request);
+
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()){
+
+
+            $sortieRepository->save($event, true);
+
+            return $this->redirectToRoute('index');
+        }
+
+        return $this->render('sortie/updateEvent.html.twig', [
+            'sortieForm'=>$sortieForm->createView()
+        ]);
+    }
+
 }
