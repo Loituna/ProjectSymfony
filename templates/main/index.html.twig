@@ -104,9 +104,11 @@
                         <button type="button" class="btn btn-primary mb-2">
                             <a class="text-white" href="{{ path('sortie_show', {'eventId': sortie.id}) }}">Détails</a>
                         </button>
+                        {% if sortie.etatId == '1' %}
                         <button type="button" class="btn btn-primary mb-2">
                             <a class="text-white" href="">Modifier</a>
                         </button>
+                        {% endif %}
                     {% endif %}
                 </td>
             </tr>
