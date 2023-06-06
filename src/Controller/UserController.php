@@ -68,7 +68,7 @@ class UserController extends AbstractController
 
             $userRepository->save($user,true);
 
-            return $this->redirectToRoute('user_show');
+            return $this->redirectToRoute('user_show', ['id'=> $id]);
 
         }
 
