@@ -67,7 +67,7 @@ class FiltreType extends AbstractType
 //            ])
             ->add('submit', SubmitType::class, [
                 'label' => 'RECHERCHER',
-                'attr' => ['class'=> 'btn btn-success mt-2']
+                'attr' => ['class'=> 'btn btn-success m-2 ']
             ]);
     }
 

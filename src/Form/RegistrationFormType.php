@@ -67,8 +67,8 @@ class RegistrationFormType extends AbstractType
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passe doivent correspondre.',
                 'required' => true,
-                'first_options' => ['label' => 'Mot de passe', 'attr' => ['class' => 'form-control mb-3', 'style'=> 'width: 600px;']],
-                'second_options' => ['label' => 'Confirmer le mot de passe', 'attr' => ['class' => 'form-control mb-3', 'style'=> 'width: 600px;']],
+                'first_options' => ['label' => 'Mot de passe', 'attr' => ['class' => 'form-control mb-3']],
+                'second_options' => ['label' => 'Confirmer le mot de passe', 'attr' => ['class' => 'form-control mb-3']],
                 'mapped' => false,
                 'constraints' => [
                     new NotBlank([

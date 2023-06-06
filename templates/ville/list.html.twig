@@ -3,7 +3,7 @@
 {% block body %}
     <div class="containerCampus">
         <h1 class="text-white">Les Villes déjà présentes : </h1>
-        <table class="table table-light table-striped">
+        <table class="table   table-light table-striped table-hover table-sm">
             <thead class="thead-light">
             <tr>
                 <th>Villes :</th>
@@ -15,7 +15,7 @@
             {% for ville in villes %}
                 <tr>
                     <td>
-                        <div class="text-body">{{ ville.nom }}</div>
+                        <div class="text-body ">{{ ville.nom }}</div>
                     </td>
                     <td>
                         <div class="text-body">{{ ville.codepostal }}</div>
@@ -23,15 +23,17 @@
 
 
                     <td>
-                        <button type="button" class="btn btn-danger mb-2">
+                        <button type="button" class="btn btn-danger mb-2 buttonResponsive">
                             <a href="{{ path('ville_delete', {'id': ville.id }) }}"
                                onclick="return confirm('Etes vous sur de vouloir supprimer cette Ville ? ')">Supprimer </a>
                         </button>
 
 
                         <a href="{{ path('lieu_detailByVille', {'id': ville.id} ) }}">
-                            <button type="button" class="btn btn-secondary mb-2">Consulter Lieu</button>
-                        </a></td>
+                            <button type="button" class="btn btn-success mb-2 buttonResponsive">Consulter Lieu</button>
+                        </a>
+
+                    </td>
                 </tr>
 
             {% endfor %}

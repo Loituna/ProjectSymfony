@@ -15,25 +15,20 @@ body{
     height: 145px; /* Remplacez la valeur par la hauteur souhaitée */
 }
 
-/*.container {*/
+
+/*.containerMain{*/
 /*    max-width: 1300px;*/
+/*    display: flex;*/
+/*    margin-bottom: 80px;*/
+/*}*/
+
+
+/*.containerCampus{*/
+/*    max-width: 1500px;*/
+/*    min-width: 700px;*/
 /*    margin: auto;*/
 /*    padding: 1px;*/
 /*}*/
-
-.containerMain{
-    max-width: 1300px;
-    display: flex;
-    margin-bottom: 80px;
-}
-
-
-.containerCampus{
-    max-width: 1500px;
-    min-width: 700px;
-    margin: auto;
-    padding: 1px;
-}
 
 .header{
     display: flex;
@@ -103,7 +98,15 @@ option {
     display: block;
 }
 
-@media (max-width: 767px) {/* Ecran de petite taille */
+@media screen and (max-width: 767px) {/* Ecran de petite taille */
+    h1{
+        font-size: 20px;
+    }
+
+    h2{
+        font-size: 20px;
+    }
+
     .hide_on_small{
         display: none;/* Masque l'élement sur de petits écrans */
     }
@@ -125,27 +128,31 @@ option {
         font-size: x-small;
     }
 
-    .table-responsive {
-        overflow-x: auto;
+    .dropdown-menu{
+        font-size: inherit;
     }
 
-    .table-responsive table {
-        max-height: 100%;
+    .responsiveHide{
+        display: none;
     }
 
-    .table-responsive td {
-        height: 50px; /* Modifier la hauteur selon vos besoins */
+    .responsiveHideSm{
+        display: none;
     }
 
     .buttonResponsive{
         font-size: xx-small;
-        width: 10vw;
+        width: 20vw;
         padding: 0;
+    }
+
+    .containerForm{
+        max-width: 200px;
     }
 
 }
 
-@media (max-width: 990px) {/* Ecran de type tablette */
+@media screen and (max-width: 990px) {/* Ecran de type tablette */
 
     .header{
         display: flex;
@@ -165,17 +172,6 @@ option {
         font-size: x-small;
     }
 
-    .table-responsive {
-        overflow-x: auto;
-    }
-
-    .table-responsive table {
-        max-height: 100%;
-    }
-
-    .table-responsive td {
-        height: 50px; /* Modifier la hauteur selon vos besoins */
-    }
 
     .responsiveHide{
         display: none;
@@ -183,13 +179,8 @@ option {
 
     .buttonResponsive{
         font-size: x-small;
-        width: 12vw;
+        width: 20vw;
     }
 
 }
 
-.input {
-    border: none;
-    outline: none;
-    box-shadow: none;
-}
