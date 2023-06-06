@@ -7,6 +7,8 @@ use App\Entity\Sortie;
 use Container7GF5p5a\getEtatRepositoryService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @extends ServiceEntityRepository<Sortie>
@@ -18,9 +20,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class SortieRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private Security $security)
     {
         parent::__construct($registry, Sortie::class);
+
 
     }
 
@@ -115,9 +118,63 @@ class SortieRepository extends ServiceEntityRepository
 //    }
 
 
+    public function listeSortieFiltre(FormInterface $filtreForm,)
+    {
+        $qb = $this->createQueryBuilder('s');
+        $qb->select('s.id')
+            ->addSelect('s.nom')
+            ->addSelect('s.dateDebut')
+            ->addSelect('s.dateLimite')
+            ->addSelect('s.duree')
+            ->addSelect('s.nbInscriptionMax')
+            ->addSelect('COUNT(DISTINCT p.id) as participant_count')
+            ->leftJoin('s.participants', 'p')
+            ->groupBy('s.id');
+
+        if ($filtreForm->get('Campus')->getData()) {
+            $qb->leftJoin('s.campus', 'c')
+                ->andWhere('c = :campus')
+                ->setParameter('campus', $filtreForm->get('Campus')->getData());
+        }
+
+        if ($filtreForm->get('sortiefini')->getData()) {
+            $qb->leftJoin('s.etat', 'e')
+                ->andWhere('e.id = 5')
+                ->addSelect('e.libelle as etatNom')
+                ->addSelect('e.id as etatId');
+        } else {
+            $qb->leftJoin('s.etat', 'e')
+                ->addSelect('e.libelle as etatNom')
+                ->addSelect('e.id as etatId');
+        }
+
+        if ($filtreForm->get('participant')->getData()) {
+            $qb->andWhere(':user MEMBER OF s.participants')
+                ->setParameter('user', $this->security->getUser());
+        }
+
+        if ($filtreForm->get('pasParticipant')->getData()) {
+            $qb->andWhere(':user NOT MEMBER OF s.participants')
+                ->setParameter('user', $this->security->getUser());
+        }
+
+        if ($filtreForm->get('organisateur')->getData()) {
+            $qb->leftJoin('s.organisateur', 'o')
+                ->andWhere('o = :user')
+                ->setParameter('user', $this->security->getUser());
+        } else {
+            $qb->leftJoin('s.organisateur', 'o')
+                ->addSelect('o.nom as organisateurNom')
+                ->addSelect('o.id as organisateurId');
+        }
+
+        $listeSortie = $qb->getQuery()->getResult();
 
 
 
+        return $listeSortie;
 
+
+    }
 
 }

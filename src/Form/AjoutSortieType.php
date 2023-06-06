@@ -22,20 +22,14 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Callback;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
-
 
 class
 AjoutSortieType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-
-
         $builder
             ->add('nom', TextType::class, [
                 'required' => true,
@@ -66,11 +60,9 @@ AjoutSortieType extends AbstractType
             ->add('dateDebut', DateTimeType::class, [
                 'widget' => 'single_text',
                 'label' => 'Date et Heure de la sortie:',
-                //on mets une callback pour la contrainte. voir la function 'dateValide' en dessous
-                'constraints' => [
-                     new Callback([$this, 'dateValide']),
-                ],
+
             ])
+
             ->add('dateLimite', DateType::class, [
                 'widget' => 'single_text',
                 'label' => "Date limite d'inscription: ",
@@ -86,9 +78,9 @@ AjoutSortieType extends AbstractType
             ->add('nbInscriptionMax', IntegerType::class, [
                 'label' => 'Nombre de places: ',
                 'constraints' => [
-                    new GreaterThanOrEqual([
-                        'value' => 2,
-                        'message' => 'Il doit y avoir minimum {{ compared_value }} participants !'
+                    new Length([
+                        'min' => 2,
+                        'minMessage' => 'Il doit y avoir minimum {{ limit }} participants !'
                     ])
                 ],
                 'attr' => ['class' =>'form-control']
@@ -125,8 +117,8 @@ AjoutSortieType extends AbstractType
                 'label' => 'Publier',
                 'attr' => ['class'=> 'btn btn-primary mt-2']
             ])
-        ;
 
+        ;
 
         $formModifier = function (FormInterface $form, Ville $ville){
 
@@ -166,21 +158,5 @@ AjoutSortieType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Sortie::class,
         ]);
-    }
-
-    public function dateValide($value, ExecutionContextInterface $executionContext){
-        //$value représente la valeur du champ 'date debut'
-        $dateDebut = $value;
-
-        // nous utilisons $executioncontexte pour accéder à l'ensemble du formulaire et obtenir la valeur du champ dateLimiteInscription
-        $dateLimitInscription = $executionContext->getRoot()->get('dateLimite')->getData();
-
-        if ($dateDebut <= $dateLimitInscription){
-            //ici on créer une violation si la date de début est inférieur à la date d'inscription
-            $executionContext->buildViolation("La date limite pour participer à la sortie est supérieur à la date du début de l'événement.")
-                ->atPath('dateDebut')
-                ->addViolation();
-        }
-
     }
 }
