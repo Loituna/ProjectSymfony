@@ -34,17 +34,10 @@ class SortieController extends AbstractController
         $currentUser = $security->getUser();
         $eventsWhereUserParticipant = $sortieRepository->findSortiesByCurrentUser($currentUser);
         $listEvents = $sortieRepository->findEventsIndex();
-
-
-
-
         $filtreForm = $this->createForm(FiltreType::class);
-
         $filtreForm->handleRequest($request);
 
-
             if ($filtreForm->isSubmitted() && $filtreForm->isValid()){
-
 
                $listEvents = $sortieRepository->listeSortieFiltre($filtreForm);
 
@@ -56,15 +49,12 @@ class SortieController extends AbstractController
 
 
             }
-
-
                 return $this->render('main/index.html.twig', [
             'sorties' => $listEvents,
             'sortiesUserInscrit' => $eventsWhereUserParticipant,
                     'filtreForm'=>$filtreForm->createView()
         ]);
     }
-
     #[Route('/sortie/add', name:'sortie_add')]
     public function add(EntityManagerInterface $entityManager,
                         LieuRepository $lieuRepository,

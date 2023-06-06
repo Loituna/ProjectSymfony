@@ -16,6 +16,11 @@
             <div class="form-control ">Mail : {{ user.mail}} </div>
             <div class="form-control ">Téléphone : {{ user.telephone }}</div>
             <div class="form-control ">Campus : {{ user.campus.nom}} </div>
+
+        </div>
+
+        <div class="container">
+            <img src="{{ asset('img/photoProfilUtilisateur/'~user.photo) }}" alt="Photo de profil de {{ user.nom }} ">
         </div>
 
         <br>

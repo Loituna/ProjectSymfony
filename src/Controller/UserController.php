@@ -5,11 +5,13 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
+use App\Tools\Uploader;
 use Doctrine\ORM\EntityManagerInterface;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -48,7 +50,8 @@ class UserController extends AbstractController
         UserRepository $userRepository,
         UserPasswordHasherInterface $userPasswordHasher,
         Request $request,
-        AuthorizationCheckerInterface $authorizationChecker): Response
+        AuthorizationCheckerInterface $authorizationChecker,
+        Uploader $uploader): Response
     {
         $user = $userRepository->find($id);
         $userForm = $this->createForm(RegistrationFormType::class, $user,[
@@ -65,6 +68,18 @@ class UserController extends AbstractController
                     $userForm->get('plainPassword')->getData()
                 )
             );
+            /**
+             * @var UploadedFile $file
+             */
+            $file = $userForm->get('photo')->getData();
+
+            if($file){
+
+                $newFileName= $uploader->saveFile($file,$user->getPseudo().'-'.$user->getCampus()->getNom().'-'.$user->getId(),$this->getParameter('upload_photo_user'));
+
+                $user->setPhoto($newFileName);
+
+            }
 
             $userRepository->save($user,true);
 
