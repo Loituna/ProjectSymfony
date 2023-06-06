@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\ActifType;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -42,7 +43,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/update/{id}', name: 'update')]
+    #[Route('/update/{id}', name: 'update', requirements: ['id' => '\d+'])]
     public function update(
         int $id,
         UserRepository $userRepository,
@@ -89,4 +90,31 @@ class UserController extends AbstractController
 
         return $this->redirectToRoute('user_list');
     }
+
+    #[Route('/actif/{id}', name: 'actif', requirements: ['id' => '\d+'])]
+    public function actif (
+        int $id,
+        UserRepository $userRepository,
+        Request $request)
+    {
+        $user = $userRepository->find($id);
+        $userFormActif = $this->createForm(ActifType::class, $user);
+        $userFormActif->handleRequest($request);
+
+
+        if ($userFormActif->isSubmitted() && $userFormActif->isValid()) {
+
+
+            $userRepository->save($user,true);
+
+            return $this->redirectToRoute('user_list', ['id'=> $id]);
+
+        }
+
+        return $this->render('user/list.html.twig',[
+            'userFormActif' => $userFormActif->createView()
+        ]);
+
+    }
+
 }

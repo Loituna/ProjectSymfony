@@ -15,8 +15,8 @@
                     <th>Nom</th>
                     <th>Prenom</th>
                     <th>Pseudo</th>
-                    <th>Actif</th>
                     <th>Actions</th>
+                    <th>Actif</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -24,9 +24,10 @@
                     <tr>
                         <td>{{ user.nom }}</td>
                         <td>{{ user.prenom }}</td>
-                        <td>{{ user.pseudo }}</td>
-                        <td>{{ user.actif }}</td>
+                        <td>{{ user.pseudo }} </td>
                         <td>
+
+
                             <button  class="btn btn-info mb-2">
                                 {% set userId = user.id %}
                                 <a class="text-white" href="{{ path('user_show', {'id': user.id}) }}">  Modifier</a>
@@ -36,6 +37,15 @@
                                 {% set userId = user.id %}
                                 <a class="text-white" href="{{ path('user_delete', {'id': user.id}) }}">Supprimer</a>
                             </button>
+                        </td>
+
+                        <td>
+                            {{ user.actif }}
+                            {{ form_start(userFormActif) }}
+                            {{ form_widget(userFormActif) }}
+                            <button type="submit">Enregistrer</button>
+                            {{ form_end(userFormActif) }}
+
                         </td>
                     </tr>
                 {% endfor %}
