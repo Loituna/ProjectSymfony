@@ -11,12 +11,12 @@
                 <tr>
                     <th>Nom de la Sortie</th>
                     <th>Date de la Sortie</th>
-                    <th>Clotûre</th>
-                    <th>inscrits/places</th>
-                    <th>Etat</th>
+                    <th class="responsiveHide">Clotûre</th>
+                    <th class="responsiveHide">inscrits/places</th>
+                    <th class="responsiveHide">Etat</th>
                     {% if app.user != null %}
-                        <th>Inscrit</th>
-                        <th>Organisateur</th>
+                        <th class="responsiveHide">Inscrit</th>
+                        <th class="responsiveHide">Organisateur</th>
                         <th>Actions</th>
                     {% endif %}
                 </tr>
@@ -34,14 +34,14 @@
                             <td>
                                 <div class="text-secondary">{{ sortie.dateDebut | date('d M Y H:i:') }}</div>
                             </td>
-                            <td>
+                            <td class="responsiveHide">
                                 <div class="text-danger">{{ sortie.dateLimite | date('d M Y') }}</div>
                             </td>
-                            <td>
+                            <td class="responsiveHide">
                                 <div class="text-secondary">{{ sortie.participant_count }}
                                     /{{ sortie.nbInscriptionMax }}</div>
                             </td>
-                            <td>
+                            <td class="responsiveHide">
                                 {% if sortie.etatNom == 'Passée' %}
                                     <div class="text-danger font-weight-bold">{{ sortie.etatNom }}</div>
                                 {% else %}
@@ -57,21 +57,21 @@
                             <td>
                                 <div class="text-secondary">{{ sortie.dateDebut | date('d M Y H:i:s') }}</div>
                             </td>
-                            <td>
+                            <td class="responsiveHide">
                                 <div class="text-danger">{{ sortie.dateLimite | date('d M Y') }}</div>
                             </td>
-                            <td>
+                            <td class="responsiveHide">
                                 <div class="text-secondary">{{ sortie.participant_count }}
                                     /{{ sortie.nbInscriptionMax }}</div>
                             </td>
-                            <td>
+                            <td class="responsiveHide">
                                 {% if sortie.etatNom == 'Passée' %}
                                     <div class="text-danger font-weight-bold">{{ sortie.etatNom }}</div>
                                 {% else %}
                                     <div class="text-info">{{ sortie.etatNom }}</div>
                                 {% endif %}
                             </td>
-                            <td>
+                            <td class="responsiveHide">
                                 {% set isCurrentUserParticipant = false %}
                                 {% set loopBreak = false %}
                                 {# Vérifier si le current User fait partie des participants #}
@@ -85,12 +85,12 @@
                                 {% endfor %}
 
                                 {% if isCurrentUserParticipant %}
-                                    <div class="text-info">Inscrit</div>
+                                    <div class="text-info responsiveHide">Inscrit</div>
                                 {% else %}
-                                    <div class="text-danger">Non Inscrit</div>
+                                    <div class="text-danger responsiveHide">Non Inscrit</div>
                                 {% endif %}
                             </td>
-                            <td>
+                            <td class="responsiveHide">
                                 <div class="text-secondary">{{ sortie.organisateurNom }}</div>
                             </td>
                             <td>
@@ -99,44 +99,44 @@
                                 {% elseif(sortie.organisateurId != app.user.id) %}
                                     {# Gérer les boutons si user n'est pas organisateur de la sortie #}
                                     {% if isCurrentUserParticipant and sortie.etatId =='2' %}
-                                        <button type="button" class="btn btn-info mb-2">
+                                        <button type="button" class="btn btn-info mb-2 buttonResponsive">
                                             <a class="text-white"
                                                href="{{ path('eventRemove', {'eventId': sortie.id}) }}"
                                                onclick="return confirm('Etes vous sur de vouloir vous désister de cet événement ? ')">Se
                                                 désister</a>
                                         </button>
                                     {% elseif sortie.etatId =='2' %}
-                                        <button type="button" class="btn btn-info mb-2">
+                                        <button type="button" class="btn btn-info mb-2 buttonResponsive">
                                             <a class="text-white"
                                                href="{{ path('eventRegister', {'eventId': sortie.id}) }}"
                                                onclick="return confirm('Etes vous sur de vouloir vous inscrire à cet événement ? ')">S'inscrire</a>
                                         </button>
                                     {% endif %}
-                                    <button type="button" class="btn btn-primary mb-2">
+                                    <button type="button" class="btn btn-primary mb-2 buttonResponsive">
                                         <a class="text-white" href="{{ path('sortie_show', {'eventId': sortie.id}) }}">Détails</a>
                                     </button>
                                     {# Gérer les boutons si user est organisateur de la sortie #}
                                 {% elseif sortie.organisateurId == app.user.id %}
                                     {# affichage des boutons selon connexion, inscrit et selon état #}
                                     {% if isCurrentUserParticipant and sortie.etatId =='2' %}
-                                        <button type="button" class="btn btn-info mb-2">
+                                        <button type="button" class="btn btn-info mb-2 buttonResponsive">
                                             <a class="text-white"
                                                href="{{ path('eventRemove', {'eventId': sortie.id}) }}"
                                                onclick="return confirm('Etes vous sur de vouloir vous désister de cet événement ? ')">Se
                                                 désister</a>
                                         </button>
                                     {% elseif sortie.etatId =='2' %}
-                                        <button type="button" class="btn btn-info mb-2">
+                                        <button type="button" class="btn btn-info mb-2 buttonResponsive">
                                             <a class="text-white"
                                                href="{{ path('eventRegister', {'eventId': sortie.id}) }}"
                                                onclick="return confirm('Etes vous sur de vouloir vous inscrire à cet événement ? ')">S'inscrire</a>
                                         </button>
                                     {% endif %}
-                                    <button type="button" class="btn btn-primary mb-2">
+                                    <button type="button" class="btn btn-primary mb-2 buttonResponsive">
                                         <a class="text-white" href="{{ path('sortie_show', {'eventId': sortie.id}) }}">Détails</a>
                                     </button>
                                     {% if sortie.etatId == '1' %}
-                                        <button type="button" class="btn btn-primary mb-2">
+                                        <button type="button" class="btn btn-primary mb-2 buttonResponsive">
                                             <a class="text-white" href="{{ path('update', {'eventId': sortie.id}) }}">Modifier</a>
                                         </button>
                                     {% endif %}
