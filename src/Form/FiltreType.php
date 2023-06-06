@@ -17,60 +17,58 @@ class FiltreType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('Campus', EntityType::class,[
+            ->add('Campus', EntityType::class, [
                 'class' => Campus::class,
                 'mapped' => false,
                 'choice_label' => 'nom',
-                'attr' => ['class'=>'form-control']
+                'attr' => ['class' => 'form-control'],
+                'required'=>false
             ])
-            ->add('recherche', SearchType::class, [
-                'label' => 'Recherche',
-                'required' => false,
-                'attr' => ['class'=>'form-control']
-            ])
+
             ->add('organisateur', CheckboxType::class, [
                 'label' => 'Sortie dont je suis l\'organisateur/trice',
                 'required' => false,
-                'attr' => ['class'=>'form-control']
+                'attr' => ['class' => 'form-control']
             ])
             ->add('participant', CheckboxType::class, [
                 'label' => 'Sortie à laquelle je suis inscrit/e',
                 'required' => false,
-                'attr' => ['class'=>'form-control']
+                'attr' => ['class' => 'form-control']
             ])
             ->add('pasParticipant', CheckboxType::class, [
                 'label' => 'Sortie à laquelle je ne suis pas inscrit/e',
                 'required' => false,
-                'attr' => ['class'=>'form-control']
+                'attr' => ['class' => 'form-control']
             ])
-            ->add('sortiefini',CheckboxType::class, [
-        'label' => 'Sortie passées',
-        'required' => false,
-        'attr' => ['class'=>'form-control']])
-            ->add('dateDebut', DateType::class, [
-                'label' => 'Date de début',
-                'widget' => 'single_text',
-                'format' => 'yyyy-MM-dd',
+            ->add('sortiefini', CheckboxType::class, [
+                'label' => 'Sortie passées',
                 'required' => false,
-                'attr' => ['class'=>'form-control']
-
+                'attr' => ['class' => 'form-control']
             ])
-            ->add('dateLimite', DateType::class, [
-                'label' => 'Date de fin',
-                'widget' => 'single_text',
-                'format' => 'yyyy-MM-dd',
-                'required' => false,
-                'attr' => ['class'=>'form-control']
-
-
-            ])
+//            ->add('dateDebut', DateType::class, [
+//                'label' => 'Date de début',
+//                'widget' => 'single_text',
+//                'format' => 'yyyy-MM-dd',
+//                'required' => false,
+//                'attr' => ['class' => 'form-control']
+//
+//            ])
+//            ->add('dateLimite', DateType::class, [
+//                'label' => 'Date de fin',
+//                'widget' => 'single_text',
+//                'format' => 'yyyy-MM-dd',
+//                'required' => false,
+//                'attr' => ['class' => 'form-control']
+//            ])
+//            ->add('recherche', SearchType::class, [
+//                'label' => 'Recherche',
+//                'required' => false,
+//                'attr' => ['class' => 'form-control']
+//            ])
             ->add('submit', SubmitType::class, [
                 'label' => 'RECHERCHER',
-            ])
-
-
-
-        ;
+                'attr' => ['class'=> 'btn btn-success mt-2']
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

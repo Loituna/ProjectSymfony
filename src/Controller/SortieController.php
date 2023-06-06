@@ -60,7 +60,8 @@ class SortieController extends AbstractController
 
                 return $this->render('main/index.html.twig', [
             'sorties' => $listEvents,
-            'sortiesUserInscrit' => $eventsWhereUserParticipant
+            'sortiesUserInscrit' => $eventsWhereUserParticipant,
+                    'filtreForm'=>$filtreForm->createView()
         ]);
     }
 
