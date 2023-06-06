@@ -18,6 +18,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -39,16 +40,43 @@ class RegistrationFormType extends AbstractType
 
         $builder
             ->add('pseudo', TextType::class, [
+                'required' => true,
                 'label'=>'Pseudo : ',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => "Veuillez saisir un pseudo"
+                    ]),
+                    new Length([
+                        'min' => 3,
+                        'minMessage' => 'Le pseudo doit contenir au minimum {{ limit }} caractères'
+                    ])],
                 'attr'=>['class'=>'form-control']
             ])
 
             ->add('nom', TextType::class, [
+                'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => "Veuillez saisir un nom"
+                    ]),
+                    new Length([
+                        'min' => 2,
+                        'minMessage' => 'Le nom doit contenir au minimum {{ limit }} caractères'
+                    ])],
                 'label'=>'Nom : ',
                 'attr'=>['class'=>'form-control']
             ])
 
             ->add('prenom', TextType::class, [
+                'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => "Veuillez saisir un prenom"
+                    ]),
+                    new Length([
+                        'min' => 2,
+                        'minMessage' => 'Le prenom doit contenir au minimum {{ limit }} caractères'
+                    ])],
                 'label'=>'Prenom : ',
                 'attr'=>['class'=>'form-control']
             ])
@@ -59,6 +87,15 @@ class RegistrationFormType extends AbstractType
             ])
 
             ->add('mail', TextType::class, [
+                'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => "Veuillez saisir une adresse e-mail"
+                    ]),
+                    new Email([
+                        'message' => "Veuillez saisir une adresse mail valide"
+                    ])
+                ],
                 'label'=>'Mail : ',
                 'attr'=>['class'=>'form-control']
             ])
@@ -84,6 +121,7 @@ class RegistrationFormType extends AbstractType
             ])
 
             ->add('campus', EntityType::class, [
+                'required' => true,
                 'class'=> Campus::class,
                 'choice_label'=>'nom',
                 'attr'=>['class'=>'form-control'],
@@ -95,11 +133,13 @@ class RegistrationFormType extends AbstractType
             ])
 
             ->add('actif', CheckboxType::class, [
+                'required' => true,
                 'label'=>'Actif : ',
                 'attr'=>['class'=>'form-control']
             ])
 
             ->add('administrateur', CheckboxType::class, [
+                'required' => true,
                 'label'=>'Administrateur : ',
                 'attr'=>['class'=>'form-control']
             ])

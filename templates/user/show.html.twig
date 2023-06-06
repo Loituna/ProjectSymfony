@@ -28,17 +28,17 @@
 
         {% if app.user.id == user.id and is_granted('ROLE_ADMIN') %}
             <a href="{{ path('user_list') }}"><button class="btn btn-light mb-2">Retour</button></a>
-            <a href="{{ path('user_update', {'id': user.id}) }}"><button class="btn btn-light mb-2">Modifier</button></a>
-            <a href="{{ path('user_delete', {'id': user.id}) }}"> <button class="btn btn-light mb-2">Supprimer</button></a>
+            <a href="{{ path('user_update', {'id': user.id}) }}"><button class="btn btn-info mb-2">Modifier</button></a>
+            <a href="{{ path('user_delete', {'id': user.id}) }}"> <button onclick="return confirm('Etes=vous sur de vouloir supprimer cet utilisateur ?')" class="btn btn-danger mb-2">Supprimer</button></a>
 
                 {% elseif is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('user_list') }}"><button class="btn btn-light mb-2">Retour</button></a>
-                    <a href="{{ path('user_update', {'id': user.id}) }}"><button class="btn btn-light mb-2">Modifier</button></a>
-                    <a href="{{ path('user_delete', {'id': user.id}) }}"> <button class="btn btn-light mb-2">Supprimer</button></a>
+                    <a href="{{ path('user_list') }}"><button class="btn btn-info mb-2">Retour</button></a>
+                    <a href="{{ path('user_update', {'id': user.id}) }}"><button class="btn btn-success mb-2">Modifier</button></a>
+                    <a href="{{ path('user_delete', {'id': user.id}) }}"> <button onclick="return confirm('Etes=vous sur de vouloir supprimer cet utilisateur ?')" class="btn btn-danger mb-2">Supprimer</button></a>
 
                         {% elseif user.id == app.user.id %}
-                            <a href="{{ path('index') }}"><button class="btn btn-light mb-2">Retour</button></a>
-                            <a href="{{ path('user_update', {'id': user.id}) }}"><button class="btn btn-light mb-2">Modifier</button></a>
+                            <a href="{{ path('index') }}"><button class="btn btn-info mb-2">Retour</button></a>
+                            <a href="{{ path('user_update', {'id': user.id}) }}"><button class="btn btn-success mb-2">Modifier</button></a>
         {% endif %}
 
 
