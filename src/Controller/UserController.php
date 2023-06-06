@@ -27,10 +27,8 @@ class UserController extends AbstractController
     {
         $users = $userRepository->findAll();
 
-
         return $this->render('user/list.html.twig', [
            'users' => $users
-
     ]);
     }
 
@@ -44,7 +42,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/update/{id}', name: 'update')]
+    #[Route('/update/{id}', name: 'update', requirements: ['id' => '\d+'])]
     public function update(
         int $id,
         UserRepository $userRepository,
@@ -53,15 +51,21 @@ class UserController extends AbstractController
         AuthorizationCheckerInterface $authorizationChecker,
         Uploader $uploader): Response
     {
+        //On récupère l'utilisateur avec son id
         $user = $userRepository->find($id);
+
+        //Création du formulaire avec comme parametre authorizationChecker
         $userForm = $this->createForm(RegistrationFormType::class, $user,[
             'authorization_checker' => $authorizationChecker,
         ]);
+
+        //On récupère le formulaire
         $userForm->handleRequest($request);
 
-
+        //soumission du formulaire et vérification de sa validité
         if ($userForm->isSubmitted() && $userForm->isValid()) {
 
+            //hashage du password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
@@ -81,6 +85,7 @@ class UserController extends AbstractController
 
             }
 
+            //Enregistrer les modifications dans la base de données
             $userRepository->save($user,true);
 
             return $this->redirectToRoute('user_show', ['id'=> $id]);
@@ -104,4 +109,25 @@ class UserController extends AbstractController
 
         return $this->redirectToRoute('user_list');
     }
+
+    #[Route('/isActif/{id}', name: 'isActif')]
+    public function isActif(User $user, UserRepository $userRepository): Response
+    {
+        //On récupère la data du champ actif
+        if ($user->getActif() == false) {
+            //On set à true ou a false selon son etat
+            $user->setActif(true);
+        } else {
+            $user->setActif(false);
+        }
+
+        $this->addFlash('success', 'Modification pris en compte.');
+
+        //Enregistrer les modifications dans la base de données
+        $userRepository->save($user, true);
+
+        return $this->redirectToRoute('user_list');
+    }
+
 }
+

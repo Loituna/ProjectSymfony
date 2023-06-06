@@ -24,12 +24,22 @@
                     <tr>
                         <td>{{ user.nom }}</td>
                         <td>{{ user.prenom }}</td>
-                        <td>{{ user.pseudo }}</td>
-                        <td>{{ user.actif }}</td>
+                        <td>{{ user.pseudo }} </td>
+                        <td>
+                            <form method="POST" action="{{ path('user_isActif', {'id': user.id}) }}">
+                                <button class="btn btn-warning mb-2" type="submit">
+                                    {% if user.actif == true %}
+                                        Désactiver
+                                    {% else %}
+                                        Activer
+                                    {% endif %}
+                                </button>
+                            </form>
+                        </td>
                         <td>
                             <button  class="btn btn-info mb-2">
                                 {% set userId = user.id %}
-                                <a class="text-white" href="{{ path('user_show', {'id': user.id}) }}">  Modifier</a>
+                                <a class="text-white" href="{{ path('user_show', {'id': user.id}) }}">Profil</a>
                             </button>
 
                             <button class="btn btn-danger mb-2">
