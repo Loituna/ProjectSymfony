@@ -17,18 +17,25 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Security;
+
 
 
 #[Route('/user', name: 'user_')]
 class UserController extends AbstractController
 {
+
+
+
     #[Route('/liste', name: 'list')]
-    public function list(UserRepository $userRepository): Response
+    public function list(UserRepository $userRepository,
+                         AuthorizationCheckerInterface $authorizationChecker): Response
     {
         $users = $userRepository->findAll();
 
         return $this->render('user/list.html.twig', [
-           'users' => $users
+           'users' => $users,
+
     ]);
     }
 
@@ -38,7 +45,8 @@ class UserController extends AbstractController
         $user = $userRepository->find($id);
 
         return $this->render('user/show.html.twig', [
-            'user' => $user
+            'user' => $user,
+
         ]);
     }
 

@@ -8,11 +8,12 @@
 
     <div class="containerAcceuil">
         {% block filtre %}
+            {% if app.user != null %}
             <div class="flex_filtre">
                 {{ form(filtreForm) }}
 
             </div>
-
+            {% endif %}
         {% endblock %}
 
     <div class="containerIndex">

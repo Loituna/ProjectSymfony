@@ -17,6 +17,8 @@ class VilleController extends AbstractController
     {
         $nbVille = $villeRepository->count([]);
         $maxPage = ceil($nbVille/VilleRepository::MAX_RESULT);
+
+
         if($page<1){
             return $this->redirectToRoute('ville_list',['page'=>1]);
         }

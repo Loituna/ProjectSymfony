@@ -25,63 +25,93 @@ use Symfony\Component\Validator\Constraints\Date;
 
 class SortieController extends AbstractController
 {
-    #[Route('/', name: 'index')]
+    #[Route('/{page}', name: 'index')]
+    public function index(
+        SortieRepository $sortieRepository,
+        Security         $security,
+        EtatRepository   $etatRepository,
+        Request          $request,
+        int              $page = 1): Response
 
-    public function index(SortieRepository $sortieRepository, Security $security, EtatRepository $etatRepository, Request $request): Response
-
-        {
+    {
         $this->reloadEtat($etatRepository, $sortieRepository);
-        $currentUser = $security->getUser();
-        $eventsWhereUserParticipant = $sortieRepository->findSortiesByCurrentUser($currentUser);
-        $listEvents = $sortieRepository->findEventsIndex();
+
+
+
+        if ($security->getUser()==null) {
+
+            $nbSortie = $sortieRepository->findDefaultEvent($page)->count([]);
+            $maxPage = ceil($nbSortie / SortieRepository::MAX_RESULT);
+            $listEvents = $sortieRepository->findDefaultEvent($page);
+        }elseif ($security->getUser()!=null){
+            $nbSortie = $sortieRepository->findDefaultEventCurrentUser($page)->count([]);
+            $maxPage = ceil($nbSortie / SortieRepository::MAX_RESULT);
+            $listEvents = $sortieRepository->findDefaultEventCurrentUser($page);
+
+        }
+
+        if($page<1){
+            return $this->redirectToRoute('index',['page'=>1]);
+        }
+        elseif($page>$maxPage){
+            return $this->redirectToRoute('index',['page'=>$maxPage]);
+
+        }
+
         $filtreForm = $this->createForm(FiltreType::class);
         $filtreForm->handleRequest($request);
 
-            if ($filtreForm->isSubmitted() && $filtreForm->isValid()){
-
-               $listEvents = $sortieRepository->listeSortieFiltre($filtreForm);
-
-                return $this->render('main/index.html.twig', [
-                    'sorties' => $listEvents,
-                    'sortiesUserInscrit' => $eventsWhereUserParticipant,
-                    'filtreForm'=>$filtreForm->createView()
-                ]);
 
 
-            }
-                return $this->render('main/index.html.twig', [
+
+
+        if ($filtreForm->isSubmitted() && $filtreForm->isValid()) {
+
+            $listEvents = $sortieRepository->listeSortieFiltre($filtreForm);
+
+            return $this->render('main/index.html.twig', [
+                'sorties' => $listEvents,
+                'filtreForm' => $filtreForm->createView()
+            ]);
+
+
+        }
+        return $this->render('main/filtre.html.twig', [
             'sorties' => $listEvents,
-            'sortiesUserInscrit' => $eventsWhereUserParticipant,
-                    'filtreForm'=>$filtreForm->createView()
+            'currentPage' => $page,
+            'maxPage'=> $maxPage,
+            'filtreForm' => $filtreForm->createView()
         ]);
     }
-    #[Route('/sortie/add', name:'sortie_add')]
+
+    #[Route('/sortie/add', name: 'sortie_add')]
     public function add(EntityManagerInterface $entityManager,
-                        LieuRepository $lieuRepository,
-                        VilleRepository $villeRepository,
-                        Request $request,
-                        EtatRepository $etatRepository,
-                        UserRepository $userRepository): Response{
+                        LieuRepository         $lieuRepository,
+                        VilleRepository        $villeRepository,
+                        Request                $request,
+                        EtatRepository         $etatRepository,
+                        UserRepository         $userRepository): Response
+    {
         $event = new Sortie();
 
         //Récupèrer l'utilisateur courant
         $currentUser = $userRepository->find($this->getUser());
 
         //créer un formulaire pour Sortie
-        $eventForm = $this->createForm(AjoutSortieType::class,$event);
+        $eventForm = $this->createForm(AjoutSortieType::class, $event);
 
         $eventForm->handleRequest($request);
 
-        if ($eventForm->isSubmitted() && $eventForm->isValid()){
+        if ($eventForm->isSubmitted() && $eventForm->isValid()) {
             $event = $eventForm->getData();
 
-            if( $eventForm->get('save')->isClicked()){
-                $state = $etatRepository->findOneBy(['libelle'=>'Créée']);
+            if ($eventForm->get('save')->isClicked()) {
+                $state = $etatRepository->findOneBy(['libelle' => 'Créée']);
                 $event->setEtat($state);
-            } else if( $eventForm->get('publish')->isClicked()){
-                $state = $etatRepository->findOneBy(['libelle'=>'Ouverte']);
+            } else if ($eventForm->get('publish')->isClicked()) {
+                $state = $etatRepository->findOneBy(['libelle' => 'Ouverte']);
                 $event->setEtat($state);
-            }else{
+            } else {
                 return $this->redirectToRoute('sortie_add');
             }
 
@@ -103,23 +133,24 @@ class SortieController extends AbstractController
 //            return $this->redirectToRoute('sortie_show', ['id' => $sortie->getId()]);
         }
         return $this->render('sortie/addSortie.html.twig', [
-           'sortieForm'=>$eventForm->createView()
+            'sortieForm' => $eventForm->createView()
         ]);
     }
 
     #[Route('/sortie/lieux-par-ville/', name: 'sortie_lieux_par_ville', methods: ['POST'])]
-    public function lieuxParVille(Request $request, LieuRepository $lieuRepository){
+    public function lieuxParVille(Request $request, LieuRepository $lieuRepository)
+    {
 
         $patate = $request->getContent();
-        $patate= (int)substr($patate,-2);
+        $patate = (int)substr($patate, -2);
 
         $lieux = $lieuRepository->findLieuxByVille($patate);
 
-        return $this->json($lieux,200,[],['groups'=>'lieu_data']);
+        return $this->json($lieux, 200, [], ['groups' => 'lieu_data']);
     }
 
-    #[Route('/sortie/{eventId}', name: 'sortie_show', requirements: ['id'=>'\d+'])]
-    public function show(int $eventId, SortieRepository $sortieRepository ): Response
+    #[Route('/sortie/{eventId}', name: 'sortie_show', requirements: ['id' => '\d+'])]
+    public function show(int $eventId, SortieRepository $sortieRepository): Response
     {
         $sortie = $sortieRepository->find($eventId);
         $listParticipants = $sortie->getParticipants();
@@ -127,12 +158,13 @@ class SortieController extends AbstractController
 
         return $this->render('sortie/show.html.twig', [
             'sortie' => $sortie,
-            'listParticipants' =>$listParticipants
+            'listParticipants' => $listParticipants
         ]);
     }
 
-    #[Route('/eventRegister/{eventId}', name:'eventRegister', requirements: ['id'=>'\d+'])]
-    public function registerToEvent(int $eventId, UserRepository $userRepository, SortieRepository $sortieRepository):Response {
+    #[Route('/eventRegister/{eventId}', name: 'eventRegister', requirements: ['id' => '\d+'])]
+    public function registerToEvent(int $eventId, UserRepository $userRepository, SortieRepository $sortieRepository): Response
+    {
 
         //Récupèrer l'utilisateur courant
         $currentUser = $userRepository->find($this->getUser());
@@ -144,17 +176,17 @@ class SortieController extends AbstractController
         $date = new \DateTime('now');
 
         //vérifier si l'événement existe et qu'il n'est pas complet
-        if (!$event || ($event->getParticipants()->count() == $event->getNbInscriptionMax() && $event->getNbInscriptionMax() != null )){
+        if (!$event || ($event->getParticipants()->count() == $event->getNbInscriptionMax() && $event->getNbInscriptionMax() != null)) {
             $this->addFlash('error', "la sortie est complète où alors elle n'existe plus");
             return $this->redirectToRoute('index');
-        } else if($event->getDateLimite() <= $date){
+        } else if ($event->getDateLimite() <= $date) {
             $this->addFlash('error', "la Date Limite est dépassée, vous ne pouvez plus vous inscrire");
             return $this->redirectToRoute('index');
         }
 
         //Vérifier si l'utilisateur est déjà inscrit à cet événement
         $isAlreadyParticipant = $event->getParticipants()->contains($currentUser);
-        if ($isAlreadyParticipant){
+        if ($isAlreadyParticipant) {
             $this->addFlash('error', "Vous êtes déjà inscrit à cet événement ! ");
             return $this->redirectToRoute('index');
         }
@@ -165,13 +197,14 @@ class SortieController extends AbstractController
         //Enregistrer les modifications dans la base de données
         $sortieRepository->save($event, true);
 
-        $this->addFlash('success', 'Vous êtes bien inscrit à '.$event->getNom());
+        $this->addFlash('success', 'Vous êtes bien inscrit à ' . $event->getNom());
         return $this->redirectToRoute('index');
 
     }
 
-    #[Route('/eventRemove/{eventId}', name:'eventRemove', requirements: ['id'=>'\d+'])]
-    public function removeToEvent(int $eventId, UserRepository $userRepository, SortieRepository $sortieRepository):Response {
+    #[Route('/eventRemove/{eventId}', name: 'eventRemove', requirements: ['id' => '\d+'])]
+    public function removeToEvent(int $eventId, UserRepository $userRepository, SortieRepository $sortieRepository): Response
+    {
 
         //Récupèrer l'utilisateur courant
         $currentUser = $userRepository->find($this->getUser());
@@ -180,7 +213,7 @@ class SortieController extends AbstractController
         $event = $sortieRepository->find($eventId);
 
         //vérifier si l'événement existe
-        if (!$event){
+        if (!$event) {
             $this->addFlash('error', "la sortie semble ne plus exister");
             return $this->redirectToRoute('index');
         }
@@ -191,45 +224,47 @@ class SortieController extends AbstractController
         //Enregistrer les modifications dans la base de données
         $sortieRepository->save($event, true);
 
-        $this->addFlash('success', 'Vous êtes bien désinscrit de '.$event->getNom());
+        $this->addFlash('success', 'Vous êtes bien désinscrit de ' . $event->getNom());
         return $this->redirectToRoute('index');
 
     }
 
-    #[Route('/cancelEvent/{eventId}', name:'sortie_cancelevent', requirements: ['id'=>'\d+'])]
-    public function cancelEvent(int $eventId, SortieRepository $sortieRepository, EtatRepository $etatRepository, Request $request){
+    #[Route('/cancelEvent/{eventId}', name: 'sortie_cancelevent', requirements: ['id' => '\d+'])]
+    public function cancelEvent(int $eventId, SortieRepository $sortieRepository, EtatRepository $etatRepository, Request $request)
+    {
         $eventToCancel = $sortieRepository->find($eventId);
 
         $date = new \DateTime('now');
         $raisonAnnulation = $request->query->get('raison');
 
-        if ($eventToCancel->getDateDebut()<= $date){
+        if ($eventToCancel->getDateDebut() <= $date) {
             $this->addFlash('error', "Cet événement a déjà commencé, vous ne pouvez l'annuler ! ");
-            return $this->redirectToRoute('sortie_show', ['id'=>$eventId]);
-        }else {
+            return $this->redirectToRoute('sortie_show', ['id' => $eventId]);
+        } else {
             $eventToCancel->setInfoSortie($raisonAnnulation);
             $eventToCancel->setEtat($etatRepository->find(6));
         }
 
         $sortieRepository->save($eventToCancel, true);
-        return $this->redirectToRoute('sortie_show', ['eventId'=>$eventId]);
+        return $this->redirectToRoute('sortie_show', ['eventId' => $eventId]);
     }
 
-    #[Route('/publishEvent/{eventId}', name:'sortie_publishEvent', requirements: ['id'=>'\d+'])]
-    public function publishEvent(int $eventId, SortieRepository $sortieRepository, EtatRepository $etatRepository, Request $request){
+    #[Route('/publishEvent/{eventId}', name: 'sortie_publishEvent', requirements: ['id' => '\d+'])]
+    public function publishEvent(int $eventId, SortieRepository $sortieRepository, EtatRepository $etatRepository, Request $request)
+    {
         $eventToPublish = $sortieRepository->find($eventId);
 
         $date = new \DateTime('now');
 
-        if ($eventToPublish->getDateDebut()<= $date){
+        if ($eventToPublish->getDateDebut() <= $date) {
             $this->addFlash('error', "Cet événement est censé avoir commencé, vous ne pouvez le publier ! ");
-            return $this->redirectToRoute('sortie_show', ['id'=>$eventId]);
-        }else {
+            return $this->redirectToRoute('sortie_show', ['id' => $eventId]);
+        } else {
             $eventToPublish->setEtat($etatRepository->find(2));
         }
 
         $sortieRepository->save($eventToPublish, true);
-        return $this->redirectToRoute('sortie_show', ['eventId'=>$eventId]);
+        return $this->redirectToRoute('sortie_show', ['eventId' => $eventId]);
     }
 
     private function reloadEtat(EtatRepository $etatRepository, SortieRepository $sortieRepository)
@@ -237,24 +272,23 @@ class SortieController extends AbstractController
         $listSortie = $sortieRepository->findAll();
 
 
-
-
-
-        foreach ($listSortie as $sortie ) {
+        foreach ($listSortie as $sortie) {
 
             $dateNow = new \DateTime();
 
-            if ($dateNow>$sortie->getDateDebut()&&$dateNow<$sortie->getDateLimite()){
+            if ($dateNow > $sortie->getDateDebut() && $dateNow < $sortie->getDateLimite()) {
                 $sortie->setEtat(($etatRepository->find(3)));
             }
 
-            if ($dateNow>$sortie->getDateDebut()){
-                $sortie->setEtat($etatRepository->find(5));}
+            if ($dateNow > $sortie->getDateDebut()) {
+                $sortie->setEtat($etatRepository->find(5));
+            }
 
 
-            if($dateNow->format('Y-m-d')==$sortie->getDateDebut()->format('Y-m-d')){
+            if ($dateNow->format('Y-m-d') == $sortie->getDateDebut()->format('Y-m-d')) {
 
-                $sortie->setEtat($etatRepository->find(4));}
+                $sortie->setEtat($etatRepository->find(4));
+            }
 
 
             $dif = $dateNow->diff($sortie->getDateDebut());
@@ -267,12 +301,13 @@ class SortieController extends AbstractController
         }
 
     }
-    #[Route('/updateEvent/{eventId}', name: 'update',  requirements: ['id'=>'\d+'])]
+
+    #[Route('/updateEvent/{eventId}', name: 'update', requirements: ['id' => '\d+'])]
     public function updateEvent(
-        int $eventId,
+        int              $eventId,
         SortieRepository $sortieRepository,
-        Request $request,
-        EtatRepository $etatRepository)
+        Request          $request,
+        EtatRepository   $etatRepository)
 
     {
         //récupération de l'id de la sortie en cours
@@ -282,10 +317,10 @@ class SortieController extends AbstractController
 
         $sortieForm->handleRequest($request);
 
-        if ($sortieForm->isSubmitted() && $sortieForm->isValid()){
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
 
-            if( $sortieForm->get('publish')->isClicked()){
-                $state = $etatRepository->findOneBy(['libelle'=>'Ouverte']);
+            if ($sortieForm->get('publish')->isClicked()) {
+                $state = $etatRepository->findOneBy(['libelle' => 'Ouverte']);
                 $event->setEtat($state);
             }
 
@@ -297,7 +332,7 @@ class SortieController extends AbstractController
         }
 
         return $this->render('sortie/updateEvent.html.twig', [
-            'sortieForm'=>$sortieForm->createView()
+            'sortieForm' => $sortieForm->createView()
         ]);
     }
 

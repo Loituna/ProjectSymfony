@@ -6,6 +6,7 @@ use App\Entity\Etat;
 use App\Entity\Sortie;
 use Container7GF5p5a\getEtatRepositoryService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Security\Core\Security;
@@ -20,6 +21,8 @@ use Symfony\Component\Security\Core\Security;
  */
 class SortieRepository extends ServiceEntityRepository
 {
+    const MAX_RESULT = 10;
+
     public function __construct(ManagerRegistry $registry, private Security $security)
     {
         parent::__construct($registry, Sortie::class);
@@ -134,7 +137,8 @@ class SortieRepository extends ServiceEntityRepository
         if ($filtreForm->get('Campus')->getData()) {
             $qb->leftJoin('s.campus', 'c')
                 ->andWhere('c = :campus')
-                ->setParameter('campus', $filtreForm->get('Campus')->getData());
+                ->setParameter('campus', $filtreForm->get('Campus')->getData())
+                ->addSelect('c.nom');
         }
 
         if ($filtreForm->get('sortiefini')->getData()) {
@@ -168,11 +172,71 @@ class SortieRepository extends ServiceEntityRepository
                 ->addSelect('o.id as organisateurId');
         }
 
+
         $listeSortie = $qb->getQuery()->getResult();
 
 
+        //dd($listeSortie);
 
         return $listeSortie;
+
+
+    }
+
+    public function findDefaultEvent(int $page): Paginator
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->leftJoin('s.etat', 'e')
+            ->andWhere('e.id = 2')
+            ->addSelect('s.id')
+            ->addSelect('s.nom')
+            ->addSelect('s.dateDebut');
+
+        // dd($qb->getQuery()->getResult());
+        $query=$qb->getQuery();
+        $query->setMaxResults(SortieRepository::MAX_RESULT);
+        $offset = ($page - 1) * SortieRepository::MAX_RESULT;
+        $query->setFirstResult($offset);
+
+        return new Paginator($query);
+
+
+
+    }
+
+    public function findDefaultEventCurrentUser(int $page): Paginator
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->leftJoin('s.etat', 'e')
+            ->leftJoin('s.participants', 'p')
+            ->leftJoin('s.organisateur', 'o')
+            ->addSelect('s.id')
+            ->addSelect('s.nom')
+            ->addSelect('s.dateDebut')
+            ->addSelect('s.dateLimite')
+            ->addSelect('s.duree')
+            ->addSelect('s.nbInscriptionMax')
+            ->addSelect('e.libelle as etatNom')
+            ->addSelect('e.id as etatId')
+            ->addSelect('COUNT(p.id) as participant_count')
+            ->addSelect('o.nom as organisateurNom')
+            ->addSelect('o.id as organisateurId')
+            ->addSelect(' p.id as participantsId')
+            ->andWhere('e.id = 1 ')
+            ->andWhere('o.id = :user')
+            ->setParameter('user', $this->security->getUser())
+            ->orWhere('e.id = 2')
+
+            ->andWhere()
+            ->groupBy('s.id');
+
+         dd($qb->getQuery()->getResult());
+        $query=$qb->getQuery();
+        $query->setMaxResults(SortieRepository::MAX_RESULT);
+        $offset = ($page - 1) * SortieRepository::MAX_RESULT;
+        $query->setFirstResult($offset);
+
+        return new Paginator($query);
 
 
     }
