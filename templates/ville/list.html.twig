@@ -1,62 +1,70 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="containerCampus">
-    <h1 class="text-white">Les Villes déjà présentes : </h1>
-    <table class="table table-light table-striped">
-        <thead class="thead-light">
-        <tr>
-            <th>Villes : </th>
-            <th> Code Postal : </th>
-            <th> </th>
+    <div class="containerCampus">
+        <h1 class="text-white">Les Villes déjà présentes : </h1>
+        <table class="table table-light table-striped">
+            <thead class="thead-light">
+            <tr>
+                <th>Villes :</th>
+                <th> Code Postal :</th>
+                <th> Actions :</th>
 
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             {% for ville in villes %}
                 <tr>
-                    <td><div class="text-body">{{ ville.nom }}</div></td>
-                    <td><div class="text-body">{{ ville.codepostal }}</div></td>
-
-
-                    <td><button type="button" class="btn btn-danger mb-2">
-                            <a href="{{ path('ville_delete', {'id': ville.id }) }}" onclick="return confirm('Etes vous sur de vouloir supprimer cette Ville ? ')">Supprimer </a></button></td>
+                    <td>
+                        <div class="text-body">{{ ville.nom }}</div>
+                    </td>
+                    <td>
+                        <div class="text-body">{{ ville.codepostal }}</div>
+                    </td>
 
 
                     <td>
-                        <a href="{{ path('lieu_detailByVille', {'id': ville.id} ) }}"><button type="button" class="btn btn-secondary mb-2">Consulter Lieu</button></a></td>
+                        <button type="button" class="btn btn-danger mb-2">
+                            <a href="{{ path('ville_delete', {'id': ville.id }) }}"
+                               onclick="return confirm('Etes vous sur de vouloir supprimer cette Ville ? ')">Supprimer </a>
+                        </button>
+
+
+                        <a href="{{ path('lieu_detailByVille', {'id': ville.id} ) }}">
+                            <button type="button" class="btn btn-secondary mb-2">Consulter Lieu</button>
+                        </a></td>
                 </tr>
 
             {% endfor %}
 
 
-            {#        {% block JavaScript %}#}
-{#            <script>#}
-{#                let buttons = Array.from(document.getElementsByClassName('cp_button'));#}
-{#                button.addEventListener("click",function (){#}
-{#                    let cp =(toString()) {{ villeForm.codePostal }}#}
-{#                })#}
-{#            </script>#}
-{#        {% endblock %}#}
+            {#        {% block JavaScript %} #}
+            {#            <script> #}
+            {#                let buttons = Array.from(document.getElementsByClassName('cp_button')); #}
+            {#                button.addEventListener("click",function (){ #}
+            {#                    let cp =(toString()) {{ villeForm.codePostal }} #}
+            {#                }) #}
+            {#            </script> #}
+            {#        {% endblock %} #}
 
 
-        </tbody>
-    </table>
+            </tbody>
+        </table>
 
-    <div class="flex_between flex_div">
-        {% if currentPage > 1 %}
-            <a class="link_button" href="{{ path('ville_list',{'page': currentPage -1}) }}">Previous page</a>
-        {% else %}
-            <div></div>
-        {% endif %}
-        {% if currentPage < maxPage %}
-            <a class="link_button" href="{{ path('ville_list',{'page': currentPage +1}) }}">Next page</a>
-        {% endif %}
+        <div class="flex_between flex_div">
+            {% if currentPage > 1 %}
+                <a class="link_button" href="{{ path('ville_list',{'page': currentPage -1}) }}">Previous page</a>
+            {% else %}
+                <div></div>
+            {% endif %}
+            {% if currentPage < maxPage %}
+                <a class="link_button" href="{{ path('ville_list',{'page': currentPage +1}) }}">Next page</a>
+            {% endif %}
 
 
+        </div>
+
+        {{ form(villeForm) }}
     </div>
-
-    {{ form(villeForm) }}
-</div>
 
 
 

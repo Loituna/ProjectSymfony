@@ -29,7 +29,8 @@ body{
 
 
 .containerCampus{
-    max-width: 1200px;
+    max-width: 1500px;
+    min-width: 700px;
     margin: auto;
     padding: 1px;
 }
@@ -97,8 +98,6 @@ option {
 .dropdown-menu >  a:hover, .dropdown-menu >  a:focus {
     background-color: #032757;
 }
-
-
 
 .hide_on_small{
     display: block;
