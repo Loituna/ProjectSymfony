@@ -5,9 +5,9 @@ namespace App\Form;
 use App\Entity\Campus;
 use App\Entity\User;
 use App\Repository\CampusRepository;
+use Doctrine\DBAL\Types\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -36,7 +36,10 @@ class RegistrationFormType extends AbstractType
       //  $userRole = $this->authorizationChecker->isGranted('ROLE_ADMIN') ? 'admin' : 'user';
 
         $builder
-            ->add('pseudo')
+            ->add('pseudo', \Symfony\Component\Form\Extension\Core\Type\TextType::class, [
+                'label' => 'Pseudo : ',
+                'attr' => ['class' =>'form-control']
+            ])
             ->add('nom')
             ->add('prenom')
             ->add('telephone')
