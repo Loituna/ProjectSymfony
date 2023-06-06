@@ -2,22 +2,11 @@
 
 {% block title %}Sortir.com ! | Index{% endblock %}
 
-
-
 {% block body %}
-    <div class="containerAcceuil">
-        {% block filtre %}
-            <div class="flex_filtre">
-                {{ form(filtreForm) }}
-
-            </div>
-
-        {% endblock %}
-
-
-        <div class="containerIndex">
-            <h1 class="text-white">Les Evenements en cours : </h1>
-            <table class="table table-light table-striped">
+    <div class="containerIndex">
+        <h1 class="text-white">Les Evenements en cours : </h1>
+        <div class="table-responsive">
+            <table class="table table-light table-striped ">
                 <thead class="thead-light">
                 <tr>
                     <th>Nom de la Sortie</th>
@@ -43,7 +32,7 @@
                                 <div class="text-body">{{ sortie.nom }}</div>
                             </td>
                             <td>
-                                <div class="text-secondary">{{ sortie.dateDebut | date('d M Y H:i:s') }}</div>
+                                <div class="text-secondary">{{ sortie.dateDebut | date('d M Y H:i:') }}</div>
                             </td>
                             <td>
                                 <div class="text-danger">{{ sortie.dateLimite | date('d M Y') }}</div>
@@ -146,9 +135,11 @@
                                     <button type="button" class="btn btn-primary mb-2">
                                         <a class="text-white" href="{{ path('sortie_show', {'eventId': sortie.id}) }}">Détails</a>
                                     </button>
-                                    <button type="button" class="btn btn-primary mb-2">
-                                        <a class="text-white" href="">Modifier</a>
-                                    </button>
+                                    {% if sortie.etatId == '1' %}
+                                        <button type="button" class="btn btn-primary mb-2">
+                                            <a class="text-white" href="{{ path('update', {'eventId': sortie.id}) }}">Modifier</a>
+                                        </button>
+                                    {% endif %}
                                 {% endif %}
                             </td>
                         </tr>
@@ -157,12 +148,13 @@
 
                 </tbody>
             </table>
+        </div>
 
-            <div>
-                <button type="button" class="btn btn-primary mb-2">
-                    <a href="{{ path('sortie_add') }}" class="text-white">Créer une nouvelle sortie</a>
-                </button>
-            </div>
+        <div class="hide_on_small">
+            <button type="button" class="btn btn-primary mb-2">
+                <a href="{{ path('sortie_add') }}" class="text-white">Créer une nouvelle sortie</a>
+            </button>
         </div>
     </div>
+
 {% endblock %}

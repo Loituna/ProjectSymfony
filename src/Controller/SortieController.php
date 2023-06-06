@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Campus;
 use App\Entity\Sortie;
 use App\Entity\Ville;
 use App\Form\AjoutSortieType;
@@ -27,6 +26,7 @@ use Symfony\Component\Validator\Constraints\Date;
 class SortieController extends AbstractController
 {
     #[Route('/', name: 'index')]
+
     public function index(SortieRepository $sortieRepository, Security $security, EtatRepository $etatRepository, Request $request): Response
 
         {
@@ -60,8 +60,7 @@ class SortieController extends AbstractController
 
                 return $this->render('main/index.html.twig', [
             'sorties' => $listEvents,
-            'sortiesUserInscrit' => $eventsWhereUserParticipant,
-            'filtreForm'=>$filtreForm->createView()
+            'sortiesUserInscrit' => $eventsWhereUserParticipant
         ]);
     }
 
@@ -246,6 +245,10 @@ class SortieController extends AbstractController
     {
         $listSortie = $sortieRepository->findAll();
 
+
+
+
+
         foreach ($listSortie as $sortie ) {
 
             $dateNow = new \DateTime();
@@ -273,6 +276,38 @@ class SortieController extends AbstractController
         }
 
     }
+    #[Route('/updateEvent/{eventId}', name: 'update',  requirements: ['id'=>'\d+'])]
+    public function updateEvent(
+        int $eventId,
+        SortieRepository $sortieRepository,
+        Request $request,
+        EtatRepository $etatRepository)
 
+    {
+        //récupération de l'id de la sortie en cours
+        $event = $sortieRepository->find($eventId);
+
+        $sortieForm = $this->createForm(AjoutSortieType::class, $event);
+
+        $sortieForm->handleRequest($request);
+
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()){
+
+            if( $sortieForm->get('publish')->isClicked()){
+                $state = $etatRepository->findOneBy(['libelle'=>'Ouverte']);
+                $event->setEtat($state);
+            }
+
+            $sortieRepository->save($event, true);
+
+            $this->addFlash('success', 'La sortie à été modifié');
+
+            return $this->redirectToRoute('sortie_show', ['eventId' => $eventId]);
+        }
+
+        return $this->render('sortie/updateEvent.html.twig', [
+            'sortieForm'=>$sortieForm->createView()
+        ]);
+    }
 
 }
