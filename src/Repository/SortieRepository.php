@@ -230,7 +230,7 @@ class SortieRepository extends ServiceEntityRepository
             ->andWhere()
             ->groupBy('s.id');
 
-         dd($qb->getQuery()->getResult());
+         //dd($qb->getQuery()->getResult());
         $query=$qb->getQuery();
         $query->setMaxResults(SortieRepository::MAX_RESULT);
         $offset = ($page - 1) * SortieRepository::MAX_RESULT;
