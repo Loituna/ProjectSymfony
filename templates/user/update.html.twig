@@ -2,67 +2,38 @@
 
 {% block body %}
 
-    {# supprime le contour des inputs #}
-    <style>
-        .form-control input {
-            border: none;
-            outline: none;
-            box-shadow: none;
-        }
-    </style>
+
 
     <div class="text-white">
 
             <h2>Mise à jour du profil</h2>
 
-    {{ form_start(userForm) }}
+        {{ form_start(userForm) }}
 
-    <div class="container">
+        <div class="container">
 
-                {{ form_row(userForm.pseudo) }}
+            {{ form_row(userForm.pseudo) }}
+            {{ form_row(userForm.nom) }}
+            {{ form_row(userForm.prenom) }}
+            {{ form_row(userForm.telephone) }}
+            {{ form_row(userForm.mail) }}
+            {{ form_row(userForm.campus) }}
+            {{ form_row(userForm.photo) }}
 
-                {{ form_label(userForm.nom) }}
-                <div class="form-control">{{ form_widget(userForm.nom) }}</div>
-
-
-                {{ form_label(userForm.prenom) }}
-                <div class="form-control">{{ form_widget(userForm.prenom) }}</div>
-
-                {{ form_label(userForm.telephone) }}
-                <div class="form-control">{{ form_widget(userForm.telephone) }}</div>
-
-                {{ form_label(userForm.mail) }}
-                <div class="form-control">{{ form_widget(userForm.mail) }}</div>
-
-                {{ form_widget(userForm.plainPassword) }}
-
-                {{ form_label(userForm.campus) }}
-                <div class="form-control">{{ form_widget(userForm.campus) }}</div>
-
-                {{ form_label(userForm.photo) }}
-                <div class="form-control">{{ form_widget(userForm.photo) }}</div>
-
+            {{ form_row(userForm.plainPassword) }}
 
             {% if is_granted('ROLE_ADMIN') %}
 
-                    {{ form_label(userForm.actif) }}
-                    <div class="form-control">
-                        {{ form_widget(userForm.actif) }}
-                    </div>
-
-
-                    {{ form_label(userForm.administrateur) }}
-                    <div class="form-control">
-                        {{ form_widget(userForm.administrateur) }}
-                    </div>
+                {{ form_row(userForm.actif) }}
+                {{ form_row(userForm.administrateur) }}
 
             {% endif %}
 
             <div>
-               <button type="submit" class="btn btn-success mt-2">Enregistrer</button>
+                <button type="submit" class="btn btn-success mt-2">Enregistrer</button>
             </div>
 
-    </div>
+        </div>
 
 
 

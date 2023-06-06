@@ -21,12 +21,7 @@
         <br>
         <a href="{{ path('index') }}"><button class="btn btn-light mb-2">Retour</button></a>
         {% if user.id == app.user.id %}
-        <a href="{{ path('user_update', {'id': user.id}) }}"><button class="btn btn-light mb-2">Modifier</button></a>
-        {% endif %}
-
-        {% if is_granted('ROLE_ADMIN') %}
-            <a href="{{ path('user_update', {'id': user.id}) }}"><button class="btn btn-light mb-2">Modifier</button></a>
-            <a href="{{ path('user_delete', {'id': user.id}) }}"> <button class="btn btn-light mb-2">Supprimer</button></a>
+        <a href="{{ path('user_update', {'id': user.id}) }}"><button class="btn btn-light mb-2">Modifer</button></a>
         {% endif %}
     </section>
 
