@@ -8,9 +8,11 @@ use App\Repository\CampusRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -36,11 +38,30 @@ class RegistrationFormType extends AbstractType
       //  $userRole = $this->authorizationChecker->isGranted('ROLE_ADMIN') ? 'admin' : 'user';
 
         $builder
-            ->add('pseudo')
-            ->add('nom')
-            ->add('prenom')
-            ->add('telephone')
-            ->add('mail')
+            ->add('pseudo', TextType::class, [
+                'label'=>'Pseudo : ',
+                'attr'=>['class'=>'form-control']
+            ])
+
+            ->add('nom', TextType::class, [
+                'label'=>'Nom : ',
+                'attr'=>['class'=>'form-control']
+            ])
+
+            ->add('prenom', TextType::class, [
+                'label'=>'Prenom : ',
+                'attr'=>['class'=>'form-control']
+            ])
+
+            ->add('telephone', TextType::class, [
+                'label'=>'Telephone : ',
+                'attr'=>['class'=>'form-control']
+            ])
+
+            ->add('mail', TextType::class, [
+                'label'=>'Mail : ',
+                'attr'=>['class'=>'form-control']
+            ])
 
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
@@ -65,6 +86,7 @@ class RegistrationFormType extends AbstractType
             ->add('campus', EntityType::class, [
                 'class'=> Campus::class,
                 'choice_label'=>'nom',
+                'attr'=>['class'=>'form-control'],
                 'query_builder'=> function(CampusRepository $campusRepository){
                 $qb = $campusRepository->createQueryBuilder('c');
                // $qb->addOrderBy('c.name', 'ASC');
@@ -72,11 +94,19 @@ class RegistrationFormType extends AbstractType
                 }
             ])
 
-            ->add('actif')
-            ->add('administrateur')
+            ->add('actif', CheckboxType::class, [
+                'label'=>'Actif : ',
+                'attr'=>['class'=>'form-control']
+            ])
+
+            ->add('administrateur', CheckboxType::class, [
+                'label'=>'Administrateur : ',
+                'attr'=>['class'=>'form-control']
+            ])
 
             ->add('photo', FileType::class, [
                 'mapped' => false,
+                'attr'=>['class'=>'form-control'],
             ])
         ;
         if (!$authorizationChecker->isGranted('ROLE_ADMIN')) {
