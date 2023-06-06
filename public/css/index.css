@@ -5,22 +5,22 @@ body{
     background-size: cover;
     font-family: 'Merriweather', serif;
     color: #DDDDDD;
-    /*min-height: 100vh;*/
-    /*display: flex;*/
-    /*flex-direction: column;*/
+
 }
 
-.container {
-    max-width: 1300px;
-    margin: auto;
-    padding: 1px;
-}
 
-.containerMain{
-    max-width: 1300px;
-    display: flex;
-    margin-bottom: 80px;
-}
+/*.container {*/
+/*    max-width: 1300px;*/
+/*    margin: auto;*/
+/*    padding: 1px;*/
+/*}*/
+
+/*.containerMain{*/
+/*    max-width: 1300px;*/
+/*    margin-bottom: 80px;*/
+/*    display: flex;*/
+/*    flex-direction: row-reverse;*/
+/*}*/
 
 
 .containerCampus{
@@ -85,7 +85,7 @@ option {
     padding: 5px;
 }
 
-.flex_filtre{
-    display: flex;
+/*.flex_filtre{*/
+/*    display: flex;*/
 
-}
+/*}*/
