@@ -15,8 +15,8 @@
                     <th>Nom</th>
                     <th>Prenom</th>
                     <th>Pseudo</th>
-                    <th>Actions</th>
                     <th>Actif</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -26,26 +26,26 @@
                         <td>{{ user.prenom }}</td>
                         <td>{{ user.pseudo }} </td>
                         <td>
-
-
+                            <form method="POST" action="{{ path('user_isActif', {'id': user.id}) }}">
+                                <button class="btn btn-warning mb-2" type="submit">
+                                    {% if user.actif == true %}
+                                        Désactiver
+                                    {% else %}
+                                        Activer
+                                    {% endif %}
+                                </button>
+                            </form>
+                        </td>
+                        <td>
                             <button  class="btn btn-info mb-2">
                                 {% set userId = user.id %}
-                                <a class="text-white" href="{{ path('user_show', {'id': user.id}) }}">  Modifier</a>
+                                <a class="text-white" href="{{ path('user_show', {'id': user.id}) }}">Profil</a>
                             </button>
 
                             <button class="btn btn-danger mb-2">
                                 {% set userId = user.id %}
                                 <a class="text-white" href="{{ path('user_delete', {'id': user.id}) }}">Supprimer</a>
                             </button>
-                        </td>
-
-                        <td>
-                            {{ user.actif }}
-                            {{ form_start(userFormActif) }}
-                            {{ form_widget(userFormActif) }}
-                            <button type="submit">Enregistrer</button>
-                            {{ form_end(userFormActif) }}
-
                         </td>
                     </tr>
                 {% endfor %}

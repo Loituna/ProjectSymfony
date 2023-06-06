@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\ActifType;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,10 +25,8 @@ class UserController extends AbstractController
     {
         $users = $userRepository->findAll();
 
-
         return $this->render('user/list.html.twig', [
            'users' => $users
-
     ]);
     }
 
@@ -51,15 +48,21 @@ class UserController extends AbstractController
         Request $request,
         AuthorizationCheckerInterface $authorizationChecker): Response
     {
+        //On récupère l'utilisateur avec son id
         $user = $userRepository->find($id);
+
+        //Création du formulaire avec comme parametre authorizationChecker
         $userForm = $this->createForm(RegistrationFormType::class, $user,[
             'authorization_checker' => $authorizationChecker,
         ]);
+
+        //On récupère le formulaire
         $userForm->handleRequest($request);
 
-
+        //soumission du formulaire et vérification de sa validité
         if ($userForm->isSubmitted() && $userForm->isValid()) {
 
+            //hashage du password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
@@ -67,6 +70,7 @@ class UserController extends AbstractController
                 )
             );
 
+            //Enregistrer les modifications dans la base de données
             $userRepository->save($user,true);
 
             return $this->redirectToRoute('user_show', ['id'=> $id]);
@@ -91,30 +95,24 @@ class UserController extends AbstractController
         return $this->redirectToRoute('user_list');
     }
 
-    #[Route('/actif/{id}', name: 'actif', requirements: ['id' => '\d+'])]
-    public function actif (
-        int $id,
-        UserRepository $userRepository,
-        Request $request)
+    #[Route('/isActif/{id}', name: 'isActif')]
+    public function isActif(User $user, UserRepository $userRepository): Response
     {
-        $user = $userRepository->find($id);
-        $userFormActif = $this->createForm(ActifType::class, $user);
-        $userFormActif->handleRequest($request);
-
-
-        if ($userFormActif->isSubmitted() && $userFormActif->isValid()) {
-
-
-            $userRepository->save($user,true);
-
-            return $this->redirectToRoute('user_list', ['id'=> $id]);
-
+        //On récupère la data du champ actif
+        if ($user->getActif() == false) {
+            //On set à true ou a false selon son etat
+            $user->setActif(true);
+        } else {
+            $user->setActif(false);
         }
 
-        return $this->render('user/list.html.twig',[
-            'userFormActif' => $userFormActif->createView()
-        ]);
+        $this->addFlash('success', 'Modification pris en compte.');
 
+        //Enregistrer les modifications dans la base de données
+        $userRepository->save($user, true);
+
+        return $this->redirectToRoute('user_list');
     }
 
 }
+

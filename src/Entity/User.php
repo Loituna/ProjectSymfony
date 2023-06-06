@@ -248,6 +248,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getActif(): ?bool
+    {
+        return $this->actif;
+    }
+
     public function isActif(): ?bool
     {
         return $this->actif;
