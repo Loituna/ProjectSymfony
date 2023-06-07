@@ -5,10 +5,14 @@
 
     <section>
 
+
+
         <div class="container">
             <h2 class="text-white">Mon profil</h2>
             <br>
-
+            <div class="container">
+                <img class="css-border" src="{{ asset('img/photoProfilUtilisateur/'~user.photo) }}" alt="Photo de profil de {{ user.nom }} ">
+            </div>
             <h5 class="text-form-control">Pseudo : {{ user.pseudo }} </h5>
             <br>
             <div  class="form-control"  >Nom : {{ user.nom }}</div>
@@ -19,9 +23,7 @@
 
         </div>
 
-        <div class="container">
-            <img  src="{{ asset('img/photoProfilUtilisateur/'~user.photo) }}" alt="Photo de profil de {{ user.nom }} ">
-        </div>
+
 
         <br>
 
