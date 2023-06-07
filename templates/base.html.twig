@@ -14,6 +14,7 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Merriweather&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="{{ asset('css/index.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
@@ -27,7 +28,7 @@
                 {{ include('header/header.html.twig') }}
                 {% for label, messages in app.flashes() %}
                     {% for message in messages %}
-                        <div class="flash flash-{{ label }}">
+                        <div class="flash flash-{{ label }} bg-success text-white">
                             {{ message }}
                         </div>
                     {% endfor %}
