@@ -25,15 +25,15 @@ body{
     font-family: 'Merriweather', serif;
 
 }
-.css-border {
-    border: 4px solid #cddc39;
-    padding: 2px;
-    border-radius: 50%;
-    border-top-color: #5eb5e0 ;
-    border-left-color: cornflowerblue;
-    width: 30%;
-    height: 30%;
-}
+/*.css-border {*/
+/*    border: 4px solid #cddc39;*/
+/*    padding: 2px;*/
+/*    border-radius: 50%;*/
+/*    border-top-color: #5eb5e0 ;*/
+/*    border-left-color: cornflowerblue;*/
+/*    width: 30%;*/
+/*    height: 30%;*/
+/*}*/
 
 .slider_bg_1{
 
@@ -103,6 +103,7 @@ body{
 .flex_filtre{
     background-color: #2c2c2f;
     padding: 20px;
+
 }
 
 .flex_between{
@@ -132,7 +133,9 @@ option {
 .dropdown-menu{
     background-color: #032757;
 }
-
+.dropdown-menu >  a:hover{
+    background-color: #032757;
+}
 /*Couleur lors du hover dans le menu dropdown down*/
 .dropdown-menu >  a:hover, .dropdown-menu >  a:focus {
     background-color: #032757;
@@ -140,6 +143,26 @@ option {
 
 .hide_on_small{
     display: block;
+}
+
+.imgFiltre{
+    width: 200px; /* Largeur du carré de l'image rognée */
+    height: 200px; /* Hauteur du carré de l'image rognée */
+    background-image: url('../img/imgAcceuil.jpg'); /* Chemin vers votre image */
+    background-position: center; /* Positionne l'image au centre du carré */
+    background-size: cover;
+}
+
+.containerFiltre{
+    display: flex;
+    flex-direction: row;
+    ;
+}
+.containerBouton{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-right: 2px;
 }
 
 @media screen and (max-width: 767px) {/* Ecran de petite taille */
