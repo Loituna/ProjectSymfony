@@ -9,9 +9,9 @@
             <h2 class="text-white">Mon profil</h2>
             <br>
 
-            <h5 class="text-white">Pseudo : {{ user.pseudo }} </h5>
+            <h5 class="text-form-control">Pseudo : {{ user.pseudo }} </h5>
             <br>
-            <div  class="form-control champShow"  >Nom : {{ user.nom }}</div>
+            <div  class="form-control"  >Nom : {{ user.nom }}</div>
             <div class="form-control ">Prénom : {{ user.prenom }}</div>
             <div class="form-control ">Mail : {{ user.mail}} </div>
             <div class="form-control ">Téléphone : {{ user.telephone }}</div>
@@ -20,15 +20,16 @@
         </div>
 
         <div class="container">
-            <img src="{{ asset('img/photoProfilUtilisateur/'~user.photo) }}" alt="Photo de profil de {{ user.nom }} ">
+            <img  src="{{ asset('img/photoProfilUtilisateur/'~user.photo) }}" alt="Photo de profil de {{ user.nom }} ">
         </div>
 
         <br>
 
 
         {% if app.user.id == user.id and is_granted('ROLE_ADMIN') %}
-            <a href="{{ path('user_list') }}"><button class="btn btn-light mb-2">Retour</button></a>
-            <a href="{{ path('user_update', {'id': user.id}) }}"><button class="btn btn-info mb-2">Modifier</button></a>
+            <a href="{{ path('user_list') }}"><button class="btn btn-info mb-2">Retour</button></a>
+            <a href="{{ path('user_update', {'id': user.id}) }}"><button class="btn btn-success mb-2">Modifier</button></a>
+            <a href="{{ path('user_updatePassword', {'id': user.id}) }}"><button class="btn btn-warning mb-2">Modifier mots de passe</button></a>
             <a href="{{ path('user_delete', {'id': user.id}) }}"> <button onclick="return confirm('Etes=vous sur de vouloir supprimer cet utilisateur ?')" class="btn btn-danger mb-2">Supprimer</button></a>
 
                 {% elseif is_granted('ROLE_ADMIN') %}
@@ -39,6 +40,8 @@
                         {% elseif user.id == app.user.id %}
                             <a href="{{ path('index') }}"><button class="btn btn-info mb-2">Retour</button></a>
                             <a href="{{ path('user_update', {'id': user.id}) }}"><button class="btn btn-success mb-2">Modifier</button></a>
+                            <a href="{{ path('user_updatePassword', {'id': user.id}) }}"><button class="btn btn-warning mb-2">Modifier mots de passe</button></a>
+
         {% endif %}
 
 
