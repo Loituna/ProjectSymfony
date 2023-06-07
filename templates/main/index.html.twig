@@ -119,13 +119,13 @@
                                         {% if isCurrentUserParticipant and sortie.etatId =='2' %}
                                             <button type="button" class="btn btn-info mb-2 buttonResponsive">
                                                 <a class="text-white"
-                                                   href="{{ path('eventRemove', {'eventId': sortie.id}) }}"
+                                                   href="{{ path('sortie_eventRemove', {'eventId': sortie.id}) }}"
                                                    onclick="return confirm('Etes vous sur de vouloir vous désister de cet événement ? ')">Désinscrire</a>
                                             </button>
                                         {% elseif sortie.etatId =='2' %}
                                             <button type="button" class="btn btn-info mb-2 buttonResponsive">
                                                 <a class="text-white"
-                                                   href="{{ path('eventRegister', {'eventId': sortie.id}) }}"
+                                                   href="{{ path('sortie_eventRegister', {'eventId': sortie.id}) }}"
                                                    onclick="return confirm('Etes vous sur de vouloir vous inscrire à cet événement ? ')">S'inscrire</a>
                                             </button>
                                         {% endif %}
@@ -139,13 +139,13 @@
                                         {% if isCurrentUserParticipant and sortie.etatId =='2' %}
                                             <button type="button" class="btn btn-info mb-2 buttonResponsive">
                                                 <a class="text-white"
-                                                   href="{{ path('eventRemove', {'eventId': sortie.id}) }}"
+                                                   href="{{ path('sortie_eventRemove', {'eventId': sortie.id}) }}"
                                                    onclick="return confirm('Etes vous sur de vouloir vous désister de cet événement ? ')">Désinscrire</a>
                                             </button>
                                         {% elseif sortie.etatId =='2' %}
                                             <button type="button" class="btn btn-info mb-2 buttonResponsive">
                                                 <a class="text-white"
-                                                   href="{{ path('eventRegister', {'eventId': sortie.id}) }}"
+                                                   href="{{ path('sortie_eventRegister', {'eventId': sortie.id}) }}"
                                                    onclick="return confirm('Etes vous sur de vouloir vous inscrire à cet événement ? ')">S'inscrire</a>
                                             </button>
                                         {% endif %}

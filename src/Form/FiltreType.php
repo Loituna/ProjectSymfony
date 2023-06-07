@@ -25,11 +25,11 @@ class FiltreType extends AbstractType
                 'required'=>false
             ])
 
-            ->add('organisateur', CheckboxType::class, [
-                'label' => 'Sortie dont je suis l\'organisateur/trice',
-                'required' => false,
-                'attr' => ['class' => 'form-control']
-            ])
+//            ->add('organisateur', CheckboxType::class, [
+//                'label' => 'Sortie dont je suis l\'organisateur/trice',
+//                'required' => false,
+//                'attr' => ['class' => 'form-control']
+//            ])
             ->add('participant', CheckboxType::class, [
                 'label' => 'Sortie à laquelle je suis inscrit/e',
                 'required' => false,
@@ -40,11 +40,11 @@ class FiltreType extends AbstractType
                 'required' => false,
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('sortiefini', CheckboxType::class, [
-                'label' => 'Sortie passées',
-                'required' => false,
-                'attr' => ['class' => 'form-control']
-            ])
+//            ->add('sortiefini', CheckboxType::class, [
+//                'label' => 'Sortie passées',
+//                'required' => false,
+//                'attr' => ['class' => 'form-control']
+//            ])
 //            ->add('dateDebut', DateType::class, [
 //                'label' => 'Date de début',
 //                'widget' => 'single_text',
