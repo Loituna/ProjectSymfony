@@ -22,10 +22,10 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints\Date;
 
-
+#[Route('/sortie', name: 'sortie_')]
 class SortieController extends AbstractController
 {
-    #[Route('/{page}', name: 'index')]
+    #[Route('/{page}', name: 'index', requirements:["page"=> "\d+"])]
     public function index(
         SortieRepository $sortieRepository,
         Security         $security,
@@ -33,58 +33,35 @@ class SortieController extends AbstractController
         Request          $request,
         int              $page = 1): Response
 
-    {
-        $this->reloadEtat($etatRepository, $sortieRepository);
+    {$this->reloadEtat($etatRepository, $sortieRepository);
+        $currentUser = $security->getUser();
+        $eventsWhereUserParticipant = $sortieRepository->findSortiesByCurrentUser($currentUser);
+        $listEvents = $sortieRepository->findEventsIndex();
 
-
-
-        if ($security->getUser()==null) {
-
-            $nbSortie = $sortieRepository->findDefaultEvent($page)->count([]);
-            $maxPage = ceil($nbSortie / SortieRepository::MAX_RESULT);
-            $listEvents = $sortieRepository->findDefaultEvent($page);
-        }elseif ($security->getUser()!=null){
-            $nbSortie = $sortieRepository->findDefaultEventCurrentUser($page)->count([]);
-            $maxPage = ceil($nbSortie / SortieRepository::MAX_RESULT);
-            $listEvents = $sortieRepository->findDefaultEventCurrentUser($page);
-
-        }
-
-        if($page<1){
-            return $this->redirectToRoute('index',['page'=>1]);
-        }
-        elseif($page>$maxPage){
-            return $this->redirectToRoute('index',['page'=>$maxPage]);
-
-        }
 
         $filtreForm = $this->createForm(FiltreType::class);
         $filtreForm->handleRequest($request);
 
-
-
-
-
-        if ($filtreForm->isSubmitted() && $filtreForm->isValid()) {
+        if ($filtreForm->isSubmitted() && $filtreForm->isValid()){
 
             $listEvents = $sortieRepository->listeSortieFiltre($filtreForm);
 
             return $this->render('main/index.html.twig', [
                 'sorties' => $listEvents,
-                'filtreForm' => $filtreForm->createView()
+                'sortiesUserInscrit' => $eventsWhereUserParticipant,
+                'filtreForm'=>$filtreForm->createView()
             ]);
 
 
         }
-        return $this->render('main/filtre.html.twig', [
+        return $this->render('main/index.html.twig', [
             'sorties' => $listEvents,
-            'currentPage' => $page,
-            'maxPage'=> $maxPage,
-            'filtreForm' => $filtreForm->createView()
+            'sortiesUserInscrit' => $eventsWhereUserParticipant,
+            'filtreForm'=>$filtreForm->createView()
         ]);
     }
 
-    #[Route('/sortie/add', name: 'sortie_add')]
+    #[Route('/sortie/add', name: 'add')]
     public function add(EntityManagerInterface $entityManager,
                         LieuRepository         $lieuRepository,
                         VilleRepository        $villeRepository,
@@ -137,7 +114,7 @@ class SortieController extends AbstractController
         ]);
     }
 
-    #[Route('/sortie/lieux-par-ville/', name: 'sortie_lieux_par_ville', methods: ['POST'])]
+    #[Route('/sortie/lieux-par-ville/', name: 'lieux_par_ville', methods: ['POST'])]
     public function lieuxParVille(Request $request, LieuRepository $lieuRepository)
     {
 
@@ -149,7 +126,7 @@ class SortieController extends AbstractController
         return $this->json($lieux, 200, [], ['groups' => 'lieu_data']);
     }
 
-    #[Route('/sortie/{eventId}', name: 'sortie_show', requirements: ['id' => '\d+'])]
+    #[Route('/sortie/{eventId}', name: 'show', requirements: ['id' => '\d+'])]
     public function show(int $eventId, SortieRepository $sortieRepository): Response
     {
         $sortie = $sortieRepository->find($eventId);
@@ -229,7 +206,7 @@ class SortieController extends AbstractController
 
     }
 
-    #[Route('/cancelEvent/{eventId}', name: 'sortie_cancelevent', requirements: ['id' => '\d+'])]
+    #[Route('/cancelEvent/{eventId}', name: 'cancelevent', requirements: ['id' => '\d+'])]
     public function cancelEvent(int $eventId, SortieRepository $sortieRepository, EtatRepository $etatRepository, Request $request)
     {
         $eventToCancel = $sortieRepository->find($eventId);
@@ -249,7 +226,7 @@ class SortieController extends AbstractController
         return $this->redirectToRoute('sortie_show', ['eventId' => $eventId]);
     }
 
-    #[Route('/publishEvent/{eventId}', name: 'sortie_publishEvent', requirements: ['id' => '\d+'])]
+    #[Route('/publishEvent/{eventId}', name: 'publishEvent', requirements: ['id' => '\d+'])]
     public function publishEvent(int $eventId, SortieRepository $sortieRepository, EtatRepository $etatRepository, Request $request)
     {
         $eventToPublish = $sortieRepository->find($eventId);
@@ -267,40 +244,7 @@ class SortieController extends AbstractController
         return $this->redirectToRoute('sortie_show', ['eventId' => $eventId]);
     }
 
-    private function reloadEtat(EtatRepository $etatRepository, SortieRepository $sortieRepository)
-    {
-        $listSortie = $sortieRepository->findAll();
 
-
-        foreach ($listSortie as $sortie) {
-
-            $dateNow = new \DateTime();
-
-            if ($dateNow > $sortie->getDateDebut() && $dateNow < $sortie->getDateLimite()) {
-                $sortie->setEtat(($etatRepository->find(3)));
-            }
-
-            if ($dateNow > $sortie->getDateDebut()) {
-                $sortie->setEtat($etatRepository->find(5));
-            }
-
-
-            if ($dateNow->format('Y-m-d') == $sortie->getDateDebut()->format('Y-m-d')) {
-
-                $sortie->setEtat($etatRepository->find(4));
-            }
-
-
-            $dif = $dateNow->diff($sortie->getDateDebut());
-            if ($dif->m > 1) {
-                $sortie->setEtat($etatRepository->find(7));
-            }
-
-
-            $sortieRepository->save($sortie, true);
-        }
-
-    }
 
     #[Route('/updateEvent/{eventId}', name: 'update', requirements: ['id' => '\d+'])]
     public function updateEvent(
@@ -335,5 +279,38 @@ class SortieController extends AbstractController
             'sortieForm' => $sortieForm->createView()
         ]);
     }
+    private function reloadEtat(EtatRepository $etatRepository, SortieRepository $sortieRepository)
+    {
+        $listSortie = $sortieRepository->findAll();
 
+
+        foreach ($listSortie as $sortie) {
+
+            $dateNow = new \DateTime();
+
+            if ($dateNow > $sortie->getDateDebut() && $dateNow < $sortie->getDateLimite()) {
+                $sortie->setEtat(($etatRepository->find(3)));
+            }
+
+            if ($dateNow > $sortie->getDateDebut()) {
+                $sortie->setEtat($etatRepository->find(5));
+            }
+
+
+            if ($dateNow->format('Y-m-d') == $sortie->getDateDebut()->format('Y-m-d')) {
+
+                $sortie->setEtat($etatRepository->find(4));
+            }
+
+
+            $dif = $dateNow->diff($sortie->getDateDebut());
+            if ($dif->m > 1) {
+                $sortie->setEtat($etatRepository->find(7));
+            }
+
+
+            $sortieRepository->save($sortie, true);
+        }
+
+    }
 }

@@ -13,8 +13,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class VilleController extends AbstractController
 {
     #[Route('/{page}', name: 'list',requirements:["page"=> "\d+"])]
-    public function list(VilleRepository $villeRepository,Request $request, int $page=1): Response
+    public function list(VilleRepository $villeRepository,Request $request, int $page= 1): Response
     {
+
+
         $nbVille = $villeRepository->count([]);
         $maxPage = ceil($nbVille/VilleRepository::MAX_RESULT);
 
