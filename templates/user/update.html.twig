@@ -9,7 +9,6 @@
             <h1>Mise à jour du profil</h1>
 
         {{ form_start(userForm) }}
-
         <div class="container">
 
             {{ form_row(userForm.pseudo) }}
@@ -20,7 +19,6 @@
             {{ form_row(userForm.campus) }}
             {{ form_row(userForm.photo) }}
 
-            {{ form_row(userForm.plainPassword) }}
 
             {% if is_granted('ROLE_ADMIN') %}
 
@@ -34,7 +32,6 @@
             </div>
 
         </div>
-
         {{ form_end(userForm) }}
     </div>
 
