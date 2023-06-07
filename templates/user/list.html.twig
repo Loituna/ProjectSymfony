@@ -27,7 +27,7 @@
                         <td>{{ user.pseudo }} </td>
                         <td>
                             <form method="POST" action="{{ path('user_isActif', {'id': user.id}) }}">
-                                <button class="btn btn-warning mb-2" type="submit">
+                                <button onclick="return confirm('Etes vous sur de vouloir changer l\'état actif ? ')" class="btn btn-warning mb-2" type="submit">
                                     {% if user.actif == true %}
                                         Désactiver
                                     {% else %}
@@ -44,7 +44,7 @@
 
                             <button class="btn btn-danger mb-2">
                                 {% set userId = user.id %}
-                                <a class="text-white" href="{{ path('user_delete', {'id': user.id}) }}">Supprimer</a>
+                                <a onclick="return confirm('Etes=vous sur de vouloir supprimer cet utilisateur ?')" class="text-white" href="{{ path('user_delete', {'id': user.id}) }}">Supprimer</a>
                             </button>
                         </td>
                     </tr>

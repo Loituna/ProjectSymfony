@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\PasswordType;
 use App\Form\RegistrationFormType;
+use App\Form\UpdateUserType;
 use App\Repository\UserRepository;
 use App\Tools\Uploader;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,9 +26,6 @@ use Symfony\Component\Security\Core\Security;
 #[Route('/user', name: 'user_')]
 class UserController extends AbstractController
 {
-
-
-
     #[Route('/liste', name: 'list')]
     public function list(UserRepository $userRepository,
                          AuthorizationCheckerInterface $authorizationChecker): Response
@@ -50,8 +49,43 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[Route('/password/{id}', name: 'updatePassword', requirements: ['id' => '\d+'])]
+    public function updatePassword(
+        int $id,
+        Request $request,
+        UserPasswordHasherInterface $userPasswordHasher,
+        UserRepository $userRepository
+    )
+    {
+        $user = $userRepository->find($id);
+
+        $userPasswordForm = $this->createForm(PasswordType::class, $user);
+
+        $userPasswordForm->handleRequest($request);
+
+        if ($userPasswordForm->isSubmitted() && $userPasswordForm->isValid()){
+            //hashage du password
+
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $userPasswordForm->get('plainPassword')->getData()
+                )
+            );
+
+            $userRepository->save($user,true);
+
+            return $this->redirectToRoute('user_show', ['id'=> $id]);
+        }
+
+        return $this->render('user/password.html.twig',[
+            'userPasswordForm' => $userPasswordForm->createView(),
+
+        ]);
+    }
+
     #[Route('/update/{id}', name: 'update', requirements: ['id' => '\d+'])]
-    public function update(
+    public function updateProfile(
         int $id,
         UserRepository $userRepository,
         UserPasswordHasherInterface $userPasswordHasher,
@@ -63,7 +97,7 @@ class UserController extends AbstractController
         $user = $userRepository->find($id);
 
         //Création du formulaire avec comme parametre authorizationChecker
-        $userForm = $this->createForm(RegistrationFormType::class, $user,[
+        $userForm = $this->createForm(UpdateUserType::class, $user,[
             'authorization_checker' => $authorizationChecker,
         ]);
 
@@ -73,13 +107,6 @@ class UserController extends AbstractController
         //soumission du formulaire et vérification de sa validité
         if ($userForm->isSubmitted() && $userForm->isValid()) {
 
-            //hashage du password
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $userForm->get('plainPassword')->getData()
-                )
-            );
             /**
              * @var UploadedFile $file
              */
@@ -97,13 +124,12 @@ class UserController extends AbstractController
             $userRepository->save($user,true);
 
             return $this->redirectToRoute('user_show', ['id'=> $id]);
-
         }
 
         return $this->render('user/update.html.twig',[
-           'userForm' => $userForm->createView()
+           'userForm' => $userForm->createView(),
+            'user' => $user
         ]);
-
     }
 
     #[IsGranted ('ROLE_ADMIN')]

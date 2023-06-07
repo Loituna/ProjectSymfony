@@ -5,43 +5,28 @@ namespace App\Form;
 use App\Entity\Campus;
 use App\Entity\User;
 use App\Repository\CampusRepository;
-use App\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-
-
-class RegistrationFormType extends AbstractType
+class UpdateUserType extends AbstractType
 {
-
-
     public function __construct(private AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->authorizationChecker = $authorizationChecker;
     }
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $authorizationChecker = $options['authorization_checker'];
-      //  $userRole = $this->authorizationChecker->isGranted('ROLE_ADMIN') ? 'admin' : 'user';
-
-       // $user = $this->security->getUser();
-
         $builder
             ->add('pseudo', TextType::class, [
                 'required' => true,
@@ -56,6 +41,8 @@ class RegistrationFormType extends AbstractType
                     ])],
                 'attr'=>['class'=>'form-control']
             ])
+            //->add('roles')
+            //->add('password')
 
             ->add('nom', TextType::class, [
                 'required' => true,
@@ -85,11 +72,6 @@ class RegistrationFormType extends AbstractType
                 'attr'=>['class'=>'form-control']
             ])
 
-            ->add('telephone', TextType::class, [
-                'label'=>'Telephone : ',
-                'attr'=>['class'=>'form-control']
-            ])
-
             ->add('mail', TextType::class, [
                 'required' => true,
                 'constraints' => [
@@ -104,36 +86,14 @@ class RegistrationFormType extends AbstractType
                 'attr'=>['class'=>'form-control']
             ])
 
-            ->add('plainPassword', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'invalid_message' => 'Les mots de passe doivent correspondre.',
-                'required' => true,
-                'first_options' => ['label' => 'Mot de passe', 'attr' => ['class' => 'form-control mb-3']],
-                'second_options' => ['label' => 'Confirmer le mot de passe', 'attr' => ['class' => 'form-control mb-3']],
+            ->add('photo', FileType::class, [
                 'mapped' => false,
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer un mot de passe.',
-                    ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caractères.',
-                        'max' => 4096,
-                    ]),
-                ],
-
+                'attr'=>['class'=>'form-control'],
             ])
 
-            ->add('campus', EntityType::class, [
-                'required' => true,
-                'class'=> Campus::class,
-                'choice_label'=>'nom',
-                'attr'=>['class'=>'form-control'],
-                'query_builder'=> function(CampusRepository $campusRepository){
-                $qb = $campusRepository->createQueryBuilder('c');
-               // $qb->addOrderBy('c.name', 'ASC');
-                return $qb;
-                }
+            ->add('telephone', TextType::class, [
+                'label'=>'Telephone : ',
+                'attr'=>['class'=>'form-control']
             ])
 
             ->add('actif', CheckboxType::class, [
@@ -148,20 +108,24 @@ class RegistrationFormType extends AbstractType
                 'attr'=>['class'=>'form-control']
             ])
 
-            ->add('photo', FileType::class, [
-                'mapped' => false,
+            ->add('campus', EntityType::class, [
+                'required' => true,
+                'class'=> Campus::class,
+                'choice_label'=>'nom',
                 'attr'=>['class'=>'form-control'],
+                'query_builder'=> function(CampusRepository $campusRepository){
+                    $qb = $campusRepository->createQueryBuilder('c');
+                    // $qb->addOrderBy('c.name', 'ASC');
+                    return $qb;
+                }
             ])
+
+            //->add('sorties')
         ;
         if (!$authorizationChecker->isGranted('ROLE_ADMIN')) {
             $builder->remove('actif');
             $builder->remove('administrateur');
         }
-
-//        if ($this->security->getUser()->getId() == $user->getId()) {
-//            $builder->remove('plainPassword');
-//
-//        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -171,7 +135,5 @@ class RegistrationFormType extends AbstractType
             'required' => false,
             'authorization_checker' => null,
         ]);
-
-        $resolver->setAllowedTypes('authorization_checker', [AuthorizationCheckerInterface::class, 'null']);
     }
 }
