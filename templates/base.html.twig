@@ -15,6 +15,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Merriweather&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="{{ asset('css/index.css') }}">
         <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
@@ -33,6 +34,9 @@
                         </div>
                     {% endfor %}
                 {% endfor %}
+                {% block banniere %}
+
+                {% endblock %}
             </header>
             <main>
                 <div class="containerMain">
@@ -56,10 +60,12 @@
         {% block extraStyle %}
             <style>
                 body{
-                    {#background-image: linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.5))  ,url("{{ asset('img/TEUF.jpg') }}" );#}
-                    background-size: 100% 80%;
+
+                    /*background-size: 100% 80%;*/
                     background-repeat: no-repeat;
-                    background-color: #5eb5e0;
+
+                    background-color: #2c2c2f;
+                    color: #e2e3e5;
                 }
 
             </style>

@@ -2,7 +2,24 @@
 
 {% block title %}Sortir.com ! | Index{% endblock %}
 
-
+{% block banniere %}
+    <!-- slider_area_start -->
+    <div class="slider_area">
+        <div class="single_slider  d-flex  align-items-center slider_bg_1 overlay2">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div class="slider_text ">
+                            <span class="span">Sortir.com</span>
+                            <h3 class="coucou"> Take a pause, enjoy the experience ! </h3>
+                            <p class="coucou2">Pour mieux se retrouver, autant tout programmer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
 {% block body %}
 
@@ -17,13 +34,13 @@
         {% endblock %}
 
 
-        <h1 class="text-white">Les Evenements en cours : </h1>
+        <h1 class="text-white m-2 mb-3">Les Evenements en cours : </h1>
 
-            <table class="table   table-light table-striped table-hover table-sm">
+            <table class="table   table-dark table-striped table-hover table-sm ">
 
-                    <thead class="thead-light">
+                    <thead class="thead-light ">
                     <tr>
-                        <th>Nom de la Sortie</th>
+                        <th >Nom de la Sortie</th>
                         <th>Date de la Sortie</th>
                         <th class="responsiveHideSm">Clotûre</th>
                         <th class="responsiveHideSm">inscrits/places</th>
@@ -35,7 +52,7 @@
                         {% endif %}
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody >
 
 
                     {% for sortie in sorties %}
@@ -43,25 +60,25 @@
                             {% if sortie.etatNom == 'Ouverte' %}
                                 <tr>
                                 <td>
-                                    <div class="text-body">{{ sortie.nom }}</div>
+                                    <div class="text-white">{{ sortie.nom }}</div>
                                 </td>
                                 <td>
 
-                                    <div class="text-secondary">{{ sortie.dateDebut | date('d M Y H:i:s') }}</div>
+                                    <div class="text-white">{{ sortie.dateDebut | date('d M Y H:i:s') }}</div>
 
-                                    <div class="text-secondary">{{ sortie.dateDebut | date('d M Y H:i:') }}</div>
+                                    <div class="text-white">{{ sortie.dateDebut | date('d M Y H:i:') }}</div>
 
                                 </td>
                                 <td class="responsiveHideSm">
-                                    <div class="text-danger">{{ sortie.dateLimite | date('d M Y') }}</div>
+                                    <div class="text-white">{{ sortie.dateLimite | date('d M Y') }}</div>
                                 </td>
                                 <td class="responsiveHideSm">
-                                    <div class="text-secondary">{{ sortie.participant_count }}
+                                    <div class="text-white">{{ sortie.participant_count }}
                                         /{{ sortie.nbInscriptionMax }}</div>
                                 </td>
                                 <td class="responsiveHideSm">
                                     {% if sortie.etatNom == 'Passée' %}
-                                        <div class="text-danger font-weight-bold">{{ sortie.etatNom }}</div>
+                                        <div class="text-white font-weight-bold">{{ sortie.etatNom }}</div>
                                     {% else %}
                                         <div class="text-info">{{ sortie.etatNom }}</div>
                                     {% endif %}
@@ -70,10 +87,10 @@
                         {% elseif (sortie.etatNom == 'Ouverte') or (sortie.etatNom == 'Créée' and sortie.organisateurId == app.user.id) %}
                             <tr>
                                 <td>
-                                    <div class="text-body">{{ sortie.nom }}</div>
+                                    <div class="text-white">{{ sortie.nom }}</div>
                                 </td>
                                 <td>
-                                    <div class="text-secondary">{{ sortie.dateDebut | date('d M Y H:i:s') }}</div>
+                                    <div class="text-white">{{ sortie.dateDebut | date('d M Y H:i:s') }}</div>
                                 </td>
                                 <td class="responsiveHideSm">
                                     <div class="text-danger">{{ sortie.dateLimite | date('d M Y') }}</div>
@@ -105,11 +122,11 @@
                                     {% if isCurrentUserParticipant %}
                                         <div class="text-info responsiveHide">Inscrit</div>
                                     {% else %}
-                                        <div class="text-danger responsiveHide">Non Inscrit</div>
+                                        <div class="text-primary responsiveHide">Non Inscrit</div>
                                     {% endif %}
                                 </td>
                                 <td class="responsiveHide">
-                                    <div class="text-secondary">{{ sortie.organisateurNom }}</div>
+                                    <div class="text-white">{{ sortie.organisateurNom }}</div>
                                 </td>
                                 <td>
 {#                                    {% if app.user == null %}#}
