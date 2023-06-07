@@ -7,36 +7,18 @@ body{
     color: #DDDDDD;
 }
 
-.logo{
-    background-image: url('../img/logoHeaderFini2.png');
-    /*background-size: cover; !* Ajuste la taille de l'image pour couvrir tout le div *!*/
-    background-repeat: no-repeat; /* Empêche la répétition de l'image de fond */
-    width: 132px; /* Remplacez la valeur par la largeur souhaitée */
-    height: 145px; /* Remplacez la valeur par la hauteur souhaitée */
+/* Partie Header *****************************************************************/
+
+.headerNav{
+    background-color: #032757;
+    margin: 30px;
+    font-family: 'Merriweather', serif;
+
 }
 
 
-/*.containerMain{*/
-/*    max-width: 1300px;*/
-/*    display: flex;*/
-/*    margin-bottom: 80px;*/
-/*}*/
 
-
-/*.containerCampus{*/
-/*    max-width: 1500px;*/
-/*    min-width: 700px;*/
-/*    margin: auto;*/
-/*    padding: 1px;*/
-/*}*/
-
-.header{
-    display: flex;
-    justify-content: left;
-    margin: 0;
-    align-items: center;
-}
-
+/**********************************************************************************/
 .footer{
     margin-top: auto;
     position: relative;
@@ -111,18 +93,6 @@ option {
         display: none;/* Masque l'élement sur de petits écrans */
     }
 
-    .header{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .logo{
-        background-image: url('../img/logoSmartphone.png');
-        background-repeat: no-repeat; /* Empêche la répétition de l'image de fond */
-        width: 76px; /* Remplacez la valeur par la largeur souhaitée */
-        height: 81px; /* Remplacez la valeur par la hauteur souhaitée */
-    }
 
     body{
         font-size: x-small;
@@ -154,19 +124,7 @@ option {
 
 @media screen and (max-width: 990px) {/* Ecran de type tablette */
 
-    .header{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
 
-    }
-
-    .logo{
-        background-image: url('../img/logoSmartphone.png');
-        background-repeat: no-repeat; /* Empêche la répétition de l'image de fond */
-        width: 76px; /* Remplacez la valeur par la largeur souhaitée */
-        height: 81px; /* Remplacez la valeur par la hauteur souhaitée */
-    }
 
     body{
         font-size: x-small;
