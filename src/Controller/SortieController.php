@@ -22,10 +22,10 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints\Date;
 
-
+#[Route('/sortie', name: 'sortie_')]
 class SortieController extends AbstractController
 {
-    #[Route('/{page}', name: 'index')]
+    #[Route('/{page}', name: 'index', requirements:["page"=> "\d+"])]
     public function index(
         SortieRepository $sortieRepository,
         Security         $security,
@@ -51,10 +51,10 @@ class SortieController extends AbstractController
         }
 
         if($page<1){
-            return $this->redirectToRoute('index',['page'=>1]);
+            return $this->redirectToRoute('sortie_index',['page'=>1]);
         }
         elseif($page>$maxPage){
-            return $this->redirectToRoute('index',['page'=>$maxPage]);
+            return $this->redirectToRoute('sortie_index',['page'=>$maxPage]);
 
         }
 
