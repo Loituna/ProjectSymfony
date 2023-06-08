@@ -126,7 +126,7 @@ class SortieController extends AbstractController
         return $this->json($lieux, 200, [], ['groups' => 'lieu_data']);
     }
 
-    #[Route('/{eventId}', name: 'show', requirements: ['id' => '\d+'])]
+    #[Route('/show/{eventId}', name: 'show', requirements: ['id' => '\d+'])]
     public function show(int $eventId, SortieRepository $sortieRepository): Response
     {
         $sortie = $sortieRepository->find($eventId);
