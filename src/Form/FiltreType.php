@@ -21,7 +21,7 @@ class FiltreType extends AbstractType
                 'class' => Campus::class,
                 'mapped' => false,
                 'choice_label' => 'nom',
-                'attr' => ['class' => 'form-control'],
+                'attr' => ['class' => 'col form-control m-2'],
                 'required'=>false
             ])
 
@@ -30,21 +30,25 @@ class FiltreType extends AbstractType
 //                'required' => false,
 //                'attr' => ['class' => 'form-control']
 //            ])
+
             ->add('participant', CheckboxType::class, [
                 'label' => 'Sortie à laquelle je suis inscrit/e',
                 'required' => false,
-                'attr' => ['class' => 'form-control']
+                'attr' => ['class' => '  form-check-inline m-3']
             ])
+
             ->add('pasParticipant', CheckboxType::class, [
                 'label' => 'Sortie à laquelle je ne suis pas inscrit/e',
                 'required' => false,
-                'attr' => ['class' => 'form-control']
+                'attr' => ['class' => ' form-check-inline m-3']
             ])
+
 //            ->add('sortiefini', CheckboxType::class, [
 //                'label' => 'Sortie passées',
 //                'required' => false,
 //                'attr' => ['class' => 'form-control']
 //            ])
+
 //            ->add('dateDebut', DateType::class, [
 //                'label' => 'Date de début',
 //                'widget' => 'single_text',
@@ -53,6 +57,7 @@ class FiltreType extends AbstractType
 //                'attr' => ['class' => 'form-control']
 //
 //            ])
+
 //            ->add('dateLimite', DateType::class, [
 //                'label' => 'Date de fin',
 //                'widget' => 'single_text',

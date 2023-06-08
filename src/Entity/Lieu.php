@@ -110,22 +110,22 @@ class Lieu
         return $this->sorties;
     }
 
-    public function addYe(Sortie $ye): self
+    public function addSortie(Sortie $sortie): self
     {
-        if (!$this->sorties->contains($ye)) {
-            $this->sorties->add($ye);
-            $ye->setLieu($this);
+        if (!$this->sorties->contains($sortie)) {
+            $this->sorties->add($sortie);
+            $sortie->setLieu($this);
         }
 
         return $this;
     }
 
-    public function removeYe(Sortie $ye): self
+    public function removeSortie(Sortie $sortie): self
     {
-        if ($this->sorties->removeElement($ye)) {
+        if ($this->sorties->removeElement($sortie)) {
             // set the owning side to null (unless already changed)
-            if ($ye->getLieu() === $this) {
-                $ye->setLieu(null);
+            if ($sortie->getLieu() === $this) {
+                $sortie->setLieu(null);
             }
         }
 

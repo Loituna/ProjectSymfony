@@ -50,7 +50,7 @@ body{
 
 }
 
-.coucou{
+.balise1{
     color: #ffffff;
     font-size: 50px;
     margin-top: 6px;
@@ -59,7 +59,7 @@ body{
     font-family: "fangsong", "Droid Serif";
 }
 
-.coucou2{
+.balise2{
     font-size: 28px;
     font-weight: 400;
     color: #FFFFFF;
@@ -105,9 +105,15 @@ body{
 
 .flex_filtre{
     background-color: #2c2c2f;
-    padding: 20px;
-
+    padding: 15px;
+    font-size: 20px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
+
+
 
 .flex_between{
     justify-content: space-between;
@@ -150,22 +156,28 @@ option {
 
 .imgFiltre{
     width: 200px; /* Largeur du carré de l'image rognée */
-    height: 200px; /* Hauteur du carré de l'image rognée */
-    background-image: url('../img/imgAcceuil.jpg'); /* Chemin vers votre image */
-    background-position: center; /* Positionne l'image au centre du carré */
+    height: 400px; /* Hauteur du carré de l'image rognée */
+    background-image: linear-gradient(
+            rgba(254, 207, 20, 0.22),
+            rgba(255, 103, 16, 0.27)
+    ), url('../img/imgIndex.jpg');
+    background-position: center center; /* Positionne l'image au centre du carré */
     background-size: cover;
+
+    color: #ffffff;
+    font-family: "fangsong", "Droid Serif";
+    font-size: 50px;
+    padding: 150px;
+   text-align: right;
+
 }
 
-.containerFiltre{
-    display: flex;
-    flex-direction: row;
-    ;
-}
+
 .containerBouton{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-right: 2px;
+
 }
 
 @media screen and (max-width: 767px) {/* Ecran de petite taille */
