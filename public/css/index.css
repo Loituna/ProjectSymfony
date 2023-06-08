@@ -65,7 +65,7 @@ body{
     color: #FFFFFF;
     margin-bottom: 20px;
     margin-top: 10px;
-    font-family: "Droid Serif", serif;
+    font-family: "Gabriola", serif;
 }
 /* Partie IRWIN SA MERE FAIT DE LA CSS ON TOUCHE PAS ICI *****************************************************************/
 
@@ -111,9 +111,13 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    font-family: "JetBrains Mono", "Droid Serif", Arial;;
 }
-
-
+ .container>table{
+     font-family: "JetBrains Mono", "Droid Serif",Arial;;
+     font-size: 18px;
+     font-weight: bold;
+ }
 
 .flex_between{
     justify-content: space-between;
@@ -163,13 +167,11 @@ option {
     ), url('../img/imgIndex.jpg');
     background-position: center center; /* Positionne l'image au centre du carré */
     background-size: cover;
-
     color: #ffffff;
     font-family: "fangsong", "Droid Serif";
     font-size: 50px;
     padding: 150px;
-   text-align: right;
-
+   text-align: center;
 }
 
 
