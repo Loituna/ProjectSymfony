@@ -17,6 +17,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class UpdateUserType extends AbstractType
 {
@@ -47,9 +48,7 @@ class UpdateUserType extends AbstractType
             ->add('nom', TextType::class, [
                 'required' => true,
                 'constraints' => [
-                    new NotBlank([
-                        'message' => "Veuillez saisir un nom"
-                    ]),
+
                     new Length([
                         'min' => 2,
                         'minMessage' => 'Le nom doit contenir au minimum {{ limit }} caractères'
@@ -61,9 +60,7 @@ class UpdateUserType extends AbstractType
             ->add('prenom', TextType::class, [
                 'required' => true,
                 'constraints' => [
-                    new NotBlank([
-                        'message' => "Veuillez saisir un prenom"
-                    ]),
+
                     new Length([
                         'min' => 2,
                         'minMessage' => 'Le prenom doit contenir au minimum {{ limit }} caractères'
@@ -75,9 +72,7 @@ class UpdateUserType extends AbstractType
             ->add('mail', TextType::class, [
                 'required' => true,
                 'constraints' => [
-                    new NotBlank([
-                        'message' => "Veuillez saisir une adresse e-mail"
-                    ]),
+
                     new Email([
                         'message' => "Veuillez saisir une adresse mail valide"
                     ])

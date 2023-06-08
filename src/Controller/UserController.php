@@ -67,9 +67,13 @@ class UserController extends AbstractController
         Security $security ,
     )
     {
+        $userId =$security->getUser()->getid();
+
         // IL FAUT IMPERATIVEMENT REDIRIGER LUTILISATEUR VERS /!\SA PAGE/!\
-        if ($id != $security->getUser()->getid){
-            $id =$security->getUser()->getid;
+        if ($id != $userId){
+
+            $id = $userId;
+            return $this->redirectToRoute('user_updatePassword', ['id'=> $id]);
         }
 
 
@@ -109,6 +113,8 @@ class UserController extends AbstractController
         AuthorizationCheckerInterface $authorizationChecker,
         Uploader $uploader): Response
     {
+
+        $user = $userRepository->find($id);
         //On récupère l'utilisateur avec son id
         $user = $userRepository->find($id);
 
@@ -140,12 +146,14 @@ class UserController extends AbstractController
             $userRepository->save($user,true);
 
             return $this->redirectToRoute('user_show', ['id'=> $id]);
-        }
+        }else{
+
+
 
         return $this->render('user/update.html.twig',[
            'userForm' => $userForm->createView(),
             'user' => $user
-        ]);
+        ]);}
     }
 
     #[IsGranted ('ROLE_ADMIN')]

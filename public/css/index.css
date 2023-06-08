@@ -25,15 +25,7 @@ body{
     font-family: 'Merriweather', serif;
 
 }
-/*.css-border {*/
-/*    border: 4px solid #cddc39;*/
-/*    padding: 2px;*/
-/*    border-radius: 50%;*/
-/*    border-top-color: #5eb5e0 ;*/
-/*    border-left-color: cornflowerblue;*/
-/*    width: 30%;*/
-/*    height: 30%;*/
-/*}*/
+
 
 .slider_bg_1{
 
@@ -75,7 +67,18 @@ body{
     margin-top: 10px;
     font-family: "Droid Serif", serif;
 }
-/**********************************************************************************/
+/* Partie IRWIN SA MERE FAIT DE LA CSS ON TOUCHE PAS ICI *****************************************************************/
+
+.css-border {
+    border: 4px solid #cddc39;
+    padding: 2px;
+    border-radius: 50%;
+    border-top-color: #5eb5e0 ;
+    border-left-color: cornflowerblue;
+    width: 30%;
+    height: 30%;
+}
+/*fin de la Partie IRWIN SA MERE FAIT DE LA CSS ON TOUCHE PAS ICI*********************************************************************************/
 .footer{
     margin-top: auto;
     position: relative;
