@@ -33,6 +33,7 @@ body{
 }
 
 .single_slider{
+    background-color: #032757;
     height: 342px;
     background-size: cover;
     background-repeat: no-repeat;
