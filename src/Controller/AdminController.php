@@ -8,9 +8,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AdminController extends AbstractController
 {
-    #[Route('/', name: 'app_admin')]
-    public function index(): Response
-    {
-        return $this->redirectToRoute('sortie_index');
-    }
+//    #[Route('/', name: 'app_admin')]
+//    public function index(): Response
+//    {
+//        return $this->redirectToRoute('sortie_index');
+//    }
 }

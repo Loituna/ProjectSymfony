@@ -61,7 +61,7 @@ class SortieController extends AbstractController
         ]);
     }
 
-    #[Route('/sortie/add', name: 'add')]
+    #[Route('/add', name: 'add')]
     public function add(EntityManagerInterface $entityManager,
                         LieuRepository         $lieuRepository,
                         VilleRepository        $villeRepository,
@@ -114,7 +114,7 @@ class SortieController extends AbstractController
         ]);
     }
 
-    #[Route('/sortie/lieux-par-ville/', name: 'lieux_par_ville', methods: ['POST'])]
+    #[Route('/lieux-par-ville/', name: 'lieux_par_ville', methods: ['POST'])]
     public function lieuxParVille(Request $request, LieuRepository $lieuRepository)
     {
 
@@ -126,7 +126,7 @@ class SortieController extends AbstractController
         return $this->json($lieux, 200, [], ['groups' => 'lieu_data']);
     }
 
-    #[Route('/sortie/{eventId}', name: 'show', requirements: ['id' => '\d+'])]
+    #[Route('/{eventId}', name: 'show', requirements: ['id' => '\d+'])]
     public function show(int $eventId, SortieRepository $sortieRepository): Response
     {
         $sortie = $sortieRepository->find($eventId);

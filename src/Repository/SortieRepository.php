@@ -132,6 +132,12 @@ class SortieRepository extends ServiceEntityRepository
             ->addSelect('s.nbInscriptionMax')
             ->addSelect('COUNT(DISTINCT p.id) as participant_count')
             ->leftJoin('s.participants', 'p')
+            ->leftJoin('s.etat', 'e')
+            ->addSelect('e.libelle as etatNom')
+            ->addSelect('e.id as etatId')
+            ->leftJoin('s.organisateur', 'o')
+            ->addSelect('o.nom as organisateurNom')
+            ->addSelect('o.id as organisateurId')
             ->groupBy('s.id');
 
         if ($filtreForm->get('Campus')->getData()) {
@@ -141,16 +147,16 @@ class SortieRepository extends ServiceEntityRepository
                 ->addSelect('c.nom');
         }
 
-        if ($filtreForm->get('sortiefini')->getData()) {
-            $qb->leftJoin('s.etat', 'e')
-                ->andWhere('e.id = 5')
-                ->addSelect('e.libelle as etatNom')
-                ->addSelect('e.id as etatId');
-        } else {
-            $qb->leftJoin('s.etat', 'e')
-                ->addSelect('e.libelle as etatNom')
-                ->addSelect('e.id as etatId');
-        }
+//        if ($filtreForm->get('sortiefini')->getData()) {
+//            $qb->leftJoin('s.etat', 'e')
+//                ->andWhere('e.id = 5')
+//                ->addSelect('e.libelle as etatNom')
+//                ->addSelect('e.id as etatId');
+//        } else {
+//            $qb->leftJoin('s.etat', 'e')
+//                ->addSelect('e.libelle as etatNom')
+//                ->addSelect('e.id as etatId');
+//        }
 
         if ($filtreForm->get('participant')->getData()) {
             $qb->andWhere(':user MEMBER OF s.participants')
@@ -162,15 +168,15 @@ class SortieRepository extends ServiceEntityRepository
                 ->setParameter('user', $this->security->getUser());
         }
 
-        if ($filtreForm->get('organisateur')->getData()) {
-            $qb->leftJoin('s.organisateur', 'o')
-                ->andWhere('o = :user')
-                ->setParameter('user', $this->security->getUser());
-        } else {
-            $qb->leftJoin('s.organisateur', 'o')
-                ->addSelect('o.nom as organisateurNom')
-                ->addSelect('o.id as organisateurId');
-        }
+//        if ($filtreForm->get('organisateur')->getData()) {
+//            $qb->leftJoin('s.organisateur', 'o')
+//                ->andWhere('o = :user')
+//                ->setParameter('user', $this->security->getUser());
+//        } else {
+//            $qb->leftJoin('s.organisateur', 'o')
+//                ->addSelect('o.nom as organisateurNom')
+//                ->addSelect('o.id as organisateurId');
+//        }
 
 
         $listeSortie = $qb->getQuery()->getResult();

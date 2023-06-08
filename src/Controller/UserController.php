@@ -41,6 +41,15 @@ class UserController extends AbstractController
     #[Route('/{id}', name: 'show', requirements: ['id'=>'\d+'])]
     public function show(int $id, UserRepository $userRepository): Response
     {
+        $maxUser = $userRepository->count([]);
+
+        if($id<1){
+            return $this->redirectToRoute('user_show',['id'=>1]);
+        }
+        elseif ($id>$maxUser) {
+            return $this->redirectToRoute('user_show', ['id' => $maxUser]);
+        }
+
         $user = $userRepository->find($id);
 
         return $this->render('user/show.html.twig', [
@@ -54,9 +63,16 @@ class UserController extends AbstractController
         int $id,
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        Security $security ,
     )
     {
+        // IL FAUT IMPERATIVEMENT REDIRIGER LUTILISATEUR VERS /!\SA PAGE/!\
+        if ($id != $security->getUser()->getid){
+            $id =$security->getUser()->getid;
+        }
+
+
         $user = $userRepository->find($id);
 
         $userPasswordForm = $this->createForm(PasswordType::class, $user);
