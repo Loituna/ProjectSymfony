@@ -31,11 +31,13 @@
             {% if app.user != null %}
             <div class="col imgFiltre">Filtrer mes sorties</div>
             <div class=" col flex_filtre">
-
+                        {{ form_start(filtreForm) }}
                     <div> {{ form_row(filtreForm.Campus) }}</div>
                     <div>{{ form_row(filtreForm.participant) }}</div>
                     <div>{{ form_row(filtreForm.pasParticipant) }}</div>
                     <div> {{ form_row(filtreForm.submit) }}</div>
+                        {{ form_end(filtreForm) }}
+{#                {{ form(filtreForm) }}#}
 
                 {% endif %}
             </div>

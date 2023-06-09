@@ -144,7 +144,7 @@ class SortieRepository extends ServiceEntityRepository
             $qb->leftJoin('s.campus', 'c')
                 ->andWhere('c = :campus')
                 ->setParameter('campus', $filtreForm->get('Campus')->getData())
-                ->addSelect('c.nom');
+                ->addSelect('c.nom as campusNom');
         }
 
 //        if ($filtreForm->get('sortiefini')->getData()) {
