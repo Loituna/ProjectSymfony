@@ -145,7 +145,7 @@ class Sortie
     {
         if (!$this->participants->contains($user)) {
             $this->participants->add($user);
-            $user->addSorty($this);
+            $user->addSortie($this);
         }
 
         return $this;
@@ -154,7 +154,7 @@ class Sortie
     public function removeUser(User $user): self
     {
         if ($this->participants->removeElement($user)) {
-            $user->removeSorty($this);
+            $user->removeSortie($this);
         }
 
         return $this;
